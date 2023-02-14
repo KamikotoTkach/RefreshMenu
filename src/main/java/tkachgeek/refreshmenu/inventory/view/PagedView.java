@@ -1,16 +1,11 @@
 package tkachgeek.refreshmenu.inventory.view;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
-import tkachgeek.refreshmenu.inventory.ingredient.ItemIngredient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PagedView extends View {
   transient List<Ingredient> dynamic = new ArrayList<>();
@@ -19,10 +14,13 @@ public class PagedView extends View {
   transient int pageSize = 0;
   char dynamicChar = '#';
   
-  public PagedView() {
+  {
     behavior.bind('<', ClickType.LEFT, this::prevPage);
     behavior.bind('>', ClickType.LEFT, this::nextPage);
-    setDynamic(Arrays.stream(Material.values()).filter(Material::isFuel).map(x -> new ItemIngredient(new ItemStack(x))).collect(Collectors.toList()));
+  }
+  
+  public PagedView() {
+  
   }
   
   public List<Ingredient> getDynamic() {
@@ -36,6 +34,9 @@ public class PagedView extends View {
     if (this.pageSize == 0) return;
     
     this.maxPage = dynamic.size() / pageSize;
+    
+    placeholders.add("maxPage", maxPage);
+    updatePlaceholders();
   }
   
   public char getDynamicChar() {
@@ -47,15 +48,23 @@ public class PagedView extends View {
   }
   
   private void nextPage() {
-    if (page < maxPage) {
+    if (page + 1 < maxPage) {
       page++;
+      updatePlaceholders();
       updateDynamicContent();
     }
+  }
+  
+  private void updatePlaceholders() {
+    placeholders.add("page", page + 1);
+    placeholders.add("nextPage", Math.min(maxPage, page + 2));
+    placeholders.add("prevPage", Math.max(1,page));
   }
   
   private void prevPage() {
     if (page > 0) {
       page--;
+      updatePlaceholders();
       updateDynamicContent();
     }
   }

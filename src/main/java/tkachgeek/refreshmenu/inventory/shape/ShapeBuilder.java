@@ -5,6 +5,7 @@ import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.type.ChestType;
 import tkachgeek.refreshmenu.inventory.type.InventoryTypeHolder;
 import tkachgeek.refreshmenu.inventory.type.InventoryTypeHolderImpl;
+import tkachgeek.refreshmenu.inventory.view.View;
 
 import java.util.HashMap;
 
@@ -16,6 +17,12 @@ public class ShapeBuilder {
   
   public ShapeBuilder type(InventoryType type) {
     this.type = new InventoryTypeHolderImpl(type);
+    return this;
+  }
+  
+  public ShapeBuilder type(InventoryTypeHolder type) {
+    this.type = type;
+    
     return this;
   }
   
@@ -36,6 +43,10 @@ public class ShapeBuilder {
   
   public InventoryShape build() {
     return new InventoryShape(name, shape, type, ingredients);
+  }
+  
+  public void build(View view) {
+    view.setShape(new InventoryShape(name, shape, type, ingredients));
   }
   
   public ShapeBuilder ingredient(char character, Ingredient ingredient) {

@@ -2,6 +2,7 @@ package tkachgeek.refreshmenu.inventory.ingredient;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.config.minilocale.wrapper.MiniMessageWrapper;
 import tkachgeek.tkachutils.items.ItemBuilder;
 import tkachgeek.tkachutils.items.ItemBuilderFactory;
@@ -25,10 +26,10 @@ public class IngredientImpl implements Ingredient {
   }
   
   @Override
-  public ItemStack getItem() {
+  public ItemStack getItem(Placeholders placeholders) {
     ItemBuilder item = ItemBuilderFactory.of(type);
-    if (name != null) item.name(MiniMessageWrapper.deserialize(name));
-    if (description != null) item.description(MiniMessageWrapper.deserialize(description));
+    if (name != null) item.name(MiniMessageWrapper.deserialize(name, placeholders));
+    if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders));
     if (amount != 0) item.amount(amount);
     return item.build();
   }

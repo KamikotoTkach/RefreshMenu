@@ -1,7 +1,6 @@
 package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.inventory.Inventory;
-import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
 public class ViewDrawer {
   public static void drawPage(PagedView view) {
@@ -12,10 +11,10 @@ public class ViewDrawer {
       char c = view.getShape().getJoinedShape().charAt(i);
       
       if (view.getShape().getIngredientMap().containsKey(c)) {
-        view.getInventory().setItem(i, view.getShape().getIngredientMap().get(c).getItem());
-      } else if(view.getDynamicChar() == c){
-        if(pointer < view.getDynamic().size()){
-          view.getInventory().setItem(i, view.getDynamic().get(pointer).getItem());
+        view.getInventory().setItem(i, view.getShape().getIngredientMap().get(c).getItem(view.placeholders));
+      } else if (view.getDynamicChar() == c) {
+        if (pointer < view.getDynamic().size()) {
+          view.getInventory().setItem(i, view.getDynamic().get(pointer).getItem(view.placeholders));
           pointer++;
         }
       } else {
@@ -24,28 +23,29 @@ public class ViewDrawer {
     }
   }
   
-  public static Inventory shaped(InventoryShape shape) {
-    Inventory inventory = shape.createInventory();
+  public static Inventory createFilledInventory(View view) {
+    Inventory inventory = view.getShape().createInventory();
     
-    for (int i = 0; i < shape.getJoinedShape().length(); i++) {
-      char c = shape.getJoinedShape().charAt(i);
-      if (shape.getIngredientMap().containsKey(c)) {
-        inventory.setItem(i, shape.getIngredientMap().get(c).getItem());
+    for (int i = 0; i < view.getShape().getJoinedShape().length(); i++) {
+      char c = view.getShape().getJoinedShape().charAt(i);
+      if (view.getShape().getIngredientMap().containsKey(c)) {
+        inventory.setItem(i, view.getShape().getIngredientMap().get(c).getItem(view.placeholders));
       } else {
         inventory.setItem(i, null);
       }
     }
     return inventory;
   }
-  public static void updateIngredient(InventoryShape shape, char character, Inventory inventory) {
-    for (int i = 0; i < shape.getJoinedShape().length(); i++) {
-      char c = shape.getJoinedShape().charAt(i);
-      if (shape.getIngredientMap().containsKey(c)) {
+  
+  public static void redrawIngredient(View view, char character) {
+    for (int i = 0; i < view.getShape().getJoinedShape().length(); i++) {
+      char c = view.getShape().getJoinedShape().charAt(i);
+      if (view.getShape().getIngredientMap().containsKey(c)) {
         if (c == character) {
-          inventory.setItem(i, shape.getIngredientMap().get(c).getItem());
+          view.getInventory().setItem(i, view.getShape().getIngredientMap().get(c).getItem(view.placeholders));
         }
       } else {
-        inventory.setItem(i, null);
+        view.getInventory().setItem(i, null);
       }
     }
   }

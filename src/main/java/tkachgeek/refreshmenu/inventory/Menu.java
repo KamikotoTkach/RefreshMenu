@@ -3,7 +3,6 @@ package tkachgeek.refreshmenu.inventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import tkachgeek.refreshmenu.inventory.view.Behavior;
-import tkachgeek.refreshmenu.inventory.view.PagedView;
 import tkachgeek.refreshmenu.inventory.view.View;
 
 import java.util.HashMap;
@@ -14,7 +13,7 @@ public class Menu {
   public HashMap<String, View> views = new HashMap<>();
   
   {
-    views.put("default", new PagedView());
+    views.put("default", new View());
   }
   
   public void open(Player player) {
@@ -38,5 +37,9 @@ public class Menu {
       if (value.getInventory().getViewers().size() > 0) return true;
     }
     return false;
+  }
+  
+  public void setView(String name, View view) {
+    views.put(name, view);
   }
 }

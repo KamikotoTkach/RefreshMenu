@@ -3,6 +3,7 @@ package tkachgeek.refreshmenu.inventory.ingredient;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.bukkit.inventory.ItemStack;
+import tkachgeek.config.minilocale.Placeholders;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
@@ -21,6 +22,6 @@ public interface Ingredient {
     return new ItemIngredient(item);
   }
   
-  ItemStack getItem();
+  ItemStack getItem(Placeholders placeholders);
   
 }

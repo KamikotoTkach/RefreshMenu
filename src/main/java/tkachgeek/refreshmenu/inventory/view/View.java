@@ -11,20 +11,17 @@ import tkachgeek.refreshmenu.ManagerRegistry;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
 public class View {
-  private Inventory inventory;
   public boolean canCloseHimself = true;
+  protected InventoryShape shape = InventoryShape.builder()
+                                                 .name("Не настроено, vk.com/cwcode")
+                                                 .shape("-")
+                                                 .type(InventoryType.HOPPER)
+                                                 .build();
   transient Behavior behavior = new Behavior();
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
-  InventoryShape shape = InventoryShape.builder()
-                                       .name("Меню не настроено vk.com/cwcode")
-                                       .shape("---",
-                                              "---",
-                                              "---")
-                                       .type(InventoryType.DISPENSER)
-                                       .build();
+  private Inventory inventory;
   
   public View() {
-    setInventory(ViewDrawer.shaped(shape));
   }
   
   public void onOutsideClick(InventoryClickEvent event) {
@@ -49,12 +46,13 @@ public class View {
   }
   
   public void open(Player player) {
+    getInventory();
     player.openInventory(getInventory());
     onOpen(player);
   }
   
   protected void onOpen(Player player) {
-
+  
   }
   
   public Behavior getBehavior() {
@@ -66,11 +64,15 @@ public class View {
   }
   
   public Inventory getInventory() {
-    if(inventory == null) inventory = shape.createInventory();
+    if (inventory == null) inventory = shape.createInventory();
     return inventory;
   }
   
   public void setInventory(Inventory inventory) {
     this.inventory = inventory;
+  }
+  
+  public void setShape(InventoryShape shape) {
+    this.shape = shape;
   }
 }

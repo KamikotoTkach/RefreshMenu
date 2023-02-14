@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import tkachgeek.refreshmenu.inventory.Menu;
+import tkachgeek.refreshmenu.test.TestMenu;
 
 public final class RefreshMenu extends JavaPlugin implements @NotNull Listener {
   public static JavaPlugin plugin;
@@ -24,6 +25,6 @@ public final class RefreshMenu extends JavaPlugin implements @NotNull Listener {
   
   @EventHandler
   void onInteract(PlayerInteractEvent event) {
-    manager.open(new Menu(), event.getPlayer());
+    manager.open(new TestMenu(), event.getPlayer());
   }
 }

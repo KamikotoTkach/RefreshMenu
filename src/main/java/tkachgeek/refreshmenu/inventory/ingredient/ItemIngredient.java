@@ -1,6 +1,7 @@
 package tkachgeek.refreshmenu.inventory.ingredient;
 
 import org.bukkit.inventory.ItemStack;
+import tkachgeek.config.minilocale.Placeholders;
 
 public class ItemIngredient implements Ingredient {
   ItemStack item;
@@ -13,8 +14,8 @@ public class ItemIngredient implements Ingredient {
   }
   
   @Override
-  public ItemStack getItem() {
-    return item;
+  public ItemStack getItem(Placeholders placeholders) {
+    return item; //todo сделать замену плейсхолдеров в готовом айтемстаке
   }
   
 }
