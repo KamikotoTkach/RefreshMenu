@@ -19,7 +19,7 @@ public class View {
                                                  .build();
   transient Behavior behavior = new Behavior();
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
-  private Inventory inventory;
+  transient private Inventory inventory;
   
   public View() {
   }
