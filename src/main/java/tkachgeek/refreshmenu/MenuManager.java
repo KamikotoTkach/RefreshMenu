@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import tkachgeek.refreshmenu.inventory.Menu;
+import tkachgeek.refreshmenu.inventory.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +31,17 @@ public class MenuManager {
     return activeMenu.contains(menu);
   }
   
-  public void onInventoryClose(InventoryCloseEvent event, ManagerRegistry.HierarchyResult hierarchy) {
-    if (!hierarchy.view.canCloseHimself && event.getReason() == InventoryCloseEvent.Reason.PLAYER) {
-      Bukkit.getScheduler().runTaskLater(plugin, () -> hierarchy.view.open((Player) event.getPlayer()), 1);
+  public void onInventoryClose(InventoryCloseEvent event, View view) {
+    if (!view.canCloseHimself && event.getReason() == InventoryCloseEvent.Reason.PLAYER) {
+      Bukkit.getScheduler().runTaskLater(plugin, () -> view.open((Player) event.getPlayer()), 1);
       return;
     }
     
-    if (!hierarchy.menu.hasViewers() && hierarchy.menu.shouldUnload) removeActiveMenu(hierarchy.menu);
+    if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
   }
   
   public void open(Menu menu, Player player) {
+    menu.setMenuManager(this);
     addActiveMenu(menu);
     menu.open(player);
   }

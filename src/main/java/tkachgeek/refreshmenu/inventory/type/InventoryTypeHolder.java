@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import tkachgeek.refreshmenu.inventory.view.View;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
@@ -19,5 +20,5 @@ public interface InventoryTypeHolder {
   
   InventoryType getType();
   
-  Inventory createInventory(Component name);
+  Inventory createInventory(View view, Component name);
 }

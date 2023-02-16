@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import tkachgeek.refreshmenu.inventory.view.View;
 
 public class InventoryTypeHolderImpl implements InventoryTypeHolder {
   InventoryType type = InventoryType.CHEST;
@@ -26,7 +27,7 @@ public class InventoryTypeHolderImpl implements InventoryTypeHolder {
   }
   
   @Override
-  public Inventory createInventory(Component name) {
-    return Bukkit.createInventory(null, getType(), name);
+  public Inventory createInventory(View view, Component name) {
+    return Bukkit.createInventory(view, getType(), name);
   }
 }

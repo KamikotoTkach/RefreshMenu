@@ -3,22 +3,31 @@ package tkachgeek.refreshmenu.inventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import tkachgeek.config.yaml.YmlConfig;
+import tkachgeek.refreshmenu.MenuManager;
 import tkachgeek.refreshmenu.inventory.view.Behavior;
 import tkachgeek.refreshmenu.inventory.view.View;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Menu extends YmlConfig {
   
   public transient boolean shouldUnload = true;
-  public HashMap<String, View> views = new HashMap<>();
+  private final HashMap<String, View> views = new HashMap<>();
+  private MenuManager menuManager = null;
   
   {
     views.put("default", new View());
   }
   
   public void open(Player player) {
-    views.get("default").open(player);
+    openView(player, "default");
+  }
+  
+  public void openView(Player player, String name) {
+    View view = views.get(name);
+    view.setMenu(this);
+    view.open(player);
   }
   
   public void bind(char character, ClickType type, Runnable runnable) {
@@ -42,5 +51,17 @@ public class Menu extends YmlConfig {
   
   public void setView(String name, View view) {
     views.put(name, view);
+  }
+  
+  public MenuManager getManager() {
+    return menuManager;
+  }
+  
+  public void setMenuManager(MenuManager manager) {
+    this.menuManager = manager;
+  }
+  
+  public Collection<View> getViews() {
+    return views.values();
   }
 }

@@ -6,11 +6,15 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
 import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.refreshmenu.ManagerRegistry;
+import tkachgeek.refreshmenu.MenuManager;
+import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
-public class View {
+public class View implements InventoryHolder {
   public boolean canCloseHimself = true;
   protected InventoryShape shape = InventoryShape.builder()
                                                  .name("Не настроено, vk.com/cwcode")
@@ -20,6 +24,7 @@ public class View {
   transient Behavior behavior = new Behavior();
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
   transient private Inventory inventory;
+  protected transient Menu menu = null;
   
   public View() {
   }
@@ -37,7 +42,7 @@ public class View {
     event.setCancelled(true);
   }
   
-  public void onInventoryClose(InventoryCloseEvent event, ManagerRegistry.HierarchyResult hierarchy) {
+  public void onInventoryClose(InventoryCloseEvent event) {
   
   }
   
@@ -63,8 +68,12 @@ public class View {
     return shape;
   }
   
-  public Inventory getInventory() {
-    if (inventory == null) inventory = shape.createInventory();
+  public void setShape(InventoryShape shape) {
+    this.shape = shape;
+  }
+  
+  public @NotNull Inventory getInventory() {
+    if (inventory == null) inventory = shape.createInventory(this);
     return inventory;
   }
   
@@ -72,7 +81,16 @@ public class View {
     this.inventory = inventory;
   }
   
-  public void setShape(InventoryShape shape) {
-    this.shape = shape;
+  public Placeholders getPlaceholders() {
+    return placeholders;
+  }
+  
+  
+  public Menu getMenu() {
+    return menu;
+  }
+  
+  public void setMenu(Menu menu) {
+    this.menu = menu;
   }
 }

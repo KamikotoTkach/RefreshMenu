@@ -6,21 +6,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.test.TestMenu;
 
 public final class RefreshMenu extends JavaPlugin implements @NotNull Listener {
   public static JavaPlugin plugin;
   MenuManager manager;
+  
+  public static MenuManager getManager(JavaPlugin plugin) {
+    return ManagerRegistry.register(new MenuManager(plugin));
+  }
+  
   @Override
   public void onEnable() {
     plugin = this;
     manager = getManager(this);
     Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
     Bukkit.getPluginManager().registerEvents(this, this);
-  }
-  public static MenuManager getManager(JavaPlugin plugin) {
-    return ManagerRegistry.register(new MenuManager(plugin));
   }
   
   @EventHandler
