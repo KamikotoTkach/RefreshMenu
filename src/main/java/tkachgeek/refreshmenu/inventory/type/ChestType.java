@@ -16,6 +16,11 @@ public class ChestType implements InventoryTypeHolder {
   public ChestType() {
   }
   
+  private static int getNearest(int size) {
+    if (size <= 0) return 0;
+    return Math.min(54, ((size - 1) / 9 + 1) * 9);
+  }
+  
   @Override
   public int getSize() {
     return size;
@@ -34,10 +39,5 @@ public class ChestType implements InventoryTypeHolder {
   public int setSize(int size) {
     this.size = getNearest(size);
     return size;
-  }
-  
-  private static int getNearest(int size) {
-    if (size <= 0) return 0;
-    return Math.min(54, ((size - 1) / 9 + 1) * 9);
   }
 }

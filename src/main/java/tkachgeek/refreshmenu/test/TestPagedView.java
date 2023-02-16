@@ -1,10 +1,7 @@
 package tkachgeek.refreshmenu.test;
 
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import tkachgeek.config.yaml.YmlConfigManager;
-import tkachgeek.refreshmenu.RefreshMenu;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.ingredient.ItemIngredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
@@ -43,8 +40,5 @@ public class TestPagedView extends PagedView {
   
   public TestPagedView() {
     setDynamic(Arrays.stream(Material.values()).filter(Material::isFuel).map(x -> new ItemIngredient(new ItemStack(x))).collect(Collectors.toList()));
-    
   }
-  
-  
 }

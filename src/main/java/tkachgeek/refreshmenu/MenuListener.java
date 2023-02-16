@@ -13,13 +13,10 @@ public class MenuListener implements Listener {
   void onInventoryClick(InventoryClickEvent event) {
     if (event.getInventory().getHolder() instanceof View) {
       View view = (View) event.getInventory().getHolder();
-  
+      
       if (event.getClickedInventory() == null) {
         view.onOutsideClick(event);
-        return;
-      }
-  
-      if (event.getClickedInventory().equals(event.getWhoClicked().getInventory())) {
+      } else if (event.getClickedInventory().equals(event.getWhoClicked().getInventory())) {
         view.onOwnInventoryClick(event);
       } else {
         view.onInventoryClick(event);
@@ -31,7 +28,7 @@ public class MenuListener implements Listener {
   void onInventoryClose(InventoryCloseEvent event) {
     if (event.getInventory().getHolder() instanceof View) {
       View view = (View) event.getInventory().getHolder();
-  
+      
       view.getMenu().getManager().onInventoryClose(event, view);
       view.onInventoryClose(event);
     }
@@ -41,7 +38,7 @@ public class MenuListener implements Listener {
   void onInventoryDrag(InventoryDragEvent event) {
     if (event.getInventory().getHolder() instanceof View) {
       View view = (View) event.getInventory().getHolder();
-    
+      
       view.onDrag(event);
     }
   }

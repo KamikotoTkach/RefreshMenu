@@ -6,7 +6,7 @@ import tkachgeek.config.minilocale.Placeholders;
 public class ItemIngredient implements Ingredient {
   ItemStack item;
   
-  public ItemIngredient( ItemStack item) {
+  public ItemIngredient(ItemStack item) {
     this.item = item;
   }
   
@@ -17,5 +17,4 @@ public class ItemIngredient implements Ingredient {
   public ItemStack getItem(Placeholders placeholders) {
     return item; //todo сделать замену плейсхолдеров в готовом айтемстаке
   }
-  
 }

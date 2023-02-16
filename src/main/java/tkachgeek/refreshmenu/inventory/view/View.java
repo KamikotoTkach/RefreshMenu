@@ -9,8 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import tkachgeek.config.minilocale.Placeholders;
-import tkachgeek.refreshmenu.ManagerRegistry;
-import tkachgeek.refreshmenu.MenuManager;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
@@ -21,10 +19,10 @@ public class View implements InventoryHolder {
                                                  .shape("-")
                                                  .type(InventoryType.HOPPER)
                                                  .build();
+  protected transient Menu menu = null;
   transient Behavior behavior = new Behavior();
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
   transient private Inventory inventory;
-  protected transient Menu menu = null;
   
   public View() {
   }
@@ -84,7 +82,6 @@ public class View implements InventoryHolder {
   public Placeholders getPlaceholders() {
     return placeholders;
   }
-  
   
   public Menu getMenu() {
     return menu;

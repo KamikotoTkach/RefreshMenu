@@ -7,7 +7,6 @@ import tkachgeek.config.minilocale.Placeholders;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
-   include = JsonTypeInfo.As.PROPERTY,
    property = "type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = IngredientImpl.class, name = "simple"),
@@ -23,5 +22,4 @@ public interface Ingredient {
   }
   
   ItemStack getItem(Placeholders placeholders);
-  
 }

@@ -9,8 +9,8 @@ public class TestMenu extends Menu {
   public TestMenu() {
     setView("default", new TestPagedView());
     bind('X', ClickType.LEFT, this::save);
-    
   }
+  
   private void save() {
     YmlConfigManager manager = new YmlConfigManager(RefreshMenu.plugin);
     manager.store("test", this);

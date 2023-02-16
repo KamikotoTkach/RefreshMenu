@@ -58,7 +58,7 @@ public class PagedView extends View {
   private void updatePlaceholders() {
     placeholders.add("page", page + 1);
     placeholders.add("nextPage", Math.min(maxPage, page + 2));
-    placeholders.add("prevPage", Math.max(1,page));
+    placeholders.add("prevPage", Math.max(1, page));
   }
   
   private void prevPage() {

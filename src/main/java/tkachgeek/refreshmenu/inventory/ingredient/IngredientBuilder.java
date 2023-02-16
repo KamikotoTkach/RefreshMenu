@@ -22,14 +22,17 @@ public class IngredientBuilder {
     this.description = description;
     return this;
   }
+  
   public IngredientBuilder descriptionFromComponent(List<Component> description) {
     this.description = MiniMessageWrapper.serialize(description);
     return this;
   }
+  
   public IngredientBuilder descriptionFromComponent(Component description) {
     this.description = Collections.singletonList(MiniMessageWrapper.serialize(description));
     return this;
   }
+  
   public IngredientBuilder description(String description) {
     this.description = Collections.singletonList(description);
     return this;

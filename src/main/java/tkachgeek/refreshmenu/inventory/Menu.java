@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 public class Menu extends YmlConfig {
   
-  public transient boolean shouldUnload = true;
   private final HashMap<String, View> views = new HashMap<>();
+  public transient boolean shouldUnload = true;
   private MenuManager menuManager = null;
   
   {
