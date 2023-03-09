@@ -1,5 +1,6 @@
 package tkachgeek.refreshmenu.inventory.ingredient;
 
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tkachgeek.config.minilocale.Placeholders;
@@ -28,9 +29,11 @@ public class IngredientImpl implements Ingredient {
   @Override
   public ItemStack getItem(Placeholders placeholders) {
     ItemBuilder item = ItemBuilderFactory.of(type);
-    if (name != null) item.name(MiniMessageWrapper.deserialize(name, placeholders));
-    if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders));
+    
+    if (name != null) item.name(MiniMessageWrapper.deserialize(name, placeholders).decoration(TextDecoration.ITALIC, false));
+    if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders, true));
     if (amount != 0) item.amount(amount);
+    
     return item.build();
   }
 }

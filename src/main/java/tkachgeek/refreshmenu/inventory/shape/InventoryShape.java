@@ -42,13 +42,13 @@ public class InventoryShape {
   }
   
   public int howMany(char dynamicChar) {
-    int i = 0;
+    int count = 0;
     for (String line : getShape()) {
       for (char c : line.toCharArray()) {
-        if (c == dynamicChar) i++;
+        if (c == dynamicChar) count++;
       }
     }
-    return i;
+    return count;
   }
   
   public String getName() {

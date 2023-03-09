@@ -36,7 +36,7 @@ public class View implements InventoryHolder {
   }
   
   public void onInventoryClick(InventoryClickEvent event) {
-    behavior.execute(new Behavior.ClickData(shape.charAtIndex(event.getSlot()), event.getClick()));
+    behavior.execute(event, new Behavior.ClickData(shape.charAtIndex(event.getSlot()), event.getClick()));
     event.setCancelled(true);
   }
   
