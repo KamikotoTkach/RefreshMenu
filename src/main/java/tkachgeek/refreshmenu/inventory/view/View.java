@@ -1,5 +1,7 @@
 package tkachgeek.refreshmenu.inventory.view;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -12,6 +14,13 @@ import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
+@JsonTypeInfo(
+   use = JsonTypeInfo.Id.NAME,
+   include = JsonTypeInfo.As.PROPERTY,
+   property = "type")
+@JsonSubTypes({
+   @JsonSubTypes.Type(value = View.class, name = "View"),
+})
 public class View implements InventoryHolder {
   public boolean canCloseHimself = true;
   protected InventoryShape shape = InventoryShape.builder()

@@ -2,7 +2,7 @@ package tkachgeek.refreshmenu.inventory.ingredient;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import tkachgeek.config.minilocale.wrapper.MiniMessageWrapper;
+import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
 
 import java.util.Collections;
 import java.util.List;

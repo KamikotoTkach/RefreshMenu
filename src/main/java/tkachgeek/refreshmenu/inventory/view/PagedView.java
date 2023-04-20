@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagedView extends View {
-  transient List<Ingredient> dynamic = new ArrayList<>();
+  transient List<? extends Ingredient> dynamic = new ArrayList<>();
   transient int page = 0;
   transient int maxPage = 0;
   transient int pageSize = 0;
@@ -23,11 +23,11 @@ public class PagedView extends View {
   
   }
   
-  public List<Ingredient> getDynamic() {
+  public List<? extends Ingredient> getDynamic() {
     return dynamic;
   }
   
-  public void setDynamic(List<Ingredient> dynamic) {
+  public void setDynamic(List<? extends Ingredient> dynamic) {
     this.dynamic = dynamic;
     this.pageSize = shape.howMany(dynamicChar);
     

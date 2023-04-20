@@ -1,6 +1,6 @@
 name: RefreshMenu
 version: '${project.version}'
 main: tkachgeek.refreshmenu.RefreshMenu
-api-version: 1.19
+api-version: 1.16
 authors: [ TkachGeek ]
 website: cwcode.ru/vk

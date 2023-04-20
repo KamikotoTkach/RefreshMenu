@@ -28,8 +28,12 @@ public class ViewDrawer {
   }
   
   public static Inventory createFilledInventory(View view) {
-    HashMap<Character, Ingredient> ingredientMap = view.getShape().getIngredientMap();
     Inventory inventory = view.getShape().createInventory(view);
+    fillInventory(view, inventory);
+    return inventory;
+  }
+  public static void fillInventory(View view, Inventory inventory) {
+    HashMap<Character, Ingredient> ingredientMap = view.getShape().getIngredientMap();
     String joinedShape = view.getShape().getJoinedShape();
     
     char currShapeChar;
@@ -40,7 +44,6 @@ public class ViewDrawer {
         inventory.setItem(i, ingredientMap.get(currShapeChar).getItem(view.placeholders));
       }
     }
-    return inventory;
   }
   
   public static void redrawIngredient(View view, char character) {

@@ -14,7 +14,7 @@ public class Menu extends YmlConfig {
   
   private final HashMap<String, View> views = new HashMap<>();
   public transient boolean shouldUnload = true;
-  private MenuManager menuManager = null;
+  transient private MenuManager menuManager = null;
   
   {
     views.put("default", new View());
@@ -63,5 +63,11 @@ public class Menu extends YmlConfig {
   
   public Collection<View> getViews() {
     return views.values();
+  }
+  public boolean hasView(String key) {
+    return views.containsKey(key);
+  }
+  public View getView(String key) {
+    return views.get(key);
   }
 }

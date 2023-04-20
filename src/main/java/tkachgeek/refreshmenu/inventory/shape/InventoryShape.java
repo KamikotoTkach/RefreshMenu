@@ -1,10 +1,11 @@
 package tkachgeek.refreshmenu.inventory.shape;
 
 import org.bukkit.inventory.Inventory;
-import tkachgeek.config.minilocale.wrapper.MiniMessageWrapper;
+import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.type.InventoryTypeHolder;
 import tkachgeek.refreshmenu.inventory.view.View;
+import tkachgeek.refreshmenu.inventory.view.ViewDrawer;
 
 import java.util.HashMap;
 
@@ -34,7 +35,9 @@ public class InventoryShape {
   }
   
   public Inventory createInventory(View view) {
-    return type.createInventory(view, MiniMessageWrapper.deserialize(getName(), view.getPlaceholders()));
+    Inventory inventory = type.createInventory(view, MiniMessageWrapper.deserialize(getName(), view.getPlaceholders()));
+    ViewDrawer.fillInventory(view, inventory);
+    return inventory;
   }
   
   public char charAtIndex(int index) {

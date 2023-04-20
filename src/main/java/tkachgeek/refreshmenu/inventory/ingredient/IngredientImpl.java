@@ -4,7 +4,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tkachgeek.config.minilocale.Placeholders;
-import tkachgeek.config.minilocale.wrapper.MiniMessageWrapper;
+import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
 import tkachgeek.tkachutils.items.ItemBuilder;
 import tkachgeek.tkachutils.items.ItemBuilderFactory;
 
@@ -35,5 +35,37 @@ public class IngredientImpl implements Ingredient {
     if (amount != 0) item.amount(amount);
     
     return item.build();
+  }
+  
+  public String getName() {
+    return name;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
+  }
+  
+  public List<String> getDescription() {
+    return description;
+  }
+  
+  public void setDescription(List<String> description) {
+    this.description = description;
+  }
+  
+  public int getAmount() {
+    return amount;
+  }
+  
+  public void setAmount(int amount) {
+    this.amount = amount;
+  }
+  
+  public Material getType() {
+    return type;
+  }
+  
+  public void setType(Material type) {
+    this.type = type;
   }
 }
