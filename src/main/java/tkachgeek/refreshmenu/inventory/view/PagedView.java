@@ -33,7 +33,7 @@ public class PagedView extends View {
     
     if (this.pageSize == 0) return;
     
-    this.maxPage = dynamic.size() / pageSize;
+    this.maxPage = dynamic.size() / pageSize+1;
     
     placeholders.add("maxPage", maxPage);
     updatePlaceholders();

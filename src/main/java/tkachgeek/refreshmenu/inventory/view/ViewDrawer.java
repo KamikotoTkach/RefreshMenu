@@ -2,6 +2,7 @@ package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.inventory.Inventory;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
+import tkachgeek.tkachutils.numbers.NumbersUtils;
 
 import java.util.HashMap;
 
@@ -16,7 +17,7 @@ public class ViewDrawer {
     inventory.clear();
     
     char currShapeChar;
-    for (int i = 0; i < joinedShape.length(); i++) {
+    for (int i = 0; i < NumbersUtils.notGreater(joinedShape.length(), inventory.getSize()); i++) {
       currShapeChar = joinedShape.charAt(i);
       
       if (ingredientMap.containsKey(currShapeChar)) {
@@ -32,12 +33,13 @@ public class ViewDrawer {
     fillInventory(view, inventory);
     return inventory;
   }
+  
   public static void fillInventory(View view, Inventory inventory) {
     HashMap<Character, Ingredient> ingredientMap = view.getShape().getIngredientMap();
     String joinedShape = view.getShape().getJoinedShape();
     
     char currShapeChar;
-    for (int i = 0; i < joinedShape.length(); i++) {
+    for (int i = 0; i < NumbersUtils.notGreater(joinedShape.length(), inventory.getSize()); i++) {
       currShapeChar = joinedShape.charAt(i);
       
       if (ingredientMap.containsKey(currShapeChar)) {
@@ -52,7 +54,7 @@ public class ViewDrawer {
     Inventory inventory = view.getInventory();
     
     char currShapeChar;
-    for (int i = 0; i < joinedShape.length(); i++) {
+    for (int i = 0; i < NumbersUtils.notGreater(joinedShape.length(), inventory.getSize()); i++) {
       currShapeChar = joinedShape.charAt(i);
       
       if (ingredientMap.containsKey(currShapeChar)) {

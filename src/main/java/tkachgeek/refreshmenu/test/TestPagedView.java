@@ -39,6 +39,10 @@ public class TestPagedView extends PagedView {
   }
   
   public TestPagedView() {
-    setDynamic(Arrays.stream(Material.values()).filter(Material::isFuel).map(x -> new ItemIngredient(new ItemStack(x))).collect(Collectors.toList()));
+    setDynamic(Arrays.stream(Material.values())
+                     .filter(Material::isFuel)
+                     .map(x -> new ItemIngredient(new ItemStack(x)))
+                     .collect(Collectors.toList())
+    );
   }
 }
