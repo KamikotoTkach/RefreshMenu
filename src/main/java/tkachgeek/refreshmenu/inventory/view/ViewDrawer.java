@@ -7,7 +7,7 @@ import tkachgeek.tkachutils.numbers.NumbersUtils;
 import java.util.HashMap;
 
 public class ViewDrawer {
-  public static void drawPage(PagedView view) {
+  public static void drawPage(PagedView<? extends Ingredient> view) {
     int pageSize = view.getShape().howMany(view.getDynamicChar());
     int dynamicItemIndex = view.getPage() * pageSize;
     String joinedShape = view.getShape().getJoinedShape();

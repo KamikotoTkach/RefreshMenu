@@ -15,12 +15,14 @@ public class IngredientImpl implements Ingredient {
   List<String> description;
   int amount;
   Material type;
+  int customModelData;
   
-  public IngredientImpl(String name, List<String> description, int amount, Material type) {
+  public IngredientImpl(String name, List<String> description, int amount, Material type, int customModelData) {
     this.name = name;
     this.description = description;
     this.amount = amount;
     this.type = type;
+    this.customModelData = customModelData;
   }
   
   public IngredientImpl() {
@@ -33,6 +35,7 @@ public class IngredientImpl implements Ingredient {
     if (name != null) item.name(MiniMessageWrapper.deserialize(name, placeholders).decoration(TextDecoration.ITALIC, false));
     if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders, true));
     if (amount != 0) item.amount(amount);
+    if(customModelData!=0) item.customModelData(customModelData);
     
     return item.build();
   }
@@ -63,6 +66,14 @@ public class IngredientImpl implements Ingredient {
   
   public Material getType() {
     return type;
+  }
+  
+  public int getCustomModelData() {
+    return customModelData;
+  }
+  
+  public void setCustomModelData(int customModelData) {
+    this.customModelData = customModelData;
   }
   
   public void setType(Material type) {

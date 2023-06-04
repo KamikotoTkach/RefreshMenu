@@ -10,7 +10,7 @@ import tkachgeek.refreshmenu.inventory.view.PagedView;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class TestPagedView extends PagedView {
+public class TestPagedView extends PagedView<Ingredient> {
   {
     InventoryShape.builder()
                   .chest(27)

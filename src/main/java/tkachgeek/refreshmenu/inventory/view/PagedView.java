@@ -6,9 +6,10 @@ import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class PagedView extends View {
-  transient List<? extends Ingredient> dynamic = new ArrayList<>();
+public class PagedView<T extends Ingredient> extends View {
+  transient List<T> dynamic = new ArrayList<>();
   transient int page = 0;
   transient int maxPage = 0;
   transient int pageSize = 0;
@@ -23,20 +24,31 @@ public class PagedView extends View {
   
   }
   
-  public List<? extends Ingredient> getDynamic() {
+  public List<T> getDynamic() {
     return dynamic;
   }
   
-  public void setDynamic(List<? extends Ingredient> dynamic) {
+  public void setDynamic(List<T> dynamic) {
     this.dynamic = dynamic;
     this.pageSize = shape.howMany(dynamicChar);
     
     if (this.pageSize == 0) return;
     
-    this.maxPage = dynamic.size() / pageSize+1;
+    this.maxPage = dynamic.size() / pageSize + 1;
     
     placeholders.add("maxPage", maxPage);
     updatePlaceholders();
+  }
+  
+  private void updatePlaceholders() {
+    placeholders.add("page", page + 1);
+    placeholders.add("nextPage", Math.min(maxPage, page + 2));
+    placeholders.add("prevPage", Math.max(1, page));
+  }
+  
+  public Optional<T> getDynamic(int slot) {
+    int index = page * pageSize + slot;
+    return index >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(index));
   }
   
   public char getDynamicChar() {
@@ -55,10 +67,8 @@ public class PagedView extends View {
     }
   }
   
-  private void updatePlaceholders() {
-    placeholders.add("page", page + 1);
-    placeholders.add("nextPage", Math.min(maxPage, page + 2));
-    placeholders.add("prevPage", Math.max(1, page));
+  private void updateDynamicContent() {
+    ViewDrawer.drawPage(this);
   }
   
   private void prevPage() {
@@ -67,10 +77,6 @@ public class PagedView extends View {
       updatePlaceholders();
       updateDynamicContent();
     }
-  }
-  
-  private void updateDynamicContent() {
-    ViewDrawer.drawPage(this);
   }
   
   @Override
