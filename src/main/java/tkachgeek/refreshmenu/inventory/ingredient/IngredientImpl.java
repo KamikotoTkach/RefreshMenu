@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
+import tkachgeek.refreshmenu.configurationUI.UIConfigurable;
 import tkachgeek.tkachutils.items.ItemBuilder;
 import tkachgeek.tkachutils.items.ItemBuilderFactory;
 
@@ -15,6 +16,7 @@ public class IngredientImpl implements Ingredient {
   List<String> description;
   int amount;
   Material type;
+  
   int customModelData;
   
   public IngredientImpl(String name, List<String> description, int amount, Material type, int customModelData) {
@@ -35,7 +37,7 @@ public class IngredientImpl implements Ingredient {
     if (name != null) item.name(MiniMessageWrapper.deserialize(name, placeholders).decoration(TextDecoration.ITALIC, false));
     if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders, true));
     if (amount != 0) item.amount(amount);
-    if(customModelData!=0) item.customModelData(customModelData);
+    if (customModelData != 0) item.customModelData(customModelData);
     
     return item.build();
   }
