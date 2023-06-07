@@ -3,6 +3,8 @@ package tkachgeek.refreshmenu.configurationUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import tkachgeek.refreshmenu.configurationUI.type.TypeMapper;
+import tkachgeek.refreshmenu.configurationUI.valueSupplier.ValueSupplier;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.refreshmenu.inventory.type.ChestType;
 import tkachgeek.refreshmenu.inventory.view.PagedView;
@@ -54,7 +56,7 @@ public class UIConfigurableView extends PagedView<ConfigurableIngredient> {
     for (Field field : configurable.getClass().getDeclaredFields()) {
       UIConfigurable annotation = field.getAnnotation(UIConfigurable.class);
       
-      if (annotation == null) continue;
+      if (annotation == null || !ValueSupplier.registry.supports(field.getType())) continue;
       field.setAccessible(true);
       
       ingredients.add(new ConfigurableIngredient(configurable, field, annotation));
