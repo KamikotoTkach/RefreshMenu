@@ -47,8 +47,10 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   public Optional<T> getDynamic(int slot) {
-    int index = page * pageSize + slot;
-    return index >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(index));
+    int indexAtPage = (int) shape.getJoinedShape().substring(0, slot).chars().filter(ch -> ch == dynamicChar).count();
+    int indexAtDynamic = page * pageSize + indexAtPage;
+    
+    return indexAtDynamic >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(indexAtDynamic));
   }
   
   public char getDynamicChar() {

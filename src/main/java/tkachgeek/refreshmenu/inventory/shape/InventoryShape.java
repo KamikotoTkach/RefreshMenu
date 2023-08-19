@@ -44,11 +44,11 @@ public class InventoryShape {
     return getJoinedShape().charAt(index);
   }
   
-  public int howMany(char dynamicChar) {
+  public int howMany(char toCount) {
     int count = 0;
     for (String line : getShape()) {
       for (char c : line.toCharArray()) {
-        if (c == dynamicChar) count++;
+        if (c == toCount) count++;
       }
     }
     return count;
