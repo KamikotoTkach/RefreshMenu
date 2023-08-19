@@ -2,6 +2,7 @@ package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 
 import java.util.ArrayList;
@@ -60,30 +61,31 @@ public class PagedView<T extends Ingredient> extends View {
   public void setDynamicChar(char dynamicIngredient) {
     this.dynamicChar = dynamicIngredient;
   }
-  
+  transient Player player;
   private void nextPage() {
     if (page + 1 < maxPage) {
       page++;
       updatePlaceholders();
-      updateDynamicContent();
+      updateDynamicContent(player);
     }
   }
   
-  private void updateDynamicContent() {
-    ViewDrawer.drawPage(this);
+  private void updateDynamicContent(Player player) {
+    ViewDrawer.drawPage(this, player);
   }
   
   private void prevPage() {
     if (page > 0) {
       page--;
       updatePlaceholders();
-      updateDynamicContent();
+      updateDynamicContent(player);
     }
   }
   
   @Override
   protected void onOpen(Player player) {
-    updateDynamicContent();
+    this.player = player;
+    updateDynamicContent(player);
   }
   
   public int getPage() {

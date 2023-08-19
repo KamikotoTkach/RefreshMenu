@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
-import tkachgeek.refreshmenu.configurationUI.UIConfigurable;
 import tkachgeek.tkachutils.items.ItemBuilder;
 import tkachgeek.tkachutils.items.ItemBuilderFactory;
 
@@ -70,15 +69,15 @@ public class IngredientImpl implements Ingredient {
     return type;
   }
   
+  public void setType(Material type) {
+    this.type = type;
+  }
+  
   public int getCustomModelData() {
     return customModelData;
   }
   
   public void setCustomModelData(int customModelData) {
     this.customModelData = customModelData;
-  }
-  
-  public void setType(Material type) {
-    this.type = type;
   }
 }
