@@ -2,7 +2,6 @@ package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 
 import java.util.ArrayList;
@@ -15,6 +14,7 @@ public class PagedView<T extends Ingredient> extends View {
   transient int maxPage = 0;
   transient int pageSize = 0;
   char dynamicChar = '#';
+  transient Player player;
   
   {
     behavior.bind('<', ClickType.LEFT, this::prevPage);
@@ -25,11 +25,11 @@ public class PagedView<T extends Ingredient> extends View {
   
   }
   
-  public List<T> getDynamic() {
+  protected List<T> getDynamic() {
     return dynamic;
   }
   
-  public void setDynamic(List<T> dynamic) {
+  protected void setDynamic(List<T> dynamic) {
     this.dynamic = dynamic;
     this.pageSize = shape.howMany(dynamicChar);
     
@@ -41,28 +41,28 @@ public class PagedView<T extends Ingredient> extends View {
     updatePlaceholders();
   }
   
-  private void updatePlaceholders() {
+  protected void updatePlaceholders() {
     placeholders.add("page", page + 1);
     placeholders.add("nextPage", Math.min(maxPage, page + 2));
     placeholders.add("prevPage", Math.max(1, page));
   }
   
-  public Optional<T> getDynamic(int slot) {
+  protected Optional<T> getDynamic(int slot) {
     int indexAtPage = (int) shape.getJoinedShape().substring(0, slot).chars().filter(ch -> ch == dynamicChar).count();
     int indexAtDynamic = page * pageSize + indexAtPage;
     
     return indexAtDynamic >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(indexAtDynamic));
   }
   
-  public char getDynamicChar() {
+  protected char getDynamicChar() {
     return dynamicChar;
   }
   
-  public void setDynamicChar(char dynamicIngredient) {
+  protected void setDynamicChar(char dynamicIngredient) {
     this.dynamicChar = dynamicIngredient;
   }
-  transient Player player;
-  private void nextPage() {
+  
+  protected void nextPage() {
     if (page + 1 < maxPage) {
       page++;
       updatePlaceholders();
@@ -70,11 +70,11 @@ public class PagedView<T extends Ingredient> extends View {
     }
   }
   
-  private void updateDynamicContent(Player player) {
+  protected void updateDynamicContent(Player player) {
     ViewDrawer.drawPage(this, player);
   }
   
-  private void prevPage() {
+  protected void prevPage() {
     if (page > 0) {
       page--;
       updatePlaceholders();
@@ -88,7 +88,7 @@ public class PagedView<T extends Ingredient> extends View {
     updateDynamicContent(player);
   }
   
-  public int getPage() {
+  protected int getPage() {
     return page;
   }
 }
