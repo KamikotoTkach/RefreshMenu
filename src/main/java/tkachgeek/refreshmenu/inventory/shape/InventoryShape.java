@@ -108,4 +108,14 @@ public class InventoryShape {
       if (joinedShape == null) joinedShape = String.join("", getShape());
       return joinedShape;
    }
+
+   @Override
+   public InventoryShape clone() {
+      return new InventoryShape(
+            this.getName(),
+            this.getShape(),
+            this.getType(),
+            this.getIngredientMap()
+      );
+   }
 }
