@@ -16,14 +16,20 @@ public class IngredientBuilder {
   private int customModelData = 0;
   
   public IngredientBuilder fromItemData(ItemData itemData) {
-     type = itemData.getMaterial();
-     name = itemData.getName().serialize();
-     description = itemData.getDescription().toList();
-     customModelData  = itemData.getCustomModelData();
-     return this;
+    type = itemData.getMaterial();
+    name = itemData.getName().serialize();
+    description = itemData.getDescription().toList();
+    customModelData = itemData.getCustomModelData();
+    return this;
   }
+  
   public IngredientBuilder name(String name) {
     this.name = name;
+    return this;
+  }
+  
+  public IngredientBuilder name(Component name) {
+    this.name = MiniMessageWrapper.serialize(name);
     return this;
   }
   
@@ -32,18 +38,28 @@ public class IngredientBuilder {
     return this;
   }
   
+  public IngredientBuilder description(String... description) {
+    this.description = List.of(description);
+    return this;
+  }
+  
+  public IngredientBuilder description(String description) {
+    this.description = Collections.singletonList(description);
+    return this;
+  }
+  
   public IngredientBuilder descriptionFromComponent(List<Component> description) {
+    this.description = MiniMessageWrapper.serialize(description);
+    return this;
+  }
+  
+  public IngredientBuilder descriptionFromComponent(Component... description) {
     this.description = MiniMessageWrapper.serialize(description);
     return this;
   }
   
   public IngredientBuilder descriptionFromComponent(Component description) {
     this.description = Collections.singletonList(MiniMessageWrapper.serialize(description));
-    return this;
-  }
-  
-  public IngredientBuilder description(String description) {
-    this.description = Collections.singletonList(description);
     return this;
   }
   
@@ -56,6 +72,7 @@ public class IngredientBuilder {
     this.type = type;
     return this;
   }
+  
   public IngredientBuilder customModelData(int data) {
     this.customModelData = data;
     return this;
