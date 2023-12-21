@@ -113,9 +113,9 @@ public class InventoryShape {
    public InventoryShape clone() {
       return new InventoryShape(
             this.getName(),
-            this.getShape(),
+            this.getShape().clone(),
             this.getType(),
-            this.getIngredientMap()
+            new HashMap<>(this.getIngredientMap())
       );
    }
 }
