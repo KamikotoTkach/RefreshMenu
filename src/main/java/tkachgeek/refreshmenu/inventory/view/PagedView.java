@@ -35,7 +35,7 @@ public class PagedView<T extends Ingredient> extends View {
     
     if (this.pageSize == 0) return;
     
-    this.maxPage = dynamic.size() / pageSize + 1;
+    this.maxPage = dynamic.size() / pageSize + (dynamic.size() % pageSize != 0 ? 1 : 0);
     
     placeholders.add("maxPage", maxPage);
     updatePlaceholders();
