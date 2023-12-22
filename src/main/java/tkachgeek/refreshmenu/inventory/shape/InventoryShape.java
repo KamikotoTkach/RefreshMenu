@@ -68,13 +68,11 @@ public class InventoryShape {
    public char charAtIndex(int index) {
       return getJoinedShape().charAt(index);
    }
-
+   
    public int howMany(char toCount) {
       int count = 0;
-      for (String line : getShape()) {
-         for (char c : line.toCharArray()) {
-            if (c == toCount) count++;
-         }
+      for (char c : getJoinedShape().toCharArray()) {
+         if (c == toCount) count++;
       }
       return count;
    }
