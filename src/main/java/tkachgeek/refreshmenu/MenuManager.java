@@ -13,33 +13,37 @@ import java.util.List;
 public class MenuManager {
   private final JavaPlugin plugin;
   List<Menu> activeMenu = new ArrayList<>();
-  
+
   protected MenuManager(JavaPlugin plugin) {
     this.plugin = plugin;
   }
-  
+
+  public JavaPlugin getPlugin() {
+    return plugin;
+  }
+
   public void addActiveMenu(Menu menu) {
     if (hasActiveMenu(menu)) return;
     activeMenu.add(menu);
   }
-  
+
   public void removeActiveMenu(Menu menu) {
     activeMenu.remove(menu);
   }
-  
+
   public boolean hasActiveMenu(Menu menu) {
     return activeMenu.contains(menu);
   }
-  
+
   public void onInventoryClose(InventoryCloseEvent event, View view) {
     if (!view.canCloseHimself && event.getReason() == InventoryCloseEvent.Reason.PLAYER) {
       Bukkit.getScheduler().runTaskLater(plugin, () -> view.open((Player) event.getPlayer()), 1);
       return;
     }
-    
+
     if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
   }
-  
+
   public void open(Menu menu, Player player) {
     menu.setMenuManager(this);
     addActiveMenu(menu);
