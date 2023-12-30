@@ -55,6 +55,34 @@ public class InventoryShape {
                                                       .build());
    }
 
+   public static ShapeBuilder defaultArtExtendedShape() {
+      return InventoryShape.builder()
+                           .name("Меню")
+                           .chest(54)
+                           .shape("#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#######<>")
+
+                           .ingredient('<', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <prevPage> страницу")
+                                                      .description("<page>/<maxPage>")
+                                                      .build())
+
+                           .ingredient('>', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <nextPage> страницу")
+                                                      .description("<page>/<maxPage>")
+                                                      .build());
+   }
+
    public InventoryTypeHolder getType() {
       return type;
    }
@@ -68,7 +96,7 @@ public class InventoryShape {
    public char charAtIndex(int index) {
       return getJoinedShape().charAt(index);
    }
-   
+
    public int howMany(char toCount) {
       int count = 0;
       for (char c : getJoinedShape().toCharArray()) {

@@ -67,7 +67,7 @@ public class ViewDrawer {
     }
   }
 
-  public static void drawArtExtendedPage(ArtExtendedView<? extends Ingredient> view, Player player) {
+  public static void drawArtExtendedPage(ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view, Player player) {
     int pageSize = view.getShape().howMany(view.getDynamicChar());
     int dynamicItemIndex = view.getPage() * pageSize;
     String joinedShape = view.getShape().getJoinedShape();
@@ -86,7 +86,7 @@ public class ViewDrawer {
       if (view.getArts().containsKey(currShapeChar)) {
         ArtIngredient art = view.getArts().get(currShapeChar);
         int draws = artDraws.getOrDefault(currShapeChar, 0);
-        if (draws > art.getMaxDraws()) continue;
+        if (art.getMaxDraws() > -1 && draws > art.getMaxDraws()) continue;
 
         artDraws.put(currShapeChar, draws + 1);
         item = view.getArts().get(currShapeChar).getItem(context);
