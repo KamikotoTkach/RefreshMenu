@@ -7,12 +7,10 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 public class Behavior {
-  HashMap<ClickData, Runnable> binds = new HashMap<>();
-  HashMap<ClickData, Consumer<InventoryClickEvent>> bindsConsumer = new HashMap<>();
+  HashMap<ClickData, Consumer<InventoryClickEvent>> binds = new HashMap<>();
   
   public Behavior(Behavior toClone) {
     this.binds = toClone.binds;
-    this.bindsConsumer = toClone.bindsConsumer;
   }
   
   public Behavior() {
@@ -21,15 +19,16 @@ public class Behavior {
   public void bind(char character, ClickType clickType, Runnable runnable) {
     bind(new ClickData(character, clickType), runnable);
   }
+  
   public void bind(char character, ClickType clickType, Consumer<InventoryClickEvent> runnable) {
     bind(new ClickData(character, clickType), runnable);
   }
   
   public void bind(ClickData clickData, Runnable runnable) {
-    binds.put(clickData, runnable);
+    binds.put(clickData, (e) -> runnable.run());
   }
   public void bind(ClickData clickData, Consumer<InventoryClickEvent> consumer) {
-    bindsConsumer.put(clickData, consumer);
+    binds.put(clickData, consumer);
   }
   
   public void unbind(char character, ClickType clickType) {
@@ -38,7 +37,6 @@ public class Behavior {
   
   public void unbind(ClickData clickData) {
     binds.remove(clickData);
-    bindsConsumer.remove(clickData);
   }
   
   public void execute(InventoryClickEvent event, char character, ClickType clickType) {
@@ -46,10 +44,8 @@ public class Behavior {
   }
   
   public void execute(InventoryClickEvent event, ClickData clickData) {
-    if (bindsConsumer.containsKey(clickData)) {
-      bindsConsumer.get(clickData).accept(event);
-    } else if (binds.containsKey(clickData)) {
-      binds.get(clickData).run();
+    if (binds.containsKey(clickData)) {
+      binds.get(clickData).accept(event);
     }
   }
   

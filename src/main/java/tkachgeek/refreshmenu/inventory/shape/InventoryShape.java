@@ -6,7 +6,6 @@ import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.type.InventoryTypeHolder;
 import tkachgeek.refreshmenu.inventory.view.View;
-import tkachgeek.refreshmenu.inventory.view.ViewDrawer;
 
 import java.util.HashMap;
 
@@ -30,8 +29,8 @@ public class InventoryShape {
    public static ShapeBuilder builder() {
       return new ShapeBuilder();
    }
-
    public static ShapeBuilder defaultPagedShape() {
+      //<editor-fold desc="defaultPagedShape">
       return InventoryShape.builder()
                            .name("Меню")
                            .chest(54)
@@ -53,9 +52,10 @@ public class InventoryShape {
                                                       .name("На <nextPage> страницу")
                                                       .description("<page>/<maxPage>")
                                                       .build());
+      //</editor-fold>
    }
-
    public static ShapeBuilder defaultArtExtendedShape() {
+      //<editor-fold desc="defaultArtExtendedShape">
       return InventoryShape.builder()
                            .name("Меню")
                            .chest(54)
@@ -81,6 +81,7 @@ public class InventoryShape {
                                                       .name("На <nextPage> страницу")
                                                       .description("<page>/<maxPage>")
                                                       .build());
+      //</editor-fold>
    }
 
    public InventoryTypeHolder getType() {
@@ -88,9 +89,7 @@ public class InventoryShape {
    }
 
    public Inventory createInventory(View view) {
-      Inventory inventory = type.createInventory(view, MiniMessageWrapper.deserialize(getName(), view.getPlaceholders()));
-      ViewDrawer.fillInventory(view, inventory);
-      return inventory;
+     return type.createInventory(view, MiniMessageWrapper.deserialize(getName(), view.getPlaceholders()));
    }
 
    public char charAtIndex(int index) {

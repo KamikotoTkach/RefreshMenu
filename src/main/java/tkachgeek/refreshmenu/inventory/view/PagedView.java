@@ -2,7 +2,10 @@ package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
+import tkachgeek.refreshmenu.inventory.view.drawer.PagedViewDrawer;
+import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class PagedView<T extends Ingredient> extends View {
   public PagedView() {
   }
   
-  protected List<T> getDynamic() {
+  public List<T> getDynamic() {
     return dynamic;
   }
   
@@ -53,7 +56,7 @@ public class PagedView<T extends Ingredient> extends View {
     return indexAtDynamic >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(indexAtDynamic));
   }
   
-  protected char getDynamicChar() {
+  public char getDynamicChar() {
     return dynamicChar;
   }
   
@@ -70,7 +73,7 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   protected void updateDynamicContent(Player player) {
-    ViewDrawer.drawPage(this, player);
+    drawInventory(player); //todo: сделать чтобы обновлялся именно динамик контент
   }
   
   protected void prevPage() {
@@ -84,10 +87,15 @@ public class PagedView<T extends Ingredient> extends View {
   @Override
   protected void onOpen(Player player) {
     this.player = player;
-    updateDynamicContent(player);
+    drawInventory(player);
   }
   
-  protected int getPage() {
+  public int getPage() {
     return page;
+  }
+  
+  @Override
+  protected void initializeDrawer() {
+    drawer = new PagedViewDrawer();
   }
 }

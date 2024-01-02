@@ -25,6 +25,12 @@ public class Menu {
   
   public void openView(Player player, String name) {
     View view = views.get(name);
+    
+    if (view == null) {
+      menuManager.getPlugin().getLogger().warning("No view with name `" + name + "`");
+      return;
+    }
+    
     view.setMenu(this);
     view.open(player);
   }

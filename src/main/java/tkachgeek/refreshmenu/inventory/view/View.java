@@ -11,8 +11,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import tkachgeek.config.minilocale.Placeholders;
+import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
+import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
@@ -29,8 +31,17 @@ public class View implements InventoryHolder {
                                                  .build();
   protected transient Menu menu = null;
   transient Behavior behavior = new Behavior();
+  transient ViewDrawer drawer;
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
   transient private Inventory inventory;
+  
+  {
+    initializeDrawer();
+  }
+  
+  protected void initializeDrawer() {
+    drawer = new ViewDrawer();
+  }
   
   public View() {
   }
@@ -43,27 +54,27 @@ public class View implements InventoryHolder {
     event.setCancelled(true);
   }
   
-  public void onInventoryClick(InventoryClickEvent event) {
-    behavior.execute(event, new Behavior.ClickData(shape.charAtIndex(event.getSlot()), event.getClick()));
-    event.setCancelled(true);
-  }
-  
-  public void onInventoryClose(InventoryCloseEvent event) {
-  
-  }
-  
   public void onDrag(InventoryDragEvent event) {
     event.setCancelled(true);
   }
   
+  public void onInventoryClick(InventoryClickEvent event) {
+    event.setCancelled(true);
+    
+    behavior.execute(event, new Behavior.ClickData(shape.charAtIndex(event.getSlot()), event.getClick()));
+  }
+  
+  public void onInventoryClose(InventoryCloseEvent event) {
+  }
+  
   public void open(Player player) {
-    getInventory();
+    drawInventory(player);
     player.openInventory(getInventory());
     onOpen(player);
   }
   
-  protected void onOpen(Player player) {
-  
+  public void drawInventory(Player player) {
+    drawer.draw(new MenuContext(this, player));
   }
   
   public Behavior getBehavior() {
@@ -78,6 +89,10 @@ public class View implements InventoryHolder {
     this.shape = shape;
   }
   
+  /**
+   * @return empty inventory with proper size and title
+   */
+  @Override
   public @NotNull Inventory getInventory() {
     if (inventory == null) inventory = shape.createInventory(this);
     return inventory;
@@ -97,5 +112,9 @@ public class View implements InventoryHolder {
   
   public void setMenu(Menu menu) {
     this.menu = menu;
+  }
+  
+  protected void onOpen(Player player) {
+  
   }
 }
