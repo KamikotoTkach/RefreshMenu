@@ -4,8 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import tkachgeek.config.yaml.YmlConfigManager;
-import tkachgeek.refreshmenu.RefreshMenu;
 import tkachgeek.refreshmenu.configurationUI.UIConfigurableView;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
@@ -21,8 +19,6 @@ public class TestMenu extends Menu {
   }
   
   private void save() {
-    YmlConfigManager manager = new YmlConfigManager(RefreshMenu.plugin);
-    manager.store("test", this);
   }
   
   private static class NavigateView extends View {

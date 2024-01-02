@@ -22,7 +22,6 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   public PagedView() {
-  
   }
   
   protected List<T> getDynamic() {

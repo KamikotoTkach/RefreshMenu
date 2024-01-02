@@ -16,7 +16,6 @@ import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
-   include = JsonTypeInfo.As.PROPERTY,
    property = "type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = View.class, name = "View"),

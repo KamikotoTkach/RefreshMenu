@@ -3,9 +3,8 @@ package tkachgeek.refreshmenu;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
-public final class RefreshMenu extends JavaPlugin implements @NotNull Listener {
+public final class RefreshMenu extends JavaPlugin implements Listener {
   public static JavaPlugin plugin;
   
   public static MenuManager getManager(JavaPlugin plugin) {
