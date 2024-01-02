@@ -14,6 +14,7 @@ import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
+import tkachgeek.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 @JsonTypeInfo(
@@ -31,7 +32,7 @@ public class View implements InventoryHolder {
                                                  .build();
   protected transient Menu menu = null;
   transient Behavior behavior = new Behavior();
-  transient ViewDrawer drawer;
+  transient AbstractDrawer drawer;
   transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
   transient private Inventory inventory;
   
