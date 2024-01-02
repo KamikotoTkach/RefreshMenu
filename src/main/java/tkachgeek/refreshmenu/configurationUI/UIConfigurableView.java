@@ -3,7 +3,6 @@ package tkachgeek.refreshmenu.configurationUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import tkachgeek.refreshmenu.configurationUI.type.TypeMapper;
 import tkachgeek.refreshmenu.configurationUI.valueSupplier.ValueSupplier;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.refreshmenu.inventory.type.ChestType;

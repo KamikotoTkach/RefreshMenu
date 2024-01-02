@@ -125,13 +125,13 @@
         <dependency>
             <groupId>tkachgeek</groupId>
             <artifactId>TkachUtils</artifactId>
-            <version>1.3</version>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>tkachgeek</groupId>
             <artifactId>ConfigYML</artifactId>
-            <version>1.0</version>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

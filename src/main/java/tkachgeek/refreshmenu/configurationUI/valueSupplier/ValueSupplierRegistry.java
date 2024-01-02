@@ -1,7 +1,5 @@
 package tkachgeek.refreshmenu.configurationUI.valueSupplier;
 
-import org.bukkit.entity.Item;
-
 import java.util.ArrayList;
 import java.util.List;
 

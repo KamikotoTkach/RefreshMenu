@@ -1,6 +1,5 @@
 package tkachgeek.refreshmenu.inventory.view;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 

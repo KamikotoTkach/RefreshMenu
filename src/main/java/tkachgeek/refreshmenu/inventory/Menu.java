@@ -43,7 +43,7 @@ public class Menu {
   
   public boolean hasViewers() {
     for (View value : views.values()) {
-      if (value.getInventory().getViewers().size() > 0) return true;
+      if (!value.getInventory().getViewers().isEmpty()) return true;
     }
     return false;
   }
@@ -63,9 +63,11 @@ public class Menu {
   public Collection<View> getViews() {
     return views.values();
   }
+  
   public boolean hasView(String key) {
     return views.containsKey(key);
   }
+  
   public View getView(String key) {
     return views.get(key);
   }
