@@ -2,7 +2,6 @@ package tkachgeek.refreshmenu.inventory;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import tkachgeek.config.yaml.YmlConfig;
 import tkachgeek.refreshmenu.MenuManager;
 import tkachgeek.refreshmenu.inventory.view.Behavior;
 import tkachgeek.refreshmenu.inventory.view.View;
@@ -10,7 +9,7 @@ import tkachgeek.refreshmenu.inventory.view.View;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Menu extends YmlConfig {
+public class Menu {
   
   private final HashMap<String, View> views = new HashMap<>();
   public transient boolean shouldUnload = true;
