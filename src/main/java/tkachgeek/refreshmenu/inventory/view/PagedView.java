@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class PagedView<T extends Ingredient> extends View {
-  transient List<T> dynamic = new ArrayList<>();
-  transient int page = 0;
-  transient int maxPage = 0;
-  transient int pageSize = 0;
-  char dynamicChar = '#';
-  transient Player player;
+  protected transient List<T> dynamic = new ArrayList<>();
+  protected transient int page = 0;
+  protected transient int maxPage = 0;
+  protected transient int pageSize = 0;
+  protected char dynamicChar = '#';
+  protected transient Player player;
   
   {
     behavior.bind('<', ClickType.LEFT, this::prevPage);
@@ -87,7 +87,6 @@ public class PagedView<T extends Ingredient> extends View {
   @Override
   protected void onOpen(Player player) {
     this.player = player;
-    drawInventory(player);
   }
   
   public int getPage() {

@@ -31,9 +31,9 @@ public class View implements InventoryHolder {
                                                  .type(InventoryType.HOPPER)
                                                  .build();
   protected transient Menu menu = null;
-  transient Behavior behavior = new Behavior();
-  transient AbstractDrawer drawer;
-  transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
+  protected transient Behavior behavior = new Behavior();
+  protected transient AbstractDrawer drawer;
+  protected transient Placeholders placeholders = new Placeholders("coder", "TkachGeek");
   transient private Inventory inventory;
   
   {
