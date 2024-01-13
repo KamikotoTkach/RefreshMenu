@@ -35,7 +35,7 @@ public class PagedViewDrawer extends ViewDrawer {
       }
     }
     
-    return null;
+    return AIR;
   }
 }
 

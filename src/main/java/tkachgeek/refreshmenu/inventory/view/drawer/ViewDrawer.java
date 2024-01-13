@@ -1,5 +1,6 @@
 package tkachgeek.refreshmenu.inventory.view.drawer;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import tkachgeek.refreshmenu.MenuContext;
@@ -10,6 +11,7 @@ import tkachgeek.tkachutils.numbers.NumbersUtils;
 import java.util.HashMap;
 
 public class ViewDrawer extends AbstractDrawer {
+  public static ItemStack AIR = new ItemStack(Material.AIR);
   @Override
   public void draw(MenuContext context) {
     InventoryShape shape = context.view().getShape();
