@@ -118,9 +118,6 @@ public class TestPagedView extends PagedView<Ingredient /*или любая св
 
 PagedView автоматически предоставляет плейсхолдеры ```maxPage``` ```page``` ```nextPage``` ```prevPage``` и методы ```updatePlaceholders```, ```updateDynamicContent```
 
-```ViewDrawer```
-Предоставляет методы для отрисовки View: ```drawPage```, ```fillInventory```, ```redrawIngredient```
-
 
 Как показать меню игроку:
 1. Получить экземпляр MenuManager и сохранить куда-то:
