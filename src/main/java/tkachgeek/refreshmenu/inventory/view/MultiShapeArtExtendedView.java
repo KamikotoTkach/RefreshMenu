@@ -43,8 +43,4 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
   public void setShapes(List<InventoryShape> shapes) {
     this.shapes = shapes;
   }
-  
-  public void setShapePointer(int shapePointer) {
-    this.shapePointer = shapePointer;
-  }
 }
