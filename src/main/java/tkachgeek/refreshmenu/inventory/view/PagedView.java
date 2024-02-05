@@ -9,6 +9,7 @@ import tkachgeek.refreshmenu.inventory.view.drawer.PagedViewDrawer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class PagedView<T extends Ingredient> extends View {
   protected transient List<T> dynamic = new ArrayList<>();
@@ -72,7 +73,7 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   protected void updateDynamicContent(Player player) {
-    drawer.drawChar(new MenuContext(this, player), getDynamicChar());
+    drawer.drawChars(new MenuContext(this, player), Set.of(getDynamicChar(), '<', '>'));
   }
   
   protected void prevPage() {

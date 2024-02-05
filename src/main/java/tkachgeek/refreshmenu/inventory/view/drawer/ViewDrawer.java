@@ -9,6 +9,7 @@ import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.tkachutils.numbers.NumbersUtils;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
@@ -29,14 +30,14 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   @Override
-  public void drawChar(MenuContext context, char character) {
+  public void drawChars(MenuContext context, Set<Character> characters) {
     InventoryShape shape = context.view().getShape();
     String joinedShape = shape.getJoinedShape();
     
     for (int i = 0; i < getDrawingSize(context); i++) {
       char currShapeChar = joinedShape.charAt(i);
       
-      if (currShapeChar != character) continue;
+      if (!characters.contains(currShapeChar)) continue;
       
       ItemStack item = findItem(context, i, currShapeChar);
       

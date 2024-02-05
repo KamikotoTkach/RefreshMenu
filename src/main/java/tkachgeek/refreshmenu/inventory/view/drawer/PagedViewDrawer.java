@@ -5,6 +5,8 @@ import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.view.PagedView;
 
+import java.util.Set;
+
 public class PagedViewDrawer extends ViewDrawer {
   int dynamicItemIndex;
   PagedView<? extends Ingredient> view;
@@ -23,7 +25,7 @@ public class PagedViewDrawer extends ViewDrawer {
   }
   
   @Override
-  public void drawChar(MenuContext context, char character) {
+  public void drawChars(MenuContext context, Set<Character> characters) {
     if (!(context.view() instanceof PagedView<? extends Ingredient> pagedView))
       throw new IllegalArgumentException("PagedViewDrawer can only be used with <? extends PagedView>");
     
@@ -32,7 +34,7 @@ public class PagedViewDrawer extends ViewDrawer {
     int pageSize = pagedView.getShape().howMany(view.getDynamicChar());
     dynamicItemIndex = view.getPage() * pageSize;
     
-    super.drawChar(context, character);
+    super.drawChars(context, characters);
   }
   
   @Override

@@ -7,6 +7,8 @@ import tkachgeek.tkachutils.numbers.NumbersUtils;
 import tkachgeek.tkachutils.player.WindowIdCatcher;
 import tkachgeek.tkachutils.protocol.Packet;
 
+import java.util.Set;
+
 public class ExtendedViewDrawer extends PagedViewDrawer {
   int inventorySize;
   
@@ -18,10 +20,10 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  public void drawChar(MenuContext context, char character) {
+  public void drawChars(MenuContext context, Set<Character> characters) {
     inventorySize = context.view().getInventory().getSize();
     
-    super.drawChar(context, character);
+    super.drawChars(context, characters);
   }
   
   @Override
