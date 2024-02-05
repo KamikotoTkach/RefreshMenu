@@ -17,6 +17,13 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
+  public void drawChar(MenuContext context, char character) {
+    inventorySize = context.view().getInventory().getSize();
+    
+    super.drawChar(context, character);
+  }
+  
+  @Override
   protected int getDrawingSize(MenuContext context) {
     return NumbersUtils.notGreater(context.view().getShape().getJoinedShape().length(),
                                    inventorySize + 36);

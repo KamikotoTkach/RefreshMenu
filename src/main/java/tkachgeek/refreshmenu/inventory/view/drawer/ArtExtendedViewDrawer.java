@@ -23,6 +23,16 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   }
   
   @Override
+  public void drawChar(MenuContext context, char character) {
+    if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
+      throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
+    
+    view = artExtendedView;
+    
+    super.drawChar(context, character);
+  }
+  
+  @Override
   protected ItemStack findItem(MenuContext context, int slot, char shapeChar) {
     ItemStack item = super.findItem(context, slot, shapeChar);
     if (item != null) return item;

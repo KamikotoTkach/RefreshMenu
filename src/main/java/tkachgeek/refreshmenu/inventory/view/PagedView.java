@@ -5,7 +5,6 @@ import org.bukkit.event.inventory.ClickType;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.view.drawer.PagedViewDrawer;
-import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +72,7 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   protected void updateDynamicContent(Player player) {
-    drawInventory(player); //todo: сделать чтобы обновлялся именно динамик контент
+    drawer.drawChar(new MenuContext(this, player), getDynamicChar());
   }
   
   protected void prevPage() {

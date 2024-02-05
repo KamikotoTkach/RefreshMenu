@@ -28,6 +28,24 @@ public class ViewDrawer extends AbstractDrawer {
     }
   }
   
+  @Override
+  public void drawChar(MenuContext context, char character) {
+    InventoryShape shape = context.view().getShape();
+    String joinedShape = shape.getJoinedShape();
+    
+    for (int i = 0; i < getDrawingSize(context); i++) {
+      char currShapeChar = joinedShape.charAt(i);
+      
+      if (currShapeChar != character) continue;
+      
+      ItemStack item = findItem(context, i, currShapeChar);
+      
+      if (item != null) {
+        setItem(context, i, item);
+      }
+    }
+  }
+  
   protected int getDrawingSize(MenuContext context) {
     return NumbersUtils.notGreater(context.view().getShape().getJoinedShape().length(),
                                    context.view().getInventory().getSize());
