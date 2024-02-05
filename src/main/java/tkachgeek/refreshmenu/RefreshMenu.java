@@ -3,6 +3,7 @@ package tkachgeek.refreshmenu;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import tkachgeek.tkachutils.player.WindowIdCatcher;
 
 public final class RefreshMenu extends JavaPlugin implements Listener {
   public static JavaPlugin plugin;
@@ -15,5 +16,7 @@ public final class RefreshMenu extends JavaPlugin implements Listener {
   public void onEnable() {
     plugin = this;
     Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
+    
+    WindowIdCatcher.load();
   }
 }

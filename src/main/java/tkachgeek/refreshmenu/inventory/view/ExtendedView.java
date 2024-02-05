@@ -24,7 +24,7 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   protected void onOpen(Player player) {
     JavaPlugin plugin = this.getMenu().getManager().getPlugin();
     Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-      Packet.clearInventory(player);
+      Packet.clearInventory(player, 0);
       super.onOpen(player);
     });
   }
