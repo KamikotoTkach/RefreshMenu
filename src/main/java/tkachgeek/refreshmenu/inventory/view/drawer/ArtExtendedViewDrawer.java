@@ -36,9 +36,12 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   @Override
   protected ItemStack findItem(MenuContext context, int slot, char shapeChar) {
     ItemStack item = super.findItem(context, slot, shapeChar);
-    if (item != null) return item;
+    
+    if (item != null && !item.getType().isAir()) return item;
     
     ArtIngredient art = view.getArts().get(shapeChar);
+    if(art == null) return null;
+    
     int draws = artDraws.getOrDefault(shapeChar, 0);
     if (art.getMaxDraws() > -1 && draws > art.getMaxDraws()) return null;
     

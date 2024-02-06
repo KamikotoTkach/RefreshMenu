@@ -41,7 +41,7 @@ public class PagedViewDrawer extends ViewDrawer {
   protected ItemStack findItem(MenuContext context, int slot, char shapeChar) {
     ItemStack simpleIngredient = super.findItem(context, slot, shapeChar);
     
-    if (simpleIngredient != null) return simpleIngredient;
+    if (simpleIngredient != null && !simpleIngredient.getType().isAir()) return simpleIngredient;
     
     if (view.getDynamicChar() == shapeChar) {
       
