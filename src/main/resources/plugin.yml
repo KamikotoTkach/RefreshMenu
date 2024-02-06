@@ -4,3 +4,6 @@ main: tkachgeek.refreshmenu.RefreshMenu
 api-version: 1.16
 authors: [ TkachGeek ]
 website: cwcode.ru/vk
+depend:
+  - ProtocolLib
+  - CWCommands
