@@ -7,14 +7,18 @@ import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.tkachutils.numbers.NumbersUtils;
+import tkachgeek.tkachutils.player.WindowIdCatcher;
 
 import java.util.HashMap;
 import java.util.Set;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
+  public static ItemStack[] buffer = null;
   @Override
   public void draw(MenuContext context) {
+    buffer = context.view().getInventory().getContents().clone();
+    
     InventoryShape shape = context.view().getShape();
     String joinedShape = shape.getJoinedShape();
     
@@ -27,10 +31,19 @@ public class ViewDrawer extends AbstractDrawer {
         setItem(context, i, item);
       }
     }
+    
+    drawBuffer(context);
+  }
+  
+  protected void drawBuffer(MenuContext context) {
+    context.view().getInventory().setContents(buffer);
+    buffer = null;
   }
   
   @Override
   public void drawChars(MenuContext context, Set<Character> characters) {
+    buffer = context.view().getInventory().getContents().clone();
+    
     InventoryShape shape = context.view().getShape();
     String joinedShape = shape.getJoinedShape();
     
@@ -45,6 +58,8 @@ public class ViewDrawer extends AbstractDrawer {
         setItem(context, i, item);
       }
     }
+    
+    drawBuffer(context);
   }
   
   protected int getDrawingSize(MenuContext context) {
@@ -53,7 +68,7 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
-    if (item != null) context.view().getInventory().setItem(slot, item);
+    buffer[slot] = item;
   }
   
   protected ItemStack findItem(MenuContext context, int slot, char currShapeChar) {

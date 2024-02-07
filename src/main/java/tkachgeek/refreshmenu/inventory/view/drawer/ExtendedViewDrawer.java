@@ -1,22 +1,30 @@
 package tkachgeek.refreshmenu.inventory.view.drawer;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.tkachutils.numbers.NumbersUtils;
-import tkachgeek.tkachutils.player.WindowIdCatcher;
-import tkachgeek.tkachutils.protocol.Packet;
 
 import java.util.Set;
 
 public class ExtendedViewDrawer extends PagedViewDrawer {
   int inventorySize;
-  
+  ItemStack[] playerInventoryBuffer = new ItemStack[36];
   @Override
   public void draw(MenuContext context) {
+    context.player().sendMessage("start render");
+    
     inventorySize = context.view().getInventory().getSize();
     
     super.draw(context);
+    
+    context.player().sendMessage("end render");
+    
   }
   
   @Override
@@ -24,6 +32,17 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
     inventorySize = context.view().getInventory().getSize();
     
     super.drawChars(context, characters);
+  }
+  
+  public void sendSlotPacket(Player player, int slot) {
+    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
+    
+    packet.getIntegers().write(0, -2);
+    packet.getIntegers().write(1, 0);
+    packet.getIntegers().write(2, slot >= 27 ? slot - 27 : slot + 9);
+
+    packet.getItemModifier().write(0, playerInventoryBuffer[slot]);
+    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
   }
   
   @Override
@@ -37,10 +56,25 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
     if (slot < inventorySize) {
       super.setItem(context, slot, item);
     } else {
-      slot = slot - inventorySize;
-      slot = slot >= 27 ? slot - 27 : slot + 9;
-      
-      Packet.setSlot(context.player(), slot, item, WindowIdCatcher.getWindowID(context.player()));
+      playerInventoryBuffer[slot-inventorySize] = item;
     }
   }
+  
+  @Override
+  protected void drawBuffer(MenuContext context) {
+    super.drawBuffer(context);
+    
+    for (int i = 0; i < playerInventoryBuffer.length; i++) {
+      sendSlotPacket(context.player(), i);
+    }
+  }
+  
+  public ItemStack[] getPlayerInventoryBuffer() {
+    return playerInventoryBuffer;
+  }
+  
+  public int getTopInventorySize() {
+    return inventorySize;
+  }
+  
 }

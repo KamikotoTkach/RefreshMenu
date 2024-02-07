@@ -40,6 +40,8 @@ public class MenuManager {
       Bukkit.getScheduler().runTaskLater(plugin, () -> view.open((Player) event.getPlayer()), 1);
       return;
     }
+    
+    RefreshMenu.getApi().removeOpenedView(((Player) event.getPlayer()));
 
     if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
   }

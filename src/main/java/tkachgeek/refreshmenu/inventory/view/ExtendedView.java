@@ -28,4 +28,6 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
       super.onOpen(player);
     });
   }
+  
+  
 }

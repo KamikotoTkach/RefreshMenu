@@ -3,6 +3,7 @@ package tkachgeek.refreshmenu.inventory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import tkachgeek.refreshmenu.MenuManager;
+import tkachgeek.refreshmenu.RefreshMenu;
 import tkachgeek.refreshmenu.inventory.view.Behavior;
 import tkachgeek.refreshmenu.inventory.view.View;
 
@@ -32,6 +33,9 @@ public class Menu {
     }
     
     view.setMenu(this);
+    
+    RefreshMenu.getApi().setOpenedView(player, view);
+    
     view.open(player);
   }
   

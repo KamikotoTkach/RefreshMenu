@@ -14,8 +14,7 @@ public class TestMenu extends Menu {
   public TestMenu() {
     setView("default", new NavigateView());
     setView("config", new UIConfigurableView(TestConfig.getInstance()));
-    
-    bind('S', ClickType.LEFT, this::save);
+    setView("extended", new TestExtendedView());
   }
   
   private void save() {
@@ -26,12 +25,17 @@ public class TestMenu extends Menu {
       InventoryShape.builder()
                     .chest(27)
                     .shape("#########",
-                           "##C###S##",
+                           "##C#E#S##",
                            "#########")
                     
                     .ingredient('C', Ingredient.builder()
                                                .type(Material.ARROW)
                                                .name("Конфигурабле")
+                                               .build())
+                    
+                    .ingredient('E', Ingredient.builder()
+                                               .type(Material.ARROW)
+                                               .name("Экстендед")
                                                .build())
                     
                     .ingredient('S', Ingredient.builder()
@@ -42,8 +46,13 @@ public class TestMenu extends Menu {
                     .build(this);
       
       getBehavior().bind('C', ClickType.LEFT, this::configurable);
+      getBehavior().bind('E', ClickType.LEFT, this::extended);
     }
     
+    
+    private void extended(InventoryClickEvent event) {
+      getMenu().openView((Player) event.getWhoClicked(), "extended");
+    }
     private void configurable(InventoryClickEvent event) {
       getMenu().openView((Player) event.getWhoClicked(), "config");
     }

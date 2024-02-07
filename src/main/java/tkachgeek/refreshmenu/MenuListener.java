@@ -1,11 +1,15 @@
 package tkachgeek.refreshmenu;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import tkachgeek.refreshmenu.inventory.view.View;
+
+import java.util.WeakHashMap;
 
 public class MenuListener implements Listener {
   
@@ -24,9 +28,16 @@ public class MenuListener implements Listener {
   
   @EventHandler
   void onInventoryClose(InventoryCloseEvent event) {
-    if (event.getInventory().getHolder() instanceof View view) {
+    if (event.getInventory().getHolder() instanceof View view) { //todo поработать тут над порядком действий
       view.getMenu().getManager().onInventoryClose(event, view);
       view.onInventoryClose(event);
+      
+    }
+  }
+  @EventHandler
+  void onInventoryOpen(InventoryOpenEvent event) {
+    if (event.getInventory().getHolder() instanceof View view) {
+      RefreshMenu.getApi().setOpenedView((Player) event.getPlayer(), view);
     }
   }
   

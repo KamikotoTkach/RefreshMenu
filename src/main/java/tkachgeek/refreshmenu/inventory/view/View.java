@@ -44,6 +44,10 @@ public class View implements InventoryHolder {
     drawer = new ViewDrawer();
   }
   
+  public AbstractDrawer getDrawer() {
+    return drawer;
+  }
+  
   public View() {
   }
   

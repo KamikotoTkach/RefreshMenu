@@ -1,15 +1,19 @@
 package tkachgeek.refreshmenu;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import tkachgeek.tkachutils.player.WindowIdCatcher;
+import tkachgeek.refreshmenu.protocol.PacketListener;
 
-public final class RefreshMenu extends JavaPlugin implements Listener {
+public final class RefreshMenu extends JavaPlugin {
   public static JavaPlugin plugin;
+  private static RefreshMenuApi api = new RefreshMenuApi();
   
   public static MenuManager getManager(JavaPlugin plugin) {
     return ManagerRegistry.register(new MenuManager(plugin));
+  }
+  
+  public static RefreshMenuApi getApi() {
+    return api;
   }
   
   @Override
@@ -17,6 +21,6 @@ public final class RefreshMenu extends JavaPlugin implements Listener {
     plugin = this;
     Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
     
-    WindowIdCatcher.load();
+    new PacketListener();
   }
 }
