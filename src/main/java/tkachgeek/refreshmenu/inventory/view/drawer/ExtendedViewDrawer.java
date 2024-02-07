@@ -17,14 +17,9 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   ItemStack[] playerInventoryBuffer = new ItemStack[36];
   @Override
   public void draw(MenuContext context) {
-    context.player().sendMessage("start render");
-    
     inventorySize = context.view().getInventory().getSize();
     
     super.draw(context);
-    
-    context.player().sendMessage("end render");
-    
   }
   
   @Override
