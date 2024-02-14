@@ -18,7 +18,14 @@ public class HeadIngredient implements Ingredient {
   String name;
   List<String> description;
   int amount;
-  String textures;
+  String texture;
+  
+  public HeadIngredient(String name, List<String> description, int amount, String texture) {
+    this.name = name;
+    this.description = description;
+    this.amount = amount;
+    this.texture = texture;
+  }
   
   @Override
   public ItemStack getItem(Placeholders placeholders) {
@@ -28,9 +35,9 @@ public class HeadIngredient implements Ingredient {
     if (description != null) item.description(MiniMessageWrapper.deserialize(description, placeholders, true));
     if (amount != 0) item.amount(amount);
     
-    if (textures != null) {
+    if (texture != null) {
       PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
-      profile.setProperty(new ProfileProperty("textures", textures));
+      profile.setProperty(new ProfileProperty("textures", texture));
       item.playerProfile(profile);
     }
     
@@ -49,8 +56,8 @@ public class HeadIngredient implements Ingredient {
     this.amount = amount;
   }
   
-  public void setTextures(String textures) {
-    this.textures = textures;
+  public void setTexture(String texture) {
+    this.texture = texture;
   }
   
   public String getName() {
@@ -65,7 +72,7 @@ public class HeadIngredient implements Ingredient {
     return amount;
   }
   
-  public String getTextures() {
-    return textures;
+  public String getTexture() {
+    return texture;
   }
 }

@@ -18,6 +18,9 @@ public interface Ingredient {
   static IngredientBuilder builder() {
     return new IngredientBuilder();
   }
+  static HeadIngredientBuilder head() {
+    return new HeadIngredientBuilder();
+  }
   
   static ItemIngredient of(ItemStack item) {
     return new ItemIngredient(item);
