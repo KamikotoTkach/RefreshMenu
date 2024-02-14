@@ -11,7 +11,8 @@ import tkachgeek.refreshmenu.MenuContext;
    property = "type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = IngredientImpl.class, name = "simple"),
-   @JsonSubTypes.Type(value = ItemIngredient.class, name = "item")
+   @JsonSubTypes.Type(value = ItemIngredient.class, name = "item"),
+   @JsonSubTypes.Type(value = HeadIngredient.class, name = "head")
 })
 public interface Ingredient {
   static IngredientBuilder builder() {
