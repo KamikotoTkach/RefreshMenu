@@ -20,6 +20,9 @@ public class HeadIngredient implements Ingredient {
   int amount;
   String texture;
   
+  public HeadIngredient() {
+  }
+  
   public HeadIngredient(String name, List<String> description, int amount, String texture) {
     this.name = name;
     this.description = description;
