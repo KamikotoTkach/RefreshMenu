@@ -51,4 +51,8 @@ public class MenuManager {
     addActiveMenu(menu);
     menu.open(player);
   }
+  
+  public List<Menu> getActiveMenu() {
+    return activeMenu;
+  }
 }

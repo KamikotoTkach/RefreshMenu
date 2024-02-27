@@ -17,7 +17,7 @@ public class ItemStackValueSupplier implements ValueSupplier{
     }
     
     try {
-      field.set(object,item.clone());
+      field.set(object, item.clone());
       view.open(player);
     } catch (Exception e) {
       player.sendMessage(e.getMessage());
