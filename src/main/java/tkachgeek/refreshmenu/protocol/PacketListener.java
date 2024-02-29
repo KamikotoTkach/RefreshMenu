@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
@@ -21,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 public class PacketListener {
+  
+  public static final ItemStack AIR = new ItemStack(Material.AIR);
+  
   public PacketListener() {
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.WINDOW_ITEMS) {
       public void onPacketSending(PacketEvent event) {
@@ -39,7 +43,7 @@ public class PacketListener {
           itemStacks.set(slot, playerInventoryBuffer[c++]);
         }
         
-        event.getPacket().getItemListModifier().write(0,itemStacks);
+        event.getPacket().getItemListModifier().write(0, itemStacks);
       }
     });
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.SET_SLOT) {
@@ -74,7 +78,7 @@ public class PacketListener {
         
         Integer clickedSlot = event.getPacket().getIntegers().read(2);
         
-        if(clickedSlot > topInventorySize-1) {
+        if (clickedSlot > topInventorySize - 1) {
           
           Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
           ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
@@ -98,12 +102,12 @@ public class PacketListener {
         }
       }
     });
-    
   }
   
   private static void setSlot(Integer windowId, Integer slot, ItemStack itemStack, Player player) {
-    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
+    if (itemStack == null) itemStack = AIR;
     
+    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
     packet.getIntegers().write(0, windowId);
     packet.getIntegers().write(1, 0);
     packet.getIntegers().write(2, slot);
