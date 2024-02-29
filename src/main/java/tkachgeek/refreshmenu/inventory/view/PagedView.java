@@ -97,4 +97,16 @@ public class PagedView<T extends Ingredient> extends View {
   protected void initializeDrawer() {
     drawer = new PagedViewDrawer();
   }
+  
+  public Player getPlayer() {
+    return player;
+  }
+  
+  public boolean hasViewers() {
+    return !getInventory().getViewers().isEmpty();
+  }
+  
+  public void updateRequired(Player player) {
+    ((PagedViewDrawer) drawer).updateRequired(new MenuContext(this, player));
+  }
 }

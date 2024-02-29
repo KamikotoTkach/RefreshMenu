@@ -29,6 +29,10 @@ public class MenuManager {
 
   public void removeActiveMenu(Menu menu) {
     activeMenu.remove(menu);
+    
+    for (View view : menu.getViews()) {
+      RefreshMenu.getMenuRefreshManager().tryUnregister(view);
+    }
   }
 
   public boolean hasActiveMenu(Menu menu) {

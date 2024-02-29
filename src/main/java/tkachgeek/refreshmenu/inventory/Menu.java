@@ -59,7 +59,10 @@ public class Menu {
   }
   
   public void setView(String name, View view) {
-    views.put(name, view);
+    View prevView = views.put(name, view);
+    
+    RefreshMenu.getMenuRefreshManager().tryUnregister(prevView);
+    RefreshMenu.getMenuRefreshManager().tryRegister(view);
   }
   
   public MenuManager getManager() {
