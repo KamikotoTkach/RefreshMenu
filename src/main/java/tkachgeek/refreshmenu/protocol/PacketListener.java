@@ -40,7 +40,8 @@ public class PacketListener {
         
         int c = 0;
         for (int slot = topInventorySize; slot < itemStacks.size(); slot++) {
-          itemStacks.set(slot, playerInventoryBuffer[c++]);
+          ItemStack element = playerInventoryBuffer[c++];
+          itemStacks.set(slot, element == null ? AIR : element);
         }
         
         event.getPacket().getItemListModifier().write(0, itemStacks);
@@ -58,7 +59,8 @@ public class PacketListener {
         Integer slot = event.getPacket().getIntegers().read(0);
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
-          event.getPacket().getItemModifier().write(0, extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot >= 27 ? playerInvSlot - 27 : playerInvSlot + 9]);
+          ItemStack element = extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot >= 27 ? playerInvSlot - 27 : playerInvSlot + 9];
+          event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
         }
       }
     });
