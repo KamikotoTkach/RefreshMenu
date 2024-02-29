@@ -31,7 +31,7 @@ public class PagedView<T extends Ingredient> extends View {
     return dynamic;
   }
   
-  protected void setDynamic(List<T> dynamic) {
+  public void setDynamic(List<T> dynamic) {
     this.dynamic = dynamic;
     this.pageSize = shape.howMany(dynamicChar);
     
