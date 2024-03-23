@@ -2,6 +2,7 @@ package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.view.drawer.PagedViewDrawer;
@@ -108,5 +109,20 @@ public class PagedView<T extends Ingredient> extends View {
   
   public void updateRequired(Player player) {
     ((PagedViewDrawer) drawer).updateRequired(new MenuContext(this, player));
+  }
+  
+  @Override
+  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+    int slot = event.getSlot();
+    
+    if (event.getView().getInventory(event.getRawSlot()) != getInventory()) {
+      slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
+    }
+    
+    Ingredient clickedIngredient = character == dynamicChar? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
+    
+    if (clickedIngredient != null) {
+      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+    }
   }
 }

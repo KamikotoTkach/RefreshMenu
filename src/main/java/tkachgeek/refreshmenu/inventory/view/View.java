@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import tkachgeek.config.minilocale.Placeholders;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.Menu;
+import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
@@ -56,6 +57,11 @@ public class View implements InventoryHolder {
   }
   
   public void onOwnInventoryClick(InventoryClickEvent event) {
+    int playerInvSlot = event.getSlot();
+    char character = shape.charAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9)));
+    
+    handleIngredientClickAction(event, character);
+    
     event.setCancelled(true);
   }
   
@@ -66,7 +72,19 @@ public class View implements InventoryHolder {
   public void onInventoryClick(InventoryClickEvent event) {
     event.setCancelled(true);
     
-    behavior.execute(event, new Behavior.ClickData(shape.charAtIndex(event.getSlot()), event.getClick()));
+    char character = shape.charAtIndex(event.getSlot());
+    
+    handleIngredientClickAction(event, character);
+    
+    behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+  }
+  
+  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+    Ingredient clickedIngredient = shape.getIngredientMap().get(character);
+    
+    if (clickedIngredient != null) {
+      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+    }
   }
   
   public void onInventoryClose(InventoryCloseEvent event) {
