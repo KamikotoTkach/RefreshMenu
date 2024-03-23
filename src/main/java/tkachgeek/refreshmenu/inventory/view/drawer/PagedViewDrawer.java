@@ -52,9 +52,7 @@ public class PagedViewDrawer extends ViewDrawer {
         if (ingredient.shouldRefresh(context)) {
           ItemStack item = ingredient.getItem(context);
           
-          if (item != null) {
-            setItem(context, i, item);
-          }
+          setItem(context, i, item);
         }
       }
     }

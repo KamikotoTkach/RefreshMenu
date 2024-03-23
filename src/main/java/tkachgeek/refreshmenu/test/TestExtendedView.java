@@ -3,9 +3,11 @@ package tkachgeek.refreshmenu.test;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import tkachgeek.refreshmenu.inventory.ingredient.ArtIngredient;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.ingredient.ItemIngredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
+import tkachgeek.refreshmenu.inventory.view.ArtExtendedView;
 import tkachgeek.refreshmenu.inventory.view.ExtendedView;
 import tkachgeek.tkachutils.items.ItemBuilderFactory;
 
@@ -13,7 +15,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class TestExtendedView extends ExtendedView<Ingredient> {
+public class TestExtendedView extends ArtExtendedView<Ingredient, ArtIngredient> {
   {
     InventoryShape.builder()
                   .chest(54)

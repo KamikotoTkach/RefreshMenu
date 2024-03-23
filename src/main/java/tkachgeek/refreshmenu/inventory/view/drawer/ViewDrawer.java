@@ -27,9 +27,7 @@ public class ViewDrawer extends AbstractDrawer {
       
       ItemStack item = findItem(context, i, currShapeChar);
       
-      if (item != null) {
-        setItem(context, i, item);
-      }
+      setItem(context, i, item);
     }
     
     drawBuffer(context);
@@ -54,9 +52,7 @@ public class ViewDrawer extends AbstractDrawer {
       
       ItemStack item = findItem(context, i, currShapeChar);
       
-      if (item != null) {
-        setItem(context, i, item);
-      }
+      setItem(context, i, item);
     }
     
     drawBuffer(context);
@@ -68,7 +64,7 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
-    buffer[slot] = item;
+    buffer[slot] = item == null ? AIR : item;
   }
   
   protected ItemStack findItem(MenuContext context, int slot, char currShapeChar) {
