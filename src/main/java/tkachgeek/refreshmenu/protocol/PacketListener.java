@@ -58,7 +58,13 @@ public class PacketListener {
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
-        Integer slot = event.getPacket().getIntegers().read(1);
+        Integer slot;
+        if (ServerUtils.isVersionGreater_1_16_5()) {
+          slot = event.getPacket().getIntegers().read(2);
+        } else {
+          slot = event.getPacket().getIntegers().read(1);
+        }
+        
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
           ItemStack element = extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot];
@@ -90,7 +96,7 @@ public class PacketListener {
         
         if (clickedSlot > topInventorySize - 1) {
           if (ServerUtils.isVersionGreater("1.16.5")) {
-            Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(0).getHandle());
+            Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
             
             for (Integer slot : handle.keySet()) {
               if (slot <= topInventorySize - 1) continue;
