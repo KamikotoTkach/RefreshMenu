@@ -17,6 +17,8 @@ import tkachgeek.refreshmenu.RefreshMenu;
 import tkachgeek.refreshmenu.inventory.view.ExtendedView;
 import tkachgeek.refreshmenu.inventory.view.View;
 import tkachgeek.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
+import tkachgeek.tkachutils.protocol.Packet;
+import tkachgeek.tkachutils.server.ServerUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -56,10 +58,10 @@ public class PacketListener {
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
-        Integer slot = event.getPacket().getIntegers().read(0);
+        Integer slot = event.getPacket().getIntegers().read(1);
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
-          ItemStack element = extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot >= 27 ? playerInvSlot - 27 : playerInvSlot + 9];
+          ItemStack element = extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot];
           event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
         }
       }
@@ -68,7 +70,6 @@ public class PacketListener {
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Client.WINDOW_CLICK) {
       public void onPacketReceiving(PacketEvent event) {
         Integer windowId = event.getPacket().getIntegers().read(0);
-        
         if (windowId < 1) return;
         
         Player player = event.getPlayer();
@@ -78,22 +79,37 @@ public class PacketListener {
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
-        Integer clickedSlot = event.getPacket().getIntegers().read(2);
+        Integer clickedSlot;
+        if (ServerUtils.isVersionGreater("1.18.1")) {
+          clickedSlot = event.getPacket().getIntegers().read(2);
+        } else {
+          clickedSlot = event.getPacket().getIntegers().read(1);
+        }
+        
+        ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
         
         if (clickedSlot > topInventorySize - 1) {
-          
-          Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
-          ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
-          
-          for (Integer slot : handle.keySet()) {
-            if (slot <= topInventorySize - 1) continue;
+          if (ServerUtils.isVersionGreater("1.16.5")) {
+            Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(0).getHandle());
             
-            setSlot(windowId, slot, playerInventoryBuffer[slot - topInventorySize], player);
+            for (Integer slot : handle.keySet()) {
+              if (slot <= topInventorySize - 1) continue;
+              
+              Packet.setSlot(player, slot, playerInventoryBuffer[slot - topInventorySize], windowId);
+            }
           }
           
-          setSlot(-1, -1, null, player);
+          Packet.setSlot(player, -1, AIR, -1);
+          Packet.setSlot(player, clickedSlot, playerInventoryBuffer[clickedSlot - topInventorySize], windowId);
           
-          ClickType click = event.getPacket().getIntegers().read(3) == 0 ? ClickType.LEFT : ClickType.RIGHT;
+          Integer button;
+          if (ServerUtils.isVersionGreater("1.17")) {
+            button = event.getPacket().getIntegers().read(3);
+          } else {
+            button = event.getPacket().getIntegers().read(2);
+          }
+          
+          ClickType click = button == 0 ? ClickType.LEFT : ClickType.RIGHT;
           
           InventoryView openInventory = player.getOpenInventory();
           if (openInventory.getTopInventory().getHolder() instanceof ExtendedView<?> extendedView) {

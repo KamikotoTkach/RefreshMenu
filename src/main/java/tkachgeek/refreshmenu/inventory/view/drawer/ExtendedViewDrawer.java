@@ -1,14 +1,11 @@
 package tkachgeek.refreshmenu.inventory.view.drawer;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.tkachutils.numbers.NumbersUtils;
+import tkachgeek.tkachutils.protocol.Packet;
 
 import java.util.Set;
 
@@ -30,14 +27,8 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   public void sendSlotPacket(Player player, int slot) {
-    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
-    
-    packet.getIntegers().write(0, -2);
-    packet.getIntegers().write(1, 0);
-    packet.getIntegers().write(2, slot >= 27 ? slot - 27 : slot + 9);
-
-    packet.getItemModifier().write(0, playerInventoryBuffer[slot]);
-    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
+    ItemStack item = playerInventoryBuffer[slot];
+    Packet.setSlot(player, slot > 27 ? slot - 27 : slot + 9, item == null ? AIR : item, -2);
   }
   
   @Override
