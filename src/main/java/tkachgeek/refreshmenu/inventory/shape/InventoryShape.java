@@ -83,6 +83,35 @@ public class InventoryShape {
                                                       .build());
       //</editor-fold>
    }
+   public static ShapeBuilder defaultMultiShapeArtExtendedShape() {
+      //<editor-fold desc="defaultArtExtendedShape">
+      return InventoryShape.builder()
+                           .name("Меню")
+                           .chest(54)
+                           .shape("#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#######{}")
+
+                           .ingredient('{', Ingredient.builder()
+                                                      .type(Material.SPECTRAL_ARROW)
+                                                      .name("На <prevShape> страницу")
+                                                      .description("<shape>/<shapes>")
+                                                      .build())
+
+                           .ingredient('}', Ingredient.builder()
+                                                      .type(Material.SPECTRAL_ARROW)
+                                                      .name("На <nextShape> страницу")
+                                                      .description("<shape>/<shapes>")
+                                                      .build());
+      //</editor-fold>
+   }
 
    public InventoryTypeHolder getType() {
       return type;

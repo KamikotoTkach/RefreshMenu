@@ -1,6 +1,7 @@
 package tkachgeek.refreshmenu.inventory.view;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import tkachgeek.refreshmenu.inventory.ingredient.ArtIngredient;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
@@ -12,12 +13,17 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
   List<InventoryShape> shapes = new ArrayList<>();
   int shapePointer = 0;
   
+  {
+    getBehavior().bind('{', ClickType.LEFT, event -> prevShape((Player) event.getWhoClicked()));
+    getBehavior().bind('}', ClickType.LEFT, event -> nextShape((Player) event.getWhoClicked()));
+  }
   public void nextShape(Player player) {
     if (shapePointer + 1 < shapes.size()) {
       shapePointer++;
       
       shape = shapes.get(shapePointer);
       
+      updatePlaceholders();
       drawInventory(player);
     }
   }
@@ -28,8 +34,19 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
       
       shape = shapes.get(shapePointer);
       
+      updatePlaceholders();
       drawInventory(player);
     }
+  }
+  
+  @Override
+  protected void updatePlaceholders() {
+    super.updatePlaceholders();
+    
+    placeholders.add("shape", shapePointer + 1);
+    placeholders.add("shapes", shapes.size());
+    placeholders.add("nextShape", Math.min(shapes.size(), shapePointer + 2));
+    placeholders.add("prevShape", Math.max(1, shapePointer));
   }
   
   public List<InventoryShape> getShapes() {
@@ -42,5 +59,8 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
   
   public void setShapes(List<InventoryShape> shapes) {
     this.shapes = shapes;
+    this.shape = shapes.get(0);
+    
+    updatePlaceholders();
   }
 }
