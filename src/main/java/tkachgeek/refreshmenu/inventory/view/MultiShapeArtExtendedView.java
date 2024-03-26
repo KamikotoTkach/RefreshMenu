@@ -25,6 +25,7 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
       
       updatePlaceholders();
       drawInventory(player);
+      updateInventoryTitle(player);
     }
   }
   
@@ -36,6 +37,7 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
       
       updatePlaceholders();
       drawInventory(player);
+      updateInventoryTitle(player);
     }
   }
   
