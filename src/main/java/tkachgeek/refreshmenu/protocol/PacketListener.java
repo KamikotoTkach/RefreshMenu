@@ -5,6 +5,9 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -20,17 +23,20 @@ import tkachgeek.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
 import tkachgeek.tkachutils.protocol.Packet;
 import tkachgeek.tkachutils.server.ServerUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class PacketListener {
   
   public static final ItemStack AIR = new ItemStack(Material.AIR);
-  
+  static HashMap<UUID, OpenedWindow> openedWindow = new HashMap<>();
   public PacketListener() {
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.WINDOW_ITEMS) {
       public void onPacketSending(PacketEvent event) {
-        if (event.getPacket().getIntegers().read(0) < 1) return;
+        Integer windowID = event.getPacket().getIntegers().read(0);
+        if (windowID < 1) return;
         
         View openedView = RefreshMenu.getApi().getOpenedView(event.getPlayer());
         if (openedView == null || !(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
@@ -47,6 +53,14 @@ public class PacketListener {
         }
         
         event.getPacket().getItemListModifier().write(0, itemStacks);
+      }
+    });
+    ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.OPEN_WINDOW) {
+      public void onPacketSending(PacketEvent event) {
+        Integer windowID = event.getPacket().getIntegers().read(0);
+        Object type = event.getPacket().getModifier().read(1);
+        
+        openedWindow.put(event.getPlayer().getUniqueId(), new OpenedWindow(windowID, type));
       }
     });
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.SET_SLOT) {
@@ -127,16 +141,16 @@ public class PacketListener {
       }
     });
   }
+
   
-  private static void setSlot(Integer windowId, Integer slot, ItemStack itemStack, Player player) {
-    if (itemStack == null) itemStack = AIR;
+  public static void setInventoryTitle(Player player, Component title) {
+    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_WINDOW);
     
-    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.SET_SLOT);
-    packet.getIntegers().write(0, windowId);
-    packet.getIntegers().write(1, 0);
-    packet.getIntegers().write(2, slot);
+    OpenedWindow window = openedWindow.get(player.getUniqueId());
+    packet.getIntegers().write(0, window.id());
+    packet.getModifier().write(1, window.type());
+    packet.getChatComponents().write(0, WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(title)));
     
-    packet.getItemModifier().write(0, itemStack);
     ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
   }
 }

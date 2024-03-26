@@ -11,12 +11,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import tkachgeek.config.minilocale.Placeholders;
+import tkachgeek.config.minilocale.wrapper.adventure.MiniMessageWrapper;
 import tkachgeek.refreshmenu.MenuContext;
 import tkachgeek.refreshmenu.inventory.Menu;
 import tkachgeek.refreshmenu.inventory.ingredient.Ingredient;
 import tkachgeek.refreshmenu.inventory.shape.InventoryShape;
 import tkachgeek.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import tkachgeek.refreshmenu.inventory.view.drawer.ViewDrawer;
+import tkachgeek.refreshmenu.protocol.PacketListener;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
@@ -98,6 +100,10 @@ public class View implements InventoryHolder {
   
   public void drawInventory(Player player) {
     drawer.draw(new MenuContext(this, player));
+  }
+  
+  public void updateInventoryTitle(Player player) {
+    PacketListener.setInventoryTitle(player, MiniMessageWrapper.deserialize(shape.getName(), getPlaceholders()));
   }
   
   public Behavior getBehavior() {
