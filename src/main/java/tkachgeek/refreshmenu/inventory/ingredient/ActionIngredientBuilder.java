@@ -83,6 +83,11 @@ public class ActionIngredientBuilder {
     return this;
   }
   
+  public ActionIngredientBuilder bind(ClickType clickType, Action action) {
+    this.actions.put(clickType, action);
+    return this;
+  }
+  
   public ActionIngredient build() {
     return new ActionIngredient(name, description, amount, type, customModelData, actions);
   }
