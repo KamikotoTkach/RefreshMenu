@@ -28,6 +28,10 @@ public interface Ingredient {
     return new HeadIngredientBuilder();
   }
   
+  static ActionIngredientBuilder action() {
+    return new ActionIngredientBuilder();
+  }
+  
   static ItemIngredient of(ItemStack item) {
     return new ItemIngredient(item);
   }
