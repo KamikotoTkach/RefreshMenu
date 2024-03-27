@@ -1,6 +1,7 @@
-# RefreshMenu
-Ещё одна библиотека на менюшки для Paper.
+# RefreshMenu 1.0
+#### Библиотека на меню для Paper
 
+Настройка конфигов [тут](docs/readme.md)
 
 **Кратко:** <br>
 
@@ -121,6 +122,11 @@ PagedView автоматически предоставляет плейсхол
 
 Как показать меню игроку:
 1. Получить экземпляр MenuManager и сохранить куда-то:
-   ```java menuManager = RefreshMenu.getManager(YourPlugin.getInstance());```
+   ```java
+   var menuManager = RefreshMenu.getManager(YourPlugin.getInstance());
+   ```
    
-2. Открыть меню ```YourPlugin.menuManager.open(new TestMenu(), player);```
+2. Открыть меню 
+   ```java
+   menuManager.open(new YourMenu(), (Player) viewer);
+   ```
