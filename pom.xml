@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tkachgeek</groupId>
+    <groupId>ru.cwcode.tkach.refreshmenu</groupId>
     <artifactId>RefreshMenu</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
@@ -133,9 +133,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>tkachgeek</groupId>
-            <artifactId>ConfigYML</artifactId>
-            <version>LATEST</version>
+            <groupId>ru.cwcode.tkach.config</groupId>
+            <artifactId>PaperConfig</artifactId>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
