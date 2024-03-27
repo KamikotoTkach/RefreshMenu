@@ -13,6 +13,7 @@ import tkachgeek.refreshmenu.MenuContext;
    @JsonSubTypes.Type(value = ConsoleCommandAction.class, name = "consoleCommand"),
    @JsonSubTypes.Type(value = PlayerCommandAction.class, name = "playerCommand"),
    @JsonSubTypes.Type(value = SendMessageAction.class, name = "sendMessage"),
+   @JsonSubTypes.Type(value = SetViewAction.class, name = "setView"),
 })
 public interface Action {
   void accept(MenuContext context, ClickType clickType);
