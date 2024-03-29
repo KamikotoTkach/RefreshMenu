@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
-import tkachgeek.tkachutils.items.ItemBuilder;
-import tkachgeek.tkachutils.items.ItemBuilderFactory;
+import ru.cwcode.cwutils.items.ItemBuilder;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 import java.util.List;
 

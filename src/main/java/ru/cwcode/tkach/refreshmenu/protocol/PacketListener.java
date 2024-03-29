@@ -20,8 +20,8 @@ import ru.cwcode.tkach.refreshmenu.RefreshMenu;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
-import tkachgeek.tkachutils.protocol.Packet;
-import tkachgeek.tkachutils.server.ServerUtils;
+import ru.cwcode.cwutils.protocol.Packet;
+import ru.cwcode.cwutils.server.ServerUtils;
 
 import java.util.HashMap;
 import java.util.List;

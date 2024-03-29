@@ -6,7 +6,7 @@
 
     <groupId>ru.cwcode.tkach.refreshmenu</groupId>
     <artifactId>RefreshMenu</artifactId>
-    <version>1.0</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>RefreshMenu</name>
@@ -45,6 +45,10 @@
                                 <relocation>
                                     <pattern>net.wesjd.anvilgui</pattern>
                                     <shadedPattern>lib.anvilgui</shadedPattern> <!-- Replace [YOUR_PLUGIN_PACKAGE] with your namespace -->
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.fasterxml.jackson</pattern>
+                                    <shadedPattern>ru.cwcode.tkach.config.relocate.com.fasterxml.jackson</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -127,8 +131,8 @@
             <version>1.6.5-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>tkachgeek</groupId>
-            <artifactId>TkachUtils</artifactId>
+            <groupId>ru.cwcode.cwutils</groupId>
+            <artifactId>CWUtils</artifactId>
             <version>LATEST</version>
             <scope>provided</scope>
         </dependency>

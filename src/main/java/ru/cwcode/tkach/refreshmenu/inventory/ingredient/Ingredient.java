@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
-import tkachgeek.tkachutils.items.ItemBuilderFactory;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,

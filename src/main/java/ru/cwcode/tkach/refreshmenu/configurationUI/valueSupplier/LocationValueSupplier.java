@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
-import tkachgeek.tkachutils.numbers.NumbersUtils;
+import ru.cwcode.cwutils.numbers.NumbersUtils;
 
 import java.lang.reflect.Field;
 

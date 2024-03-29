@@ -6,8 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
-import tkachgeek.tkachutils.numbers.NumbersUtils;
-import tkachgeek.tkachutils.player.WindowIdCatcher;
+import ru.cwcode.cwutils.numbers.NumbersUtils;
 
 import java.util.HashMap;
 import java.util.Set;

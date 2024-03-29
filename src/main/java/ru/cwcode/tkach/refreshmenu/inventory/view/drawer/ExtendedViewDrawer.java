@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
-import tkachgeek.tkachutils.numbers.NumbersUtils;
-import tkachgeek.tkachutils.protocol.Packet;
+import ru.cwcode.cwutils.numbers.NumbersUtils;
+import ru.cwcode.cwutils.protocol.Packet;
 
 import java.util.Set;
 

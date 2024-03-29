@@ -9,7 +9,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ItemIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ArtExtendedView;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
-import tkachgeek.tkachutils.items.ItemBuilderFactory;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;

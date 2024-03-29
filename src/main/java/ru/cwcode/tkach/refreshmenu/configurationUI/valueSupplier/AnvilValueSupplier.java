@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import ru.cwcode.tkach.refreshmenu.RefreshMenu;
 import ru.cwcode.tkach.refreshmenu.configurationUI.type.TypeMapper;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
-import tkachgeek.tkachutils.items.ItemBuilderFactory;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
