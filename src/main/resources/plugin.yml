@@ -7,3 +7,4 @@ website: cwcode.ru/vk
 depend:
   - ProtocolLib
   - CWCommands
+  - CWConfig
