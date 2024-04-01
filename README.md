@@ -1,4 +1,4 @@
-# RefreshMenu 1.0.0.0
+# RefreshMenu 1.1.0
 #### Библиотека на меню для Paper
 
 Настройка конфигов [тут](docs/readme.md)
