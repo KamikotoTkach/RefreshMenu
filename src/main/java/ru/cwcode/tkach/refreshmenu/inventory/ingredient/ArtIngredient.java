@@ -1,7 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(
       use = JsonTypeInfo.Id.NAME,
