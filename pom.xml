@@ -46,10 +46,6 @@
                                     <pattern>net.wesjd.anvilgui</pattern>
                                     <shadedPattern>lib.anvilgui</shadedPattern> <!-- Replace [YOUR_PLUGIN_PACKAGE] with your namespace -->
                                 </relocation>
-                                <relocation>
-                                    <pattern>ru.cwcode.tkach.config.relocate.com.fasterxml.jackson</pattern>
-                                    <shadedPattern>ru.cwcode.tkach.config.relocate.com.fasterxml.jackson</shadedPattern>
-                                </relocation>
                             </relocations>
                             <filters>
                                 <filter>
@@ -82,7 +78,6 @@
                                     <artifactId>${project.artifactId}</artifactId>
                                     <version>${project.version}</version>
                                     <type>${project.packaging}</type>
-                                    <destFileName>${project.artifactId}.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${lib.dir}</outputDirectory>
@@ -133,7 +128,7 @@
         <dependency>
             <groupId>ru.cwcode.cwutils</groupId>
             <artifactId>CWUtils</artifactId>
-            <version>LATEST</version>
+            <version>2.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
