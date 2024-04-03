@@ -1,6 +1,16 @@
 # RefreshMenu 1.1.0
 #### Библиотека на меню для Paper
 
+
+Подключение:
+```xml
+<dependency>
+  <groupId>ru.cwcode.tkach.refreshmenu</groupId>
+  <artifactId>RefreshMenu</artifactId>
+  <version>1.1.0</version>
+</dependency>
+```
+
 Настройка конфигов [тут](docs/readme.md)
 
 **Кратко:** <br>
