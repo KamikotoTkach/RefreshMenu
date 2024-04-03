@@ -8,6 +8,7 @@
   <groupId>ru.cwcode.tkach.refreshmenu</groupId>
   <artifactId>RefreshMenu</artifactId>
   <version>1.1.0</version>
+  <scope>provided</scope>
 </dependency>
 ```
 
