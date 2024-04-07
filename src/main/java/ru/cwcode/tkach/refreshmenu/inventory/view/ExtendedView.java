@@ -11,21 +11,23 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
 public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   @Override
   public void onOwnInventoryClick(InventoryClickEvent event) {
-    behavior.execute(event, new Behavior.ClickData(shape.charAtIndex(event.getRawSlot()), event.getClick()));
-    super.onOwnInventoryClick(event);
-  }
-
-  @Override
-  protected void initializeDrawer() {
-    drawer = new ExtendedViewDrawer();
+    shape.findCharAtIndex(event.getRawSlot()).ifPresent(character -> {
+      behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+      super.onOwnInventoryClick(event);
+    });
   }
   
   @Override
   public void onInventoryClose(InventoryCloseEvent event) {
     super.onInventoryClose(event);
     
-    Bukkit.getScheduler().runTaskLater(RefreshMenu.plugin,() -> {
+    Bukkit.getScheduler().runTaskLater(RefreshMenu.plugin, () -> {
       ((Player) event.getPlayer()).updateInventory();
-    },1);
+    }, 1);
+  }
+  
+  @Override
+  protected void initializeDrawer() {
+    drawer = new ExtendedViewDrawer();
   }
 }

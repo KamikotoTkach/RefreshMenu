@@ -43,8 +43,6 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   }
   
   protected Optional<ART> getArt(int slot) {
-    char artChar = shape.charAtIndex(slot);
-    
-    return Optional.ofNullable(this.arts.get(artChar));
+    return shape.findCharAtIndex(slot).map(this.arts::get);
   }
 }

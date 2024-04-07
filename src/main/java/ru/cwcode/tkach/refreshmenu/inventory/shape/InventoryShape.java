@@ -8,6 +8,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.type.InventoryTypeHolder;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class InventoryShape {
    InventoryTypeHolder type;
@@ -120,9 +121,24 @@ public class InventoryShape {
    public Inventory createInventory(View view) {
      return type.createInventory(view, MiniLocale.getInstance().miniMessageWrapper().deserialize(getName(), view.getPlaceholders()));
    }
-
+   
+   /**
+    * @throws IndexOutOfBoundsException  if the {@code index}
+    * argument is negative or not less than the length of this
+    * shape.<br>
+    * Use the {@link #findCharAtIndex(int) findCharAtIndex} instead
+    */
+   @Deprecated
    public char charAtIndex(int index) {
       return getJoinedShape().charAt(index);
+   }
+   
+   public Optional<Character> findCharAtIndex(int index) {
+      if (index < 0 || index >= getJoinedShape().length()) {
+         return Optional.empty();
+      }
+      
+      return Optional.of(getJoinedShape().charAt(index));
    }
 
    public int howMany(char toCount) {

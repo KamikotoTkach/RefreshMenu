@@ -1,7 +1,5 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view;
 
-import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
-import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -10,6 +8,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.cwcode.tkach.locale.Placeholder;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
@@ -44,15 +44,11 @@ public class View implements InventoryHolder {
     initializeDrawer();
   }
   
-  protected void initializeDrawer() {
-    drawer = new ViewDrawer();
+  public View() {
   }
   
   public AbstractDrawer getDrawer() {
     return drawer;
-  }
-  
-  public View() {
   }
   
   public void onOutsideClick(InventoryClickEvent event) {
@@ -60,12 +56,12 @@ public class View implements InventoryHolder {
   }
   
   public void onOwnInventoryClick(InventoryClickEvent event) {
-    int playerInvSlot = event.getSlot();
-    char character = shape.charAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9)));
-    
-    handleIngredientClickAction(event, character);
-    
     event.setCancelled(true);
+    int playerInvSlot = event.getSlot();
+    
+    shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
+      handleIngredientClickAction(event, character);
+    });
   }
   
   public void onDrag(InventoryDragEvent event) {
@@ -75,19 +71,11 @@ public class View implements InventoryHolder {
   public void onInventoryClick(InventoryClickEvent event) {
     event.setCancelled(true);
     
-    char character = shape.charAtIndex(event.getSlot());
-    
-    handleIngredientClickAction(event, character);
-    
-    behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
-  }
-  
-  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
-    Ingredient clickedIngredient = shape.getIngredientMap().get(character);
-    
-    if (clickedIngredient != null) {
-      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
-    }
+    shape.findCharAtIndex(event.getSlot()).ifPresent(character -> {
+      handleIngredientClickAction(event, character);
+      
+      behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+    });
   }
   
   public void onInventoryClose(InventoryCloseEvent event) {
@@ -142,6 +130,18 @@ public class View implements InventoryHolder {
   
   public void setMenu(Menu menu) {
     this.menu = menu;
+  }
+  
+  protected void initializeDrawer() {
+    drawer = new ViewDrawer();
+  }
+  
+  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+    Ingredient clickedIngredient = shape.getIngredientMap().get(character);
+    
+    if (clickedIngredient != null) {
+      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+    }
   }
   
   protected void onOpen(Player player) {
