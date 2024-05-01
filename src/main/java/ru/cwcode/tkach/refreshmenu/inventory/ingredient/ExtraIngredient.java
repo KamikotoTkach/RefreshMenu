@@ -1,0 +1,49 @@
+package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
+
+import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.ItemStack;
+import ru.cwcode.tkach.refreshmenu.MenuContext;
+import ru.cwcode.tkach.refreshmenu.inventory.ingredient.extra.Extra;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExtraIngredient extends IngredientImpl {
+  List<Extra> extras = new ArrayList<>();
+  
+  public ExtraIngredient() {
+  }
+  
+  public ExtraIngredient(String name, List<String> description, int amount, Material type, int customModelData, List<Extra> extras) {
+    super(name, description, amount, type, customModelData);
+    this.extras = extras;
+  }
+  
+  @Override
+  public void onClick(MenuContext context, ClickType clickType) {
+    extras.stream().filter(x -> x.isHandlingOnClick(this, context, clickType)).findFirst().ifPresentOrElse(x -> {
+      x.getItem(this, context);
+    }, () -> {
+      super.onClick(context, clickType);
+    });
+  }
+  
+  @Override
+  public boolean shouldRefresh(MenuContext context) {
+    return extras.stream().filter(x -> x.isHandlingShouldRefresh(this, context)).findFirst().map(x -> {
+      return x.shouldRefresh(this, context);
+    }).orElseGet(() -> {
+      return super.shouldRefresh(context);
+    });
+  }
+  
+  @Override
+  public ItemStack getItem(MenuContext context) {
+    return extras.stream().filter(x -> x.isHandlingGetItem(this, context)).findFirst().map(x -> {
+      return x.getItem(this, context);
+    }).orElseGet(() -> {
+      return super.getItem(context);
+    });
+  }
+}

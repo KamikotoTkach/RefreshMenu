@@ -6,6 +6,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.PagedView;
 
+import java.util.Collection;
 import java.util.Set;
 
 public class PagedViewDrawer extends ViewDrawer {
@@ -30,13 +31,16 @@ public class PagedViewDrawer extends ViewDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Set<Character> characters) {
+  public void drawChars(MenuContext context, Collection<Character> characters) {
     setupPagedDrawer(context);
     
     super.drawChars(context, characters);
   }
   
-  public void updateRequired(MenuContext context) { //todo refactor
+  @Override
+  public void updateRequired(MenuContext context) {
+    super.updateRequired(context);
+    
     setupPagedDrawer(context);
     
     buffer = context.view().getInventory().getContents().clone();

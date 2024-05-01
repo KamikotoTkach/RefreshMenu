@@ -32,6 +32,10 @@ public interface Ingredient {
     return new ActionIngredientBuilder();
   }
   
+  static ExtraIngredientBuilder extra() {
+    return new ExtraIngredientBuilder();
+  }
+  
   static ItemIngredient of(ItemStack item) {
     return new ItemIngredient(item);
   }
@@ -49,6 +53,7 @@ public interface Ingredient {
   default boolean shouldRefresh(MenuContext context) {
     return false;
   }
+  
   default void onClick(MenuContext context, ClickType clickType) {
   
   }
