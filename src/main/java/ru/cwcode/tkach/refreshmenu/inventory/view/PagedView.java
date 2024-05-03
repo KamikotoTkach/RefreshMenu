@@ -73,7 +73,7 @@ public class PagedView<T extends Ingredient> extends View {
     }
   }
   
-  protected void updateDynamicContent(Player player) {
+  protected synchronized void updateDynamicContent(Player player) {
     drawer.drawChars(new MenuContext(this, player), Set.of(getDynamicChar(), '<', '>'));
   }
   

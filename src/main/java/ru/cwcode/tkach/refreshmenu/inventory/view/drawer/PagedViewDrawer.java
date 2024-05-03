@@ -13,7 +13,7 @@ public class PagedViewDrawer extends ViewDrawer {
   PagedView<? extends Ingredient> view;
   
   @Override
-  public void draw(MenuContext context) {
+  public synchronized void draw(MenuContext context) {
     setupPagedDrawer(context);
     
     super.draw(context);
@@ -30,13 +30,13 @@ public class PagedViewDrawer extends ViewDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
     setupPagedDrawer(context);
     
     super.drawChars(context, characters);
   }
   
-  public void updateRequired(MenuContext context) { //todo refactor
+  public synchronized void updateRequired(MenuContext context) { //todo refactor
     setupPagedDrawer(context);
     
     buffer = context.view().getInventory().getContents().clone();

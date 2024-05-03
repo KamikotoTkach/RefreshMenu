@@ -14,7 +14,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   HashMap<Character, Integer> artDraws = new HashMap<>();
   
   @Override
-  public void draw(MenuContext context) {
+  public synchronized void draw(MenuContext context) {
     if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
       throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
     
@@ -24,7 +24,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
     if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
       throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
     

@@ -13,10 +13,10 @@ import java.util.Set;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
-  public static ItemStack[] buffer = null;
+  public static volatile ItemStack[] buffer = null;
   
   @Override
-  public void draw(MenuContext context) {
+  public synchronized void draw(MenuContext context) {
     buffer = context.view().getInventory().getContents().clone();
     
     InventoryShape shape = context.view().getShape();
@@ -34,7 +34,7 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
     buffer = context.view().getInventory().getContents().clone();
     
     InventoryShape shape = context.view().getShape();

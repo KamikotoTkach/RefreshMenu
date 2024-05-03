@@ -20,7 +20,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
     inventorySize = context.view().getInventory().getSize();
     
     super.drawChars(context, characters);
