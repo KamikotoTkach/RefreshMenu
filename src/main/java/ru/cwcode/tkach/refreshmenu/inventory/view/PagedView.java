@@ -28,6 +28,11 @@ public class PagedView<T extends Ingredient> extends View {
   public PagedView() {
   }
   
+  @Override
+  public PagedViewDrawer getDrawer() {
+    return (PagedViewDrawer) drawer;
+  }
+  
   public List<T> getDynamic() {
     return dynamic;
   }
@@ -119,7 +124,7 @@ public class PagedView<T extends Ingredient> extends View {
       slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
     }
     
-    Ingredient clickedIngredient = character == dynamicChar? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
+    Ingredient clickedIngredient = character == dynamicChar ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
     
     if (clickedIngredient != null) {
       clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());

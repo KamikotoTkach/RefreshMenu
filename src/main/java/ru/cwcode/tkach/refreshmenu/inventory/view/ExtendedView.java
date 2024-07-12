@@ -30,4 +30,9 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   protected void initializeDrawer() {
     drawer = new ExtendedViewDrawer();
   }
+  
+  @Override
+  public ExtendedViewDrawer getDrawer() {
+    return (ExtendedViewDrawer) drawer;
+  }
 }

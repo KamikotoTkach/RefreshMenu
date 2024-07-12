@@ -5,6 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ArtExtendedViewDrawer;
+import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.PagedViewDrawer;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,6 +41,11 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   @Override
   protected void initializeDrawer() {
     drawer = new ArtExtendedViewDrawer();
+  }
+  
+  @Override
+  public ArtExtendedViewDrawer getDrawer() {
+    return (ArtExtendedViewDrawer) drawer;
   }
   
   protected Optional<ART> getArt(int slot) {
