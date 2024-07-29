@@ -47,8 +47,8 @@ public class View implements InventoryHolder {
   public View() {
   }
   
-  public AbstractDrawer getDrawer() {
-    return drawer;
+  public ViewDrawer getDrawer() {
+    return (ViewDrawer) drawer;
   }
   
   public void onOutsideClick(InventoryClickEvent event) {
