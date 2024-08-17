@@ -15,6 +15,8 @@ public class PagedViewDrawer extends ViewDrawer {
   
   @Override
   public void draw(MenuContext context) {
+    if (buffer != null) return;
+    
     setupPagedDrawer(context);
     
     super.draw(context);
@@ -31,14 +33,18 @@ public class PagedViewDrawer extends ViewDrawer {
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
+  public void drawChars(MenuContext context, Collection<Character> characters) {
+    if (buffer != null) return;
+    
     setupPagedDrawer(context);
     
     super.drawChars(context, characters);
   }
   
-  public synchronized void updateRequired(MenuContext context) { //todo refactor
-    super.updateRequired();
+  public void updateRequired(MenuContext context) { //todo refactor
+    if (buffer != null) return;
+    
+    super.updateRequired(context);
     
     setupPagedDrawer(context);
     

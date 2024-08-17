@@ -16,10 +16,12 @@ import java.util.Map;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
-  public static volatile ItemStack[] buffer = null;
+  public volatile ItemStack[] buffer = null;
   
   @Override
-  public synchronized void draw(MenuContext context) {
+  public void draw(MenuContext context) {
+    if (buffer != null) return;
+    
     buffer = context.view().getInventory().getContents().clone();
     
     InventoryShape shape = context.view().getShape();
@@ -37,7 +39,8 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
+  public void drawChars(MenuContext context, Collection<Character> characters) {
+    if (buffer != null) return;
     if (characters.isEmpty()) return;
     
     buffer = context.view().getInventory().getContents().clone();
@@ -60,6 +63,8 @@ public class ViewDrawer extends AbstractDrawer {
   
   @Override
   public void updateRequired(MenuContext context) {
+    if (buffer != null) return;
+    
     drawChars(context, getRequiredUpdateCharacters(context));
   }
   

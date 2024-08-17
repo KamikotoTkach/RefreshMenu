@@ -8,20 +8,24 @@ import ru.cwcode.cwutils.numbers.NumbersUtils;
 import ru.cwcode.cwutils.protocol.Packet;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class ExtendedViewDrawer extends PagedViewDrawer {
   int inventorySize;
   ItemStack[] playerInventoryBuffer = new ItemStack[36];
+  
   @Override
   public void draw(MenuContext context) {
+    if (buffer != null) return;
+    
     inventorySize = context.view().getInventory().getSize();
     
     super.draw(context);
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
+  public void drawChars(MenuContext context, Collection<Character> characters) {
+    if (buffer != null) return;
+    
     inventorySize = context.view().getInventory().getSize();
     
     super.drawChars(context, characters);
