@@ -20,14 +20,18 @@ import ru.cwcode.cwutils.items.ItemBuilderFactory;
    @JsonSubTypes.Type(value = ActionIngredient.class, name = "action")
 })
 public interface Ingredient {
-  static IngredientBuilder builder() {
-    return new IngredientBuilder();
+  static <I extends IngredientImpl, B extends IngredientBuilder<I, B>> B builder() {
+    return (B) new IngredientBuilder<I, B>();
   }
   
   static HeadIngredientBuilder head() {
     return new HeadIngredientBuilder();
   }
   
+  /**
+   * @deprecated <p> Use {@link Ingredient#extra()} instead
+   */
+  @Deprecated
   static ActionIngredientBuilder action() {
     return new ActionIngredientBuilder();
   }

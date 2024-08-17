@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient.extra;
 
 import org.bukkit.inventory.ItemStack;
+import org.intellij.lang.annotations.Pattern;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ExtraIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
@@ -11,6 +12,10 @@ import java.util.HashMap;
 public class ExtraState implements Extra {
   HashMap<String, Ingredient> states = new HashMap<>();
   transient String lastState = null;
+  
+  public static ExtraStateBuilder builder() {
+    return new ExtraStateBuilder();
+  }
   
   @Override
   public ItemStack getItem(ExtraIngredient extraIngredient, MenuContext context) {
@@ -39,23 +44,22 @@ public class ExtraState implements Extra {
   
   @Override
   public boolean shouldRefresh(ExtraIngredient extraIngredient, MenuContext context) {
-    return states.keySet().stream().anyMatch((state) -> {
-      return shouldChangeState(state, context);
-    });
+    return states.keySet().stream()
+                 .anyMatch((state) -> shouldChangeState(state, context));
   }
   
-  private boolean shouldChangeState(String state, MenuContext context) {
-    String[] splittedState = state.split(":");
+  private boolean shouldChangeState(@Pattern("^[^:]+:[^:]+$") String state, MenuContext context) {
+    String[] splitState = state.split(":");
     
-    if (splittedState.length != 2) {
+    if (splitState.length != 2) {
       return false;
     }
     
-    String stateValue = context.view().getState(splittedState[0]);
-    return stateValue != null && stateValue.equals(splittedState[1]);
+    String stateValue = context.view().getState(splitState[0]);
+    return stateValue != null && stateValue.equals(splitState[1]);
   }
   
-  public ExtraState addState(String state, Ingredient display) {
+  public ExtraState addState(@Pattern("^[^:]+:[^:]+$") String state, Ingredient display) {
     states.put(state, display);
     return this;
   }

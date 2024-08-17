@@ -22,28 +22,28 @@ public class ExtraIngredient extends IngredientImpl {
   
   @Override
   public void onClick(MenuContext context, ClickType clickType) {
-    extras.stream().filter(x -> x.isHandlingOnClick(this, context, clickType)).findFirst().ifPresentOrElse(x -> {
-      x.getItem(this, context);
-    }, () -> {
-      super.onClick(context, clickType);
-    });
+    extras.stream()
+          .filter(x -> x.isHandlingOnClick(this, context, clickType))
+          .findFirst()
+          .ifPresentOrElse(x -> x.onClick(this, context, clickType),
+                           () -> super.onClick(context, clickType));
   }
   
   @Override
   public boolean shouldRefresh(MenuContext context) {
-    return extras.stream().filter(x -> x.isHandlingShouldRefresh(this, context)).findFirst().map(x -> {
-      return x.shouldRefresh(this, context);
-    }).orElseGet(() -> {
-      return super.shouldRefresh(context);
-    });
+    return extras.stream()
+                 .filter(x -> x.isHandlingShouldRefresh(this, context))
+                 .findFirst()
+                 .map(x -> x.shouldRefresh(this, context))
+                 .orElseGet(() -> super.shouldRefresh(context));
   }
   
   @Override
   public ItemStack getItem(MenuContext context) {
-    return extras.stream().filter(x -> x.isHandlingGetItem(this, context)).findFirst().map(x -> {
-      return x.getItem(this, context);
-    }).orElseGet(() -> {
-      return super.getItem(context);
-    });
+    return extras.stream()
+                 .filter(x -> x.isHandlingGetItem(this, context))
+                 .findFirst()
+                 .map(x -> x.getItem(this, context))
+                 .orElseGet(() -> super.getItem(context));
   }
 }

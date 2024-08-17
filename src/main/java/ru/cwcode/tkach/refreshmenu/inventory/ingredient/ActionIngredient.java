@@ -8,6 +8,10 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.action.Action;
 import java.util.EnumMap;
 import java.util.List;
 
+/**
+ * @deprecated <p> Use {@link ExtraIngredient} instead
+ */
+@Deprecated
 public class ActionIngredient extends IngredientImpl {
   EnumMap<ClickType, Action> actions = new EnumMap<>(ClickType.class);
   

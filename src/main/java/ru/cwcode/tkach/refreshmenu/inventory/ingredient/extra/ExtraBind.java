@@ -10,6 +10,10 @@ import java.util.EnumMap;
 public class ExtraBind implements Extra {
   EnumMap<ClickType, Action> actions = new EnumMap<>(ClickType.class);
   
+  public static ExtraBindBuilder builder() {
+    return new ExtraBindBuilder();
+  }
+  
   public ExtraBind bind(ClickType clickType, Action action) {
     actions.put(clickType, action);
     return this;

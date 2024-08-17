@@ -15,7 +15,6 @@ public class IngredientImpl implements Ingredient {
   List<String> description;
   int amount;
   Material type;
-  
   int customModelData;
   
   public IngredientImpl(String name, List<String> description, int amount, Material type, int customModelData) {
