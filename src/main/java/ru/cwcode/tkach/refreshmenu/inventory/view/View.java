@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.cwcode.tkach.locale.Placeholder;
@@ -20,6 +21,8 @@ import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.PacketListener;
+
+import java.util.HashMap;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
@@ -38,8 +41,8 @@ public class View implements InventoryHolder {
   protected transient Behavior behavior = new Behavior();
   protected transient AbstractDrawer drawer;
   protected transient Placeholders placeholders = Placeholder.add("coder", "TkachGeek");
-  transient private Inventory inventory;
-  
+  protected transient HashMap<String, String> states = new HashMap<>();
+  protected transient Inventory inventory;
   {
     initializeDrawer();
   }
@@ -146,5 +149,17 @@ public class View implements InventoryHolder {
   
   protected void onOpen(Player player) {
   
+  }
+  
+  public void setState(String state, String value) {
+    states.put(state, value);
+  }
+  
+  public @Nullable String getState(String state) {
+    return states.get(state);
+  }
+  
+  protected void updateRequired(Player player) {
+    drawer.updateRequired(new MenuContext(this, player));
   }
 }

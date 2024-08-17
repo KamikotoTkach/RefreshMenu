@@ -2,14 +2,17 @@ package ru.cwcode.tkach.refreshmenu.inventory.view.drawer;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.cwcode.cwutils.numbers.NumbersUtils;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
+import java.util.Map;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
@@ -34,7 +37,9 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
+    if (characters.isEmpty()) return;
+    
     buffer = context.view().getInventory().getContents().clone();
     
     InventoryShape shape = context.view().getShape();
@@ -51,6 +56,22 @@ public class ViewDrawer extends AbstractDrawer {
     }
     
     drawBuffer(context);
+  }
+  
+  @Override
+  public void updateRequired(MenuContext context) {
+    drawChars(context, getRequiredUpdateCharacters(context));
+  }
+  
+  protected static @NotNull List<Character> getRequiredUpdateCharacters(MenuContext context) {
+    InventoryShape shape = context.view().getShape();
+    
+    return shape.getIngredientMap()
+                .entrySet()
+                .stream()
+                .filter(x -> x.getValue().shouldRefresh(context))
+                .map(Map.Entry::getKey)
+                .toList();
   }
   
   protected void drawBuffer(MenuContext context) {

@@ -8,77 +8,80 @@ import ru.cwcode.tkach.locale.platform.MiniLocale;
 import java.util.Collections;
 import java.util.List;
 
-public class IngredientBuilder {
-  private String name = "";
-  private List<String> description;
-  private int amount = 1;
-  private Material type = Material.STONE;
-  private int customModelData = 0;
+public class IngredientBuilder
+  <I extends IngredientImpl, B extends IngredientBuilder<I, B>>
+  extends AbstractIngredientBuilder<I, B> {
   
-  public IngredientBuilder fromItemData(ItemData itemData) {
+  protected String name = "";
+  protected List<String> description;
+  protected int amount = 1;
+  protected Material type = Material.STONE;
+  protected int customModelData = 0;
+  
+  public B fromItemData(ItemData itemData) {
     type = itemData.getMaterial();
     name = itemData.getName().serialize();
     description = itemData.getDescription().toList();
     customModelData = itemData.getCustomModelData();
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder name(String name) {
+  public B name(String name) {
     this.name = name;
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder name(Component name) {
+  public B name(Component name) {
     this.name = MiniLocale.getInstance().miniMessageWrapper().serialize(name);
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder description(List<String> description) {
+  public B description(List<String> description) {
     this.description = description;
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder description(String... description) {
+  public B description(String... description) {
     this.description = List.of(description);
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder description(String description) {
+  public B description(String description) {
     this.description = Collections.singletonList(description);
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder descriptionFromComponent(List<Component> description) {
+  public B descriptionFromComponent(List<Component> description) {
     this.description = MiniLocale.getInstance().miniMessageWrapper().serialize(description);
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder descriptionFromComponent(Component... description) {
+  public B descriptionFromComponent(Component... description) {
     this.description = MiniLocale.getInstance().miniMessageWrapper().serialize(description);
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder descriptionFromComponent(Component description) {
+  public B descriptionFromComponent(Component description) {
     this.description = Collections.singletonList(MiniLocale.getInstance().miniMessageWrapper().serialize(description));
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder amount(int amount) {
+  public B amount(int amount) {
     this.amount = amount;
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder type(Material type) {
+  public B type(Material type) {
     this.type = type;
-    return this;
+    return getThis();
   }
   
-  public IngredientBuilder customModelData(int data) {
+  public B customModelData(int data) {
     this.customModelData = data;
-    return this;
+    return getThis();
   }
   
-  public IngredientImpl build() {
-    return new IngredientImpl(name, description, amount, type, customModelData);
+  public I build() {
+    return (I) new IngredientImpl(name, description, amount, type, customModelData);
   }
 }

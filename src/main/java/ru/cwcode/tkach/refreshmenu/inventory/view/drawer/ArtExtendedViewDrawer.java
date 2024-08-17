@@ -6,6 +6,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ArtExtendedView;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
       throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
     

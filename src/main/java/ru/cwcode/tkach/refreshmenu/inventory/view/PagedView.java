@@ -113,7 +113,7 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   public void updateRequired(Player player) {
-    ((PagedViewDrawer) drawer).updateRequired(new MenuContext(this, player));
+    super.updateRequired(player);
   }
   
   @Override

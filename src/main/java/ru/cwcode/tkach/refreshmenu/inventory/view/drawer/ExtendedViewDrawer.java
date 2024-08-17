@@ -7,6 +7,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.cwutils.numbers.NumbersUtils;
 import ru.cwcode.cwutils.protocol.Packet;
 
+import java.util.Collection;
 import java.util.Set;
 
 public class ExtendedViewDrawer extends PagedViewDrawer {
@@ -20,7 +21,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  public synchronized void drawChars(MenuContext context, Set<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     inventorySize = context.view().getInventory().getSize();
     
     super.drawChars(context, characters);
