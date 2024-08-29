@@ -3,7 +3,6 @@ package ru.cwcode.tkach.refreshmenu.inventory.view.drawer;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 
 import java.util.Collection;
-import java.util.Set;
 
 public abstract class AbstractDrawer {
    public abstract void draw(MenuContext context);

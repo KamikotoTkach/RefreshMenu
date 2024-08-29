@@ -14,14 +14,14 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import ru.cwcode.tkach.refreshmenu.RefreshMenu;
+import ru.cwcode.cwutils.protocol.Packet;
+import ru.cwcode.cwutils.server.ServerUtils;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
-import ru.cwcode.cwutils.protocol.Packet;
-import ru.cwcode.cwutils.server.ServerUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,17 +29,21 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PacketListener {
-  
   public static final ItemStack AIR = new ItemStack(Material.AIR);
+  
   static HashMap<UUID, OpenedWindow> openedWindow = new HashMap<>();
+  
   public PacketListener() {
+    //replacing items in bottom player inventory to relevant items from extended view
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.WINDOW_ITEMS) {
       public void onPacketSending(PacketEvent event) {
         Integer windowID = event.getPacket().getIntegers().read(0);
         if (windowID < 1) return;
         
-        View openedView = RefreshMenu.getApi().getOpenedView(event.getPlayer());
-        if (openedView == null || !(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+        InventoryHolder holder = event.getPlayer().getOpenInventory().getTopInventory().getHolder();
+        if(!(holder instanceof View openedView)) return;
+        
+        if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
         List<ItemStack> itemStacks = event.getPacket().getItemListModifier().read(0);
         ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
@@ -55,6 +59,8 @@ public class PacketListener {
         event.getPacket().getItemListModifier().write(0, itemStacks);
       }
     });
+    
+    //catching opened window ID instead of getting it using reflection
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.OPEN_WINDOW) {
       public void onPacketSending(PacketEvent event) {
         Integer windowID = event.getPacket().getIntegers().read(0);
@@ -63,12 +69,16 @@ public class PacketListener {
         openedWindow.put(event.getPlayer().getUniqueId(), new OpenedWindow(windowID, type));
       }
     });
+    
+    //replacing item in bottom player inventory to relevant items from extended view
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.SET_SLOT) {
       public void onPacketSending(PacketEvent event) {
         if (event.getPacket().getIntegers().read(0) < 1) return;
         
-        View openedView = RefreshMenu.getApi().getOpenedView(event.getPlayer());
-        if (openedView == null || !(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+        InventoryHolder holder = event.getPlayer().getOpenInventory().getTopInventory().getHolder();
+        if(!(holder instanceof View openedView)) return;
+        
+        if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
@@ -87,6 +97,7 @@ public class PacketListener {
       }
     });
     
+    //catching bottom inventory click and redirect control to extended view
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Client.WINDOW_CLICK) {
       public void onPacketReceiving(PacketEvent event) {
         Integer windowId = event.getPacket().getIntegers().read(0);
@@ -94,8 +105,10 @@ public class PacketListener {
         
         Player player = event.getPlayer();
         
-        View openedView = RefreshMenu.getApi().getOpenedView(player);
-        if (openedView == null || !(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+        InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
+        if(!(holder instanceof View openedView)) return;
+        
+        if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         

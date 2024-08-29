@@ -1,5 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.shape;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
@@ -11,9 +13,15 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class InventoryShape {
+   @Setter
+   @Getter
    InventoryTypeHolder type;
+   @Setter
+   @Getter
    String name;
+   @Getter
    String[] shape;
+   @Getter
    HashMap<Character, Ingredient> ingredientMap = new HashMap<>();
    transient String joinedShape = null;
 
@@ -30,6 +38,7 @@ public class InventoryShape {
    public static ShapeBuilder builder() {
       return new ShapeBuilder();
    }
+   
    public static ShapeBuilder defaultPagedShape() {
       //<editor-fold desc="defaultPagedShape">
       return InventoryShape.builder()
@@ -55,6 +64,7 @@ public class InventoryShape {
                                                       .build());
       //</editor-fold>
    }
+   
    public static ShapeBuilder defaultArtExtendedShape() {
       //<editor-fold desc="defaultArtExtendedShape">
       return InventoryShape.builder()
@@ -84,6 +94,7 @@ public class InventoryShape {
                                                       .build());
       //</editor-fold>
    }
+   
    public static ShapeBuilder defaultMultiShapeArtExtendedShape() {
       //<editor-fold desc="defaultArtExtendedShape">
       return InventoryShape.builder()
@@ -113,12 +124,9 @@ public class InventoryShape {
                                                       .build());
       //</editor-fold>
    }
-
-   public InventoryTypeHolder getType() {
-      return type;
-   }
-
-   public Inventory createInventory(View view) {
+   
+  
+  public Inventory createInventory(View view) {
      return type.createInventory(view, MiniLocale.getInstance().miniMessageWrapper().deserialize(getName(), view.getPlaceholders()));
    }
    
@@ -148,33 +156,13 @@ public class InventoryShape {
       }
       return count;
    }
-
-   public void setType(InventoryTypeHolder type) {
-      this.type = type;
-   }
-
-   public String getName() {
-      return name;
-   }
-
-   public void setName(String name) {
-      this.name = name;
-   }
-
-   public String[] getShape() {
-      return shape;
-   }
-
-   public void setShape(String... shape) {
+  
+  public void setShape(String... shape) {
       this.shape = shape;
       this.joinedShape = null;
    }
-
-   public HashMap<Character, Ingredient> getIngredientMap() {
-      return ingredientMap;
-   }
-
-   public String getJoinedShape() {
+  
+  public String getJoinedShape() {
       if (joinedShape == null) joinedShape = String.join("", getShape());
       return joinedShape;
    }

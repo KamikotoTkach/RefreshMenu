@@ -3,8 +3,8 @@ package ru.cwcode.tkach.refreshmenu.configurationUI.valueSupplier;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import ru.cwcode.cwutils.numbers.NumbersUtils;
+import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 import java.lang.reflect.Field;
 

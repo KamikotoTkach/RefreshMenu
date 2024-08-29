@@ -1,5 +1,6 @@
 package ru.cwcode.tkach.refreshmenu;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -10,6 +11,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class MenuManager {
   private final JavaPlugin plugin;
   List<Menu> activeMenu = new ArrayList<>();
@@ -17,11 +19,7 @@ public class MenuManager {
   protected MenuManager(JavaPlugin plugin) {
     this.plugin = plugin;
   }
-
-  public JavaPlugin getPlugin() {
-    return plugin;
-  }
-
+  
   public void addActiveMenu(Menu menu) {
     if (hasActiveMenu(menu)) return;
     activeMenu.add(menu);
@@ -40,8 +38,6 @@ public class MenuManager {
   }
 
   public void onInventoryClose(InventoryCloseEvent event, View view) {
-    RefreshMenu.getApi().removeOpenedView(((Player) event.getPlayer()));
-
     Bukkit.getScheduler().runTask(plugin, () -> {
       if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
     });
@@ -51,9 +47,5 @@ public class MenuManager {
     menu.setMenuManager(this);
     addActiveMenu(menu);
     menu.open(player);
-  }
-  
-  public List<Menu> getActiveMenu() {
-    return activeMenu;
   }
 }

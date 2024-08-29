@@ -1,8 +1,8 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient.action;
 
+import org.bukkit.event.inventory.ClickType;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.bukkit.event.inventory.ClickType;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 
 @JsonTypeInfo(

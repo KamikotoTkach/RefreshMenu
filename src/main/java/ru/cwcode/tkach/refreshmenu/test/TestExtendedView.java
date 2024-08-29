@@ -2,14 +2,12 @@ package ru.cwcode.tkach.refreshmenu.test;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ItemIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ArtExtendedView;
-import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
-import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;

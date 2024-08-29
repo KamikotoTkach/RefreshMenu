@@ -6,10 +6,10 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import ru.cwcode.tkach.locale.Placeholders;
-import ru.cwcode.tkach.locale.platform.MiniLocale;
 import ru.cwcode.cwutils.items.ItemBuilder;
 import ru.cwcode.cwutils.items.ItemBuilderFactory;
+import ru.cwcode.tkach.locale.Placeholders;
+import ru.cwcode.tkach.locale.platform.MiniLocale;
 
 import java.util.List;
 import java.util.UUID;

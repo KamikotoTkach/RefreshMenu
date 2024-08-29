@@ -4,10 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import ru.cwcode.cwutils.items.ItemBuilderFactory;
 import ru.cwcode.tkach.refreshmenu.RefreshMenu;
 import ru.cwcode.tkach.refreshmenu.configurationUI.type.TypeMapper;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
-import ru.cwcode.cwutils.items.ItemBuilderFactory;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

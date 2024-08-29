@@ -3,9 +3,9 @@ package ru.cwcode.tkach.refreshmenu.inventory.view.drawer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.cwutils.numbers.NumbersUtils;
 import ru.cwcode.cwutils.protocol.Packet;
+import ru.cwcode.tkach.refreshmenu.MenuContext;
 
 import java.util.Collection;
 

@@ -7,7 +7,6 @@ import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.PagedView;
 
 import java.util.Collection;
-import java.util.Set;
 
 public class PagedViewDrawer extends ViewDrawer {
   volatile int dynamicItemIndex;

@@ -1,10 +1,10 @@
 package ru.cwcode.tkach.refreshmenu.inventory.type;
 
-import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
-import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
+import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 @JsonTypeInfo(

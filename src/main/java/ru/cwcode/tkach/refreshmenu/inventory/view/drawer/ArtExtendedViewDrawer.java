@@ -8,7 +8,6 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.ArtExtendedView;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 
 public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   volatile ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;

@@ -31,9 +31,6 @@ public class Menu {
     }
     
     view.setMenu(this);
-    
-    RefreshMenu.getApi().setOpenedView(player, view);
-    
     view.open(player);
   }
   
