@@ -56,7 +56,9 @@ public class View extends AbstractView {
     shape.findCharAtIndex(event.getSlot()).ifPresent(character -> {
       handleIngredientClickAction(event, character);
       
-      behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+      execute(((Player) event.getWhoClicked()), () -> {
+        behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+      });
     });
   }
   
