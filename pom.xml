@@ -6,7 +6,7 @@
 
     <groupId>ru.cwcode.tkach.refreshmenu</groupId>
     <artifactId>RefreshMenu</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.0t</version>
     <packaging>jar</packaging>
 
     <name>RefreshMenu</name>
@@ -272,6 +272,12 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>5.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

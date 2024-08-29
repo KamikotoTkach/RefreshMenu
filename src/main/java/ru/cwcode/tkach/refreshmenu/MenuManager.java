@@ -40,14 +40,11 @@ public class MenuManager {
   }
 
   public void onInventoryClose(InventoryCloseEvent event, View view) {
-    if (!view.canCloseHimself && event.getReason() == InventoryCloseEvent.Reason.PLAYER) {
-      Bukkit.getScheduler().runTaskLater(plugin, () -> view.open((Player) event.getPlayer()), 1);
-      return;
-    }
-    
     RefreshMenu.getApi().removeOpenedView(((Player) event.getPlayer()));
 
-    if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
+    Bukkit.getScheduler().runTask(plugin, () -> {
+      if (!view.getMenu().hasViewers() && view.getMenu().shouldUnload) removeActiveMenu(view.getMenu());
+    });
   }
 
   public void open(Menu menu, Player player) {

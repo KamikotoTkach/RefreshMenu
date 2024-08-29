@@ -42,7 +42,7 @@ public class MenuRefreshManager {
     views.forEach((view, refresh) -> {
       try {
         if (view.hasViewers() && Bukkit.getCurrentTick() % refresh.delay() == 0) {
-          view.updateRequired(view.getPlayer()); //todo: было бы неплохо переписать под мульти-пользовательскую архитектуру и желательно без потери совместимости
+          view.updateRequired(view.getPlayer());
         }
       } catch (Exception e) {
         e.printStackTrace();

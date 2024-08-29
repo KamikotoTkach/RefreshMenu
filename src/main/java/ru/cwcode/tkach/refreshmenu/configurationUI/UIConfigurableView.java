@@ -55,10 +55,6 @@ public class UIConfigurableView extends PagedView<ConfigurableIngredient> {
     onExit.accept((Player) event.getWhoClicked());
   }
   
-  @Override
-  public void onInventoryClose(InventoryCloseEvent event) {
-    super.onInventoryClose(event);
-  }
   
   private void interact(InventoryClickEvent event) {
     getDynamic(event.getSlot()).ifPresent(field -> {

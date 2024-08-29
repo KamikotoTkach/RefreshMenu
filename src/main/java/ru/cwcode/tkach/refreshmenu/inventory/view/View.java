@@ -1,21 +1,21 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.cwcode.cwutils.messages.MessageReturn;
+import ru.cwcode.cwutils.messages.TargetableMessageReturn;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.cwcode.tkach.locale.Placeholder;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
-import ru.cwcode.tkach.refreshmenu.inventory.Menu;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
@@ -25,54 +25,33 @@ import ru.cwcode.tkach.refreshmenu.protocol.PacketListener;
 import java.util.HashMap;
 
 @JsonTypeInfo(
-   use = JsonTypeInfo.Id.NAME,
-   property = "type")
+  use = JsonTypeInfo.Id.NAME,
+  property = "type")
 @JsonSubTypes({
-   @JsonSubTypes.Type(value = View.class, name = "View"),
+  @JsonSubTypes.Type(value = View.class, name = "View"),
 })
-public class View implements InventoryHolder {
-  public boolean canCloseHimself = true;
+public class View extends AbstractView {
+  @Getter @Setter
   protected InventoryShape shape = InventoryShape.builder()
                                                  .name("Не настроено, vk.com/cwcode")
                                                  .shape("-")
                                                  .type(InventoryType.HOPPER)
                                                  .build();
-  protected transient Menu menu = null;
+  
+  @Getter
   protected transient Behavior behavior = new Behavior();
   protected transient AbstractDrawer drawer;
+  @Getter
   protected transient Placeholders placeholders = Placeholder.add("coder", "TkachGeek");
   protected transient HashMap<String, String> states = new HashMap<>();
-  protected transient Inventory inventory;
+  
   {
     initializeDrawer();
   }
   
-  public View() {
-  }
-  
-  public ViewDrawer getDrawer() {
-    return (ViewDrawer) drawer;
-  }
-  
-  public void onOutsideClick(InventoryClickEvent event) {
-    event.setCancelled(true);
-  }
-  
-  public void onOwnInventoryClick(InventoryClickEvent event) {
-    event.setCancelled(true);
-    int playerInvSlot = event.getSlot();
-    
-    shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
-      handleIngredientClickAction(event, character);
-    });
-  }
-  
-  public void onDrag(InventoryDragEvent event) {
-    event.setCancelled(true);
-  }
-  
+  @Override
   public void onInventoryClick(InventoryClickEvent event) {
-    event.setCancelled(true);
+    super.onInventoryClick(event);
     
     shape.findCharAtIndex(event.getSlot()).ifPresent(character -> {
       handleIngredientClickAction(event, character);
@@ -81,13 +60,24 @@ public class View implements InventoryHolder {
     });
   }
   
-  public void onInventoryClose(InventoryCloseEvent event) {
+  @Override
+  public void onOwnInventoryClick(InventoryClickEvent event) {
+    super.onOwnInventoryClick(event);
+    
+    int playerInvSlot = event.getSlot();
+    
+    shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
+      handleIngredientClickAction(event, character);
+    });
+  }
+  
+  public ViewDrawer getDrawer() {
+    return (ViewDrawer) drawer;
   }
   
   public void open(Player player) {
     drawInventory(player);
-    player.openInventory(getInventory());
-    onOpen(player);
+    super.open(player);
   }
   
   public void drawInventory(Player player) {
@@ -98,41 +88,16 @@ public class View implements InventoryHolder {
     PacketListener.setInventoryTitle(player, MiniLocale.getInstance().miniMessageWrapper().deserialize(shape.getName(), getPlaceholders()));
   }
   
-  public Behavior getBehavior() {
-    return behavior;
+  public void setState(String state, String value) {
+    states.put(state, value);
   }
   
-  public InventoryShape getShape() {
-    return shape;
+  public @Nullable String getState(String state) {
+    return states.get(state);
   }
   
-  public void setShape(InventoryShape shape) {
-    this.shape = shape;
-  }
-  
-  /**
-   * @return empty inventory with proper size and title
-   */
-  @Override
-  public @NotNull Inventory getInventory() {
-    if (inventory == null) inventory = shape.createInventory(this);
-    return inventory;
-  }
-  
-  public void setInventory(Inventory inventory) {
-    this.inventory = inventory;
-  }
-  
-  public Placeholders getPlaceholders() {
-    return placeholders;
-  }
-  
-  public Menu getMenu() {
-    return menu;
-  }
-  
-  public void setMenu(Menu menu) {
-    this.menu = menu;
+  public void updateRequired(Player player) {
+    drawer.updateRequired(new MenuContext(this, player));
   }
   
   protected void initializeDrawer() {
@@ -143,23 +108,37 @@ public class View implements InventoryHolder {
     Ingredient clickedIngredient = shape.getIngredientMap().get(character);
     
     if (clickedIngredient != null) {
-      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+      execute((Player) event.getWhoClicked(), () -> {
+        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+      });
     }
   }
   
-  protected void onOpen(Player player) {
-  
+  protected void execute(Player player, Runnable runnable) {
+    try {
+      runnable.run();
+    } catch (Exception e) {
+      handleException(e, player);
+    }
   }
   
-  public void setState(String state, String value) {
-    states.put(state, value);
+  protected void handleException(Exception exception, Player player) {
+    if (exception instanceof MessageReturn messageReturn) {
+      player.sendMessage(messageReturn.getMessage());
+    } else if(exception instanceof TargetableMessageReturn targetableMessageReturn) {
+      player.sendMessage(targetableMessageReturn.getMessage(player));
+    } else {
+      player.sendMessage(exception.getLocalizedMessage());
+      exception.printStackTrace();
+    }
   }
   
-  public @Nullable String getState(String state) {
-    return states.get(state);
-  }
-  
-  protected void updateRequired(Player player) {
-    drawer.updateRequired(new MenuContext(this, player));
+  @Override
+  public @NotNull Inventory getInventory() {
+    if (inventory == null) {
+      inventory = shape.createInventory(this);
+    }
+    
+    return inventory;
   }
 }

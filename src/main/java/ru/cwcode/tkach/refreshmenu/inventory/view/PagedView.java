@@ -1,5 +1,8 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -13,28 +16,29 @@ import java.util.Optional;
 import java.util.Set;
 
 public class PagedView<T extends Ingredient> extends View {
+  @Getter
   protected transient List<T> dynamic = new ArrayList<>();
+  @Getter
   protected transient int page = 0;
   protected transient int maxPage = 0;
   protected transient int pageSize = 0;
+  
+  @Getter
+  @Setter(AccessLevel.PROTECTED)
   protected char dynamicChar = '#';
-  protected transient Player player;
+  
+  @Getter()
+  @Setter(AccessLevel.PROTECTED)
+  protected Player player;
   
   {
     behavior.bind('<', ClickType.LEFT, this::prevPage);
     behavior.bind('>', ClickType.LEFT, this::nextPage);
   }
   
-  public PagedView() {
-  }
-  
   @Override
   public PagedViewDrawer getDrawer() {
     return (PagedViewDrawer) drawer;
-  }
-  
-  public List<T> getDynamic() {
-    return dynamic;
   }
   
   public void setDynamic(List<T> dynamic) {
@@ -47,6 +51,20 @@ public class PagedView<T extends Ingredient> extends View {
     
     placeholders.add("maxPage", maxPage);
     updatePlaceholders();
+  }
+  
+  @Override
+  public void open(Player player) {
+    this.player = player;
+    super.open(player);
+  }
+  
+  public boolean hasViewers() {
+    return !getInventory().getViewers().isEmpty();
+  }
+  
+  public void updateRequired(Player player) {
+    super.updateRequired(player);
   }
   
   protected void updatePlaceholders() {
@@ -62,14 +80,6 @@ public class PagedView<T extends Ingredient> extends View {
     return indexAtDynamic >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(indexAtDynamic));
   }
   
-  public char getDynamicChar() {
-    return dynamicChar;
-  }
-  
-  protected void setDynamicChar(char dynamicIngredient) {
-    this.dynamicChar = dynamicIngredient;
-  }
-  
   protected void nextPage() {
     if (page + 1 < maxPage) {
       page++;
@@ -78,7 +88,7 @@ public class PagedView<T extends Ingredient> extends View {
     }
   }
   
-  protected synchronized void updateDynamicContent(Player player) {
+  protected void updateDynamicContent(Player player) {
     drawer.drawChars(new MenuContext(this, player), Set.of(getDynamicChar(), '<', '>'));
   }
   
@@ -91,29 +101,8 @@ public class PagedView<T extends Ingredient> extends View {
   }
   
   @Override
-  protected void onOpen(Player player) {
-    this.player = player;
-  }
-  
-  public int getPage() {
-    return page;
-  }
-  
-  @Override
   protected void initializeDrawer() {
     drawer = new PagedViewDrawer();
-  }
-  
-  public Player getPlayer() {
-    return player;
-  }
-  
-  public boolean hasViewers() {
-    return !getInventory().getViewers().isEmpty();
-  }
-  
-  public void updateRequired(Player player) {
-    super.updateRequired(player);
   }
   
   @Override
@@ -127,7 +116,9 @@ public class PagedView<T extends Ingredient> extends View {
     Ingredient clickedIngredient = character == dynamicChar ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
     
     if (clickedIngredient != null) {
-      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+      execute(((Player) event.getWhoClicked()), () -> {
+        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+      });
     }
   }
 }

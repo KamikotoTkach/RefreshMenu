@@ -1,5 +1,6 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
@@ -9,6 +10,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngredient> extends ArtExtendedView<T, ART> {
   List<InventoryShape> shapes = new ArrayList<>();
   int shapePointer = 0;
@@ -49,14 +51,6 @@ public class MultiShapeArtExtendedView<T extends Ingredient, ART extends ArtIngr
     placeholders.add("shapes", shapes.size());
     placeholders.add("nextShape", Math.min(shapes.size(), shapePointer + 2));
     placeholders.add("prevShape", Math.max(1, shapePointer));
-  }
-  
-  public List<InventoryShape> getShapes() {
-    return shapes;
-  }
-  
-  public int getShapePointer() {
-    return shapePointer;
   }
   
   public void setShapes(List<InventoryShape> shapes) {

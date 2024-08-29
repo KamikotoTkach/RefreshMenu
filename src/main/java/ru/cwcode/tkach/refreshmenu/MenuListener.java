@@ -29,9 +29,11 @@ public class MenuListener implements Listener {
   @EventHandler
   void onInventoryClose(InventoryCloseEvent event) {
     if (event.getInventory().getHolder() instanceof View view) { //todo поработать тут над порядком действий
-      view.getMenu().getManager().onInventoryClose(event, view);
-      view.onInventoryClose(event);
+      boolean isClosed = view.onInventoryClose(event);
       
+      if (isClosed) {
+        view.getMenu().getManager().onInventoryClose(event, view);
+      }
     }
   }
   @EventHandler

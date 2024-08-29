@@ -18,12 +18,16 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   }
   
   @Override
-  public void onInventoryClose(InventoryCloseEvent event) {
-    super.onInventoryClose(event);
+  public boolean onInventoryClose(InventoryCloseEvent event) {
+    boolean isClosed = super.onInventoryClose(event);
     
-    Bukkit.getScheduler().runTaskLater(RefreshMenu.plugin, () -> {
-      ((Player) event.getPlayer()).updateInventory();
-    }, 1);
+    if (isClosed) { //update players phantom inventory to real
+      Bukkit.getScheduler().runTaskLater(RefreshMenu.plugin, () -> {
+        ((Player) event.getPlayer()).updateInventory();
+      }, 1);
+    }
+    
+    return isClosed;
   }
   
   @Override

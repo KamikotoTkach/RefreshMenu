@@ -9,13 +9,6 @@ import java.util.function.Consumer;
 public class Behavior {
   HashMap<ClickData, Consumer<InventoryClickEvent>> binds = new HashMap<>();
   
-  public Behavior(Behavior toClone) {
-    this.binds = toClone.binds;
-  }
-  
-  public Behavior() {
-  }
-  
   public void bind(char character, ClickType clickType, Runnable runnable) {
     bind(new ClickData(character, clickType), runnable);
   }
@@ -27,6 +20,7 @@ public class Behavior {
   public void bind(ClickData clickData, Runnable runnable) {
     binds.put(clickData, (e) -> runnable.run());
   }
+  
   public void bind(ClickData clickData, Consumer<InventoryClickEvent> consumer) {
     binds.put(clickData, consumer);
   }
