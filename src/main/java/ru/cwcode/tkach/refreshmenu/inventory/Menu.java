@@ -1,5 +1,6 @@
 package ru.cwcode.tkach.refreshmenu.inventory;
 
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import ru.cwcode.tkach.refreshmenu.MenuManager;
@@ -14,11 +15,8 @@ public class Menu {
   
   private final HashMap<String, View> views = new HashMap<>();
   public transient boolean shouldUnload = true;
+  @Setter
   transient private MenuManager menuManager = null;
-  
-  {
-    views.put("default", new View());
-  }
   
   public void open(Player player) {
     openView(player, "default");
@@ -67,10 +65,6 @@ public class Menu {
   
   public MenuManager getManager() {
     return menuManager;
-  }
-  
-  public void setMenuManager(MenuManager manager) {
-    this.menuManager = manager;
   }
   
   public Collection<View> getViews() {
