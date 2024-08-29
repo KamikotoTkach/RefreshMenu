@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
-  ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;
-  HashMap<Character, Integer> artDraws = new HashMap<>();
+  volatile ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;
+  volatile HashMap<Character, Integer> artDraws = new HashMap<>();
   
   @Override
   public void draw(MenuContext context) {

@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.Set;
 
 public class PagedViewDrawer extends ViewDrawer {
-  int dynamicItemIndex;
-  PagedView<? extends Ingredient> view;
+  volatile int dynamicItemIndex;
+  volatile PagedView<? extends Ingredient> view;
   
   @Override
   public void draw(MenuContext context) {

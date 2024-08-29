@@ -10,8 +10,8 @@ import ru.cwcode.cwutils.protocol.Packet;
 import java.util.Collection;
 
 public class ExtendedViewDrawer extends PagedViewDrawer {
-  int inventorySize;
-  ItemStack[] playerInventoryBuffer = new ItemStack[36];
+  volatile int inventorySize;
+  volatile ItemStack[] playerInventoryBuffer = new ItemStack[36];
   
   @Override
   public void draw(MenuContext context) {
