@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.items.ItemBuilder;
 import ru.cwcode.cwutils.items.ItemBuilderFactory;
 import ru.cwcode.tkach.locale.Placeholders;
-import ru.cwcode.tkach.locale.platform.MiniLocale;
+import ru.cwcode.tkach.refreshmenu.Utils;
 
 import java.util.List;
 
@@ -32,8 +32,10 @@ public class IngredientImpl implements Ingredient {
   public ItemStack getItem(Placeholders placeholders) {
     ItemBuilder item = ItemBuilderFactory.of(type);
     
-    if (name != null) item.name(MiniLocale.getInstance().miniMessageWrapper().deserialize(name, placeholders).decoration(TextDecoration.ITALIC, false));
-    if (description != null) item.description(MiniLocale.getInstance().miniMessageWrapper().deserialize(description, placeholders, true));
+    if (name != null) item.name(Utils.deserialize(name, placeholders).decoration(TextDecoration.ITALIC, false));
+    if (description != null) item.description(Utils.deserialize(description, placeholders).stream()
+                                                   .map(x -> x.decoration(TextDecoration.ITALIC, false))
+                                                   .toList());
     if (amount != 0) item.amount(amount);
     if (customModelData != 0) item.customModelData(customModelData);
     

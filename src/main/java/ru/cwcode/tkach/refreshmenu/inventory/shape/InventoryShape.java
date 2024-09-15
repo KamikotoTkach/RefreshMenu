@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
-import ru.cwcode.tkach.locale.platform.MiniLocale;
+import ru.cwcode.tkach.refreshmenu.Utils;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.type.InventoryTypeHolder;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
@@ -127,7 +127,7 @@ public class InventoryShape {
    
   
   public Inventory createInventory(View view) {
-     return type.createInventory(view, MiniLocale.getInstance().miniMessageWrapper().deserialize(getName(), view.getPlaceholders()));
+    return type.createInventory(view, Utils.deserialize(getName(), view.getPlaceholders()));
    }
    
    /**

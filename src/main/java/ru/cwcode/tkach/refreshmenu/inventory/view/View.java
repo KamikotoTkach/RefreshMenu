@@ -14,8 +14,8 @@ import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubT
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ru.cwcode.tkach.locale.Placeholder;
 import ru.cwcode.tkach.locale.Placeholders;
-import ru.cwcode.tkach.locale.platform.MiniLocale;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
+import ru.cwcode.tkach.refreshmenu.Utils;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
@@ -87,7 +87,7 @@ public class View extends AbstractView {
   }
   
   public void updateInventoryTitle(Player player) {
-    PacketListener.setInventoryTitle(player, MiniLocale.getInstance().miniMessageWrapper().deserialize(shape.getName(), getPlaceholders()));
+    PacketListener.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders()));
   }
   
   public void setState(String state, String value) {
