@@ -127,7 +127,7 @@ public class InventoryShape {
    
   
   public Inventory createInventory(View view) {
-    return type.createInventory(view, Utils.deserialize(getName(), view.getPlaceholders()));
+    return type.createInventory(view, Utils.deserialize(getName(), view.getPlaceholders(), null, false));
    }
    
    /**

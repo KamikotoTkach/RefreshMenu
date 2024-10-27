@@ -87,7 +87,7 @@ public class View extends AbstractView {
   }
   
   public void updateInventoryTitle(Player player) {
-    PacketListener.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders()));
+    PacketListener.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
   }
   
   public void setState(String state, String value) {
