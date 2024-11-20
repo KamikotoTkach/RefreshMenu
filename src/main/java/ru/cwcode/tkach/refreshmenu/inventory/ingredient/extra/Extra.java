@@ -12,8 +12,8 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ExtraIngredient;
   include = JsonTypeInfo.As.PROPERTY,
   property = "type")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = ExtraState.class, name = "ExtraState"),
-  @JsonSubTypes.Type(value = ExtraBind.class, name = "ExtraBind"),
+  @JsonSubTypes.Type(value = ExtraState.class, name = "state"),
+  @JsonSubTypes.Type(value = ExtraBind.class, name = "bind"),
 })
 public interface Extra {
   
