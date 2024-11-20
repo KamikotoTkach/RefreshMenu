@@ -43,29 +43,33 @@ public class PagedViewDrawer extends ViewDrawer {
   public void updateRequired(MenuContext context) { //todo refactor
     if (buffer != null) return;
     
-    super.updateRequired(context);
-    
-    setupPagedDrawer(context);
-    
-    buffer = context.view().getInventory().getContents().clone();
-    
-    InventoryShape shape = context.view().getShape();
-    String joinedShape = shape.getJoinedShape();
-    
-    for (int i = 0; i < getDrawingSize(context) && dynamicItemIndex < view.getDynamic().size(); i++) {
-      if (joinedShape.charAt(i) == view.getDynamicChar()) {
-        
-        Ingredient ingredient = view.getDynamic().get(dynamicItemIndex++);
-        
-        if (ingredient.shouldRefresh(context)) {
-          ItemStack item = ingredient.getItem(context);
+    try {
+      super.updateRequired(context);
+      
+      setupPagedDrawer(context);
+      
+      buffer = context.view().getInventory().getContents().clone();
+      
+      InventoryShape shape = context.view().getShape();
+      String joinedShape = shape.getJoinedShape();
+      
+      for (int i = 0; i < getDrawingSize(context) && dynamicItemIndex < view.getDynamic().size(); i++) {
+        if (joinedShape.charAt(i) == view.getDynamicChar()) {
           
-          setItem(context, i, item);
+          Ingredient ingredient = view.getDynamic().get(dynamicItemIndex++);
+          
+          if (ingredient.shouldRefresh(context)) {
+            ItemStack item = ingredient.getItem(context);
+            
+            setItem(context, i, item);
+          }
         }
       }
+      
+      drawBuffer(context);
+    } finally {
+      buffer = null;
     }
-    
-    drawBuffer(context);
   }
   
   @Override

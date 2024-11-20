@@ -22,26 +22,33 @@ public class ViewDrawer extends AbstractDrawer {
   public void draw(MenuContext context) {
     if (buffer != null) return;
     
-    buffer = context.view().getInventory().getContents().clone();
-    
-    InventoryShape shape = context.view().getShape();
-    String joinedShape = shape.getJoinedShape();
-    
-    for (int i = 0; i < Math.min(joinedShape.length(), getDrawingSize(context)); i++) {
-      char currShapeChar = joinedShape.charAt(i);
+    try {
+      buffer = context.view().getInventory().getContents().clone();
       
-      ItemStack item = findItem(context, i, currShapeChar);
+      InventoryShape shape = context.view().getShape();
+      String joinedShape = shape.getJoinedShape();
       
-      setItem(context, i, item);
-    }
+      for (int i = 0; i < Math.min(joinedShape.length(), getDrawingSize(context)); i++) {
+        char currShapeChar = joinedShape.charAt(i);
+        
+        ItemStack item = findItem(context, i, currShapeChar);
+        
+        setItem(context, i, item);
+      }
     
     drawBuffer(context);
+    
+    } finally {
+      buffer = null;
+    }
   }
   
   @Override
   public void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     if (characters.isEmpty()) return;
+    
+    try {
     
     buffer = context.view().getInventory().getContents().clone();
     
@@ -59,6 +66,10 @@ public class ViewDrawer extends AbstractDrawer {
     }
     
     drawBuffer(context);
+    
+    } finally {
+      buffer = null;
+    }
   }
   
   @Override

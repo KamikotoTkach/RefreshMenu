@@ -9,13 +9,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.PagedViewDrawer;
+import ru.cwcode.tkach.refreshmenu.refresh.Refreshable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class PagedView<T extends Ingredient> extends View {
+public class PagedView<T extends Ingredient> extends View implements Refreshable {
   @Getter
   protected transient List<T> dynamic = new ArrayList<>();
   @Getter
@@ -63,8 +64,10 @@ public class PagedView<T extends Ingredient> extends View {
     return !getInventory().getViewers().isEmpty();
   }
   
-  public void updateRequired(Player player) {
-    super.updateRequired(player);
+  @Override
+  public void refresh() {
+    if (getInventory().getViewers().isEmpty()) return;
+    updateRequired(player);
   }
   
   protected void updatePlaceholders() {
@@ -117,7 +120,7 @@ public class PagedView<T extends Ingredient> extends View {
     
     if (clickedIngredient != null) {
       execute(((Player) event.getWhoClicked()), () -> {
-        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick()); //todo: мгновенно пытаться обновить нажатый предмет
       });
     }
   }

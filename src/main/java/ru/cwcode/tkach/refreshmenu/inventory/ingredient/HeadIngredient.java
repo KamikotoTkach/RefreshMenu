@@ -48,6 +48,23 @@ public class HeadIngredient implements Ingredient {
     return item.build();
   }
   
+  @Override
+  public ItemStack getItem(Placeholders placeholders) {
+    ItemBuilder item = ItemBuilderFactory.of(Material.PLAYER_HEAD);
+    
+    if (name != null) item.name(Utils.deserialize(name, placeholders, null, true));
+    if (description != null) item.description(Utils.deserialize(description, placeholders, null, true));
+    if (amount != 0) item.amount(amount);
+    
+    if (texture != null) {
+      PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
+      profile.setProperty(new ProfileProperty("textures", texture));
+      item.playerProfile(profile);
+    }
+    
+    return item.build();
+  }
+  
   public void setName(String name) {
     this.name = name;
   }
