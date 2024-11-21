@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 
-import net.kyori.adventure.text.format.TextDecoration;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.items.ItemBuilder;
@@ -11,6 +12,8 @@ import ru.cwcode.tkach.refreshmenu.Utils;
 
 import java.util.List;
 
+@Setter
+@Getter
 public class IngredientImpl implements Ingredient {
   String name;
   List<String> description;
@@ -51,45 +54,5 @@ public class IngredientImpl implements Ingredient {
     if (customModelData != 0) item.customModelData(customModelData);
     
     return item.build();
-  }
-  
-  public String getName() {
-    return name;
-  }
-  
-  public void setName(String name) {
-    this.name = name;
-  }
-  
-  public List<String> getDescription() {
-    return description;
-  }
-  
-  public void setDescription(List<String> description) {
-    this.description = description;
-  }
-  
-  public int getAmount() {
-    return amount;
-  }
-  
-  public void setAmount(int amount) {
-    this.amount = amount;
-  }
-  
-  public Material getType() {
-    return type;
-  }
-  
-  public void setType(Material type) {
-    this.type = type;
-  }
-  
-  public int getCustomModelData() {
-    return customModelData;
-  }
-  
-  public void setCustomModelData(int customModelData) {
-    this.customModelData = customModelData;
   }
 }

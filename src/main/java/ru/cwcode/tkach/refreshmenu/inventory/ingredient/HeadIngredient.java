@@ -2,7 +2,8 @@ package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import net.kyori.adventure.text.format.TextDecoration;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +16,8 @@ import ru.cwcode.tkach.refreshmenu.Utils;
 import java.util.List;
 import java.util.UUID;
 
+@Setter
+@Getter
 public class HeadIngredient implements Ingredient {
   String name;
   List<String> description;
@@ -63,37 +66,5 @@ public class HeadIngredient implements Ingredient {
     }
     
     return item.build();
-  }
-  
-  public void setName(String name) {
-    this.name = name;
-  }
-  
-  public void setDescription(List<String> description) {
-    this.description = description;
-  }
-  
-  public void setAmount(int amount) {
-    this.amount = amount;
-  }
-  
-  public void setTexture(String texture) {
-    this.texture = texture;
-  }
-  
-  public String getName() {
-    return name;
-  }
-  
-  public List<String> getDescription() {
-    return description;
-  }
-  
-  public int getAmount() {
-    return amount;
-  }
-  
-  public String getTexture() {
-    return texture;
   }
 }
