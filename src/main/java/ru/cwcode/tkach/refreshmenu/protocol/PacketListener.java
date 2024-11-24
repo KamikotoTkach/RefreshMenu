@@ -18,7 +18,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.protocol.Packet;
-import ru.cwcode.cwutils.server.ServerUtils;
+import ru.cwcode.cwutils.server.PaperServerUtils;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
@@ -83,7 +83,7 @@ public class PacketListener {
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
         Integer slot;
-        if (ServerUtils.isVersionGreater_1_16_5()) {
+        if (PaperServerUtils.isVersionGreater_1_16_5()) {
           slot = event.getPacket().getIntegers().read(2);
         } else {
           slot = event.getPacket().getIntegers().read(1);
@@ -118,7 +118,7 @@ public class PacketListener {
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
         Integer clickedSlot;
-        if (ServerUtils.isVersionGreater("1.18.1")) {
+        if (PaperServerUtils.isVersionGreater("1.18.1")) {
           clickedSlot = event.getPacket().getIntegers().read(2);
         } else {
           clickedSlot = event.getPacket().getIntegers().read(1);
@@ -127,7 +127,7 @@ public class PacketListener {
         ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
         
         if (clickedSlot > topInventorySize - 1) {
-          if (ServerUtils.isVersionGreater("1.16.5")) {
+          if (PaperServerUtils.isVersionGreater("1.16.5")) {
             Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
             
             for (Integer slot : handle.keySet()) {
@@ -141,7 +141,7 @@ public class PacketListener {
           Packet.setSlot(player, clickedSlot, playerInventoryBuffer[clickedSlot - topInventorySize], windowId);
           
           Integer button;
-          if (ServerUtils.isVersionGreater("1.17")) {
+          if (PaperServerUtils.isVersionGreater("1.17")) {
             button = event.getPacket().getIntegers().read(3);
           } else {
             button = event.getPacket().getIntegers().read(2);
