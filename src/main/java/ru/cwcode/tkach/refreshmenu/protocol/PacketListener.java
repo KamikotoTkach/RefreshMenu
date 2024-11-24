@@ -105,9 +105,14 @@ public class PacketListener {
         
         Player player = event.getPlayer();
         
-        InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-        if(!(holder instanceof View openedView)) return;
+        InventoryHolder holder;
+        try {
+          holder = player.getOpenInventory().getTopInventory().getHolder();
+        } catch (RuntimeException e) { //for catching "Tile is null, asynchronous access?"
+          return;
+        }
         
+        if (!(holder instanceof View openedView)) return;
         if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
