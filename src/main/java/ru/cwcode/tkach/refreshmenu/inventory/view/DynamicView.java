@@ -61,7 +61,7 @@ public class DynamicView extends View implements Refreshable {
     if (index == -1) return Optional.empty();
     
     List<? extends Ingredient> ingredients = getDynamicIngredients(countedChar);
-    if (ingredients.size() < index) return Optional.empty();
+    if (ingredients.size() <= index) return Optional.empty();
     
     return Optional.ofNullable(ingredients.get(index));
   }
