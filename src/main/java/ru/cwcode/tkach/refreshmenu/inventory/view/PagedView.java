@@ -120,7 +120,10 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     
     if (clickedIngredient != null) {
       execute(((Player) event.getWhoClicked()), () -> {
-        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick()); //todo: мгновенно пытаться обновить нажатый предмет
+        MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
+        
+        clickedIngredient.onClick(context, event.getClick());
+        event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
       });
     }
   }
