@@ -49,24 +49,22 @@ public class ViewDrawer extends AbstractDrawer {
     if (characters.isEmpty()) return;
     
     try {
-    
-    buffer = context.view().getInventory().getContents().clone();
-    
-    InventoryShape shape = context.view().getShape();
-    String joinedShape = shape.getJoinedShape();
-    
-    for (int i = 0; i < getDrawingSize(context); i++) {
-      char currShapeChar = joinedShape.charAt(i);
+      buffer = context.view().getInventory().getContents().clone();
       
-      if (!characters.contains(currShapeChar)) continue;
+      InventoryShape shape = context.view().getShape();
+      String joinedShape = shape.getJoinedShape();
       
-      ItemStack item = findItem(context, i, currShapeChar);
+      for (int i = 0; i < getDrawingSize(context); i++) {
+        char currShapeChar = joinedShape.charAt(i);
+        
+        if (!characters.contains(currShapeChar)) continue;
+        
+        ItemStack item = findItem(context, i, currShapeChar);
+        
+        setItem(context, i, item);
+      }
       
-      setItem(context, i, item);
-    }
-    
-    drawBuffer(context);
-    
+      drawBuffer(context);
     } finally {
       buffer = null;
     }
@@ -108,7 +106,7 @@ public class ViewDrawer extends AbstractDrawer {
     HashMap<Character, Ingredient> ingredientMap = context.view().getShape().getIngredientMap();
     
     if (ingredientMap.containsKey(currShapeChar)) {
-      return ingredientMap.get(currShapeChar).getItem(context);
+      return getCachedItem(context, ingredientMap.get(currShapeChar));
     }
     
     return null;

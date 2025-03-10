@@ -50,6 +50,6 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
     if (art.getMaxDraws() > -1 && draws > art.getMaxDraws()) return null;
     
     artDraws.put(shapeChar, draws + 1);
-    return view.getArts().get(shapeChar).getItem(context);
+    return getCachedItem(context, view.getArts().get(shapeChar));
   }
 }
