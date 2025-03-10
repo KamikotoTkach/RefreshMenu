@@ -50,6 +50,7 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     
     this.maxPage = dynamic.size() / pageSize + (dynamic.size() % pageSize != 0 ? 1 : 0);
     
+    placeholders.add("max_page", maxPage);
     placeholders.add("maxPage", maxPage);
     updatePlaceholders();
   }
@@ -72,8 +73,13 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
   
   protected void updatePlaceholders() {
     placeholders.add("page", page + 1);
-    placeholders.add("nextPage", Math.min(maxPage, page + 2));
+    placeholders.add("next_page", Math.min(maxPage, page + 2));
+    placeholders.add("prev_page", Math.max(1, page));
+    
+    
+    //todo for compatibility:
     placeholders.add("prevPage", Math.max(1, page));
+    placeholders.add("nextPage", Math.min(maxPage, page + 2));
   }
   
   protected Optional<T> getDynamic(int slot) {
