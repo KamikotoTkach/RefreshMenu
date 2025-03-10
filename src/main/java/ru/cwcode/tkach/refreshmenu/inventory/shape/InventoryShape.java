@@ -65,6 +65,32 @@ public class InventoryShape {
       //</editor-fold>
    }
    
+   public static ShapeBuilder defaultCraftShape() {
+      //<editor-fold desc="defaultCraftShape">
+      return InventoryShape.builder()
+                           .name("Меню")
+                           .chest(54)
+                           .shape("#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#######<>")
+
+                           .ingredient('<', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <prev_page> страницу")
+                                                      .description("<page>/<max_page>")
+                                                      .build())
+
+                           .ingredient('>', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <next_page> страницу")
+                                                      .description("<page>/<max_page>")
+                                                      .build());
+      //</editor-fold>
+   }
+   
    public static ShapeBuilder defaultArtExtendedShape() {
       //<editor-fold desc="defaultArtExtendedShape">
       return InventoryShape.builder()
