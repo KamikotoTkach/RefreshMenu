@@ -16,7 +16,8 @@ public class AbstractView implements InventoryHolder {
   @Setter
   @Getter
   protected Menu menu;
-  @Setter @Getter
+  @Setter
+  @Getter
   protected transient Inventory inventory;
   
   public void onOutsideClick(InventoryClickEvent event) {
@@ -28,6 +29,11 @@ public class AbstractView implements InventoryHolder {
   }
   
   public void onDrag(InventoryDragEvent event) {
+    DragType dragType = DragType.getDragType(event);
+    onDrag(dragType, event);
+  }
+  
+  public void onDrag(DragType dragType, InventoryDragEvent event) {
     event.setCancelled(true);
   }
   
