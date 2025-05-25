@@ -59,7 +59,7 @@ public class PagedViewDrawer extends ViewDrawer {
           Ingredient ingredient = view.getDynamic().get(dynamicItemIndex++);
           
           if (ingredient.shouldRefresh(context)) {
-            ItemStack item = ingredient.getItem(context);
+            ItemStack item = getCachedItem(context, ingredient);
             
             setItem(context, i, item);
           }
@@ -81,7 +81,7 @@ public class PagedViewDrawer extends ViewDrawer {
     if (view.getDynamicChar() == shapeChar) {
       
       if (dynamicItemIndex < view.getDynamic().size()) {
-        return view.getDynamic().get(dynamicItemIndex++).getItem(context);
+        return getCachedItem(context, view.getDynamic().get(dynamicItemIndex++));
       }
     }
     

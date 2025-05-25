@@ -53,14 +53,40 @@ public class InventoryShape {
 
                            .ingredient('<', Ingredient.builder()
                                                       .type(Material.ARROW)
-                                                      .name("На <prevPage> страницу")
-                                                      .description("<page>/<maxPage>")
+                                                      .name("На <prev_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build())
 
                            .ingredient('>', Ingredient.builder()
                                                       .type(Material.ARROW)
-                                                      .name("На <nextPage> страницу")
-                                                      .description("<page>/<maxPage>")
+                                                      .name("На <next_page> страницу")
+                                                      .description("<page>/<max_page>")
+                                                      .build());
+      //</editor-fold>
+   }
+   
+   public static ShapeBuilder defaultCraftShape() {
+      //<editor-fold desc="defaultCraftShape">
+      return InventoryShape.builder()
+                           .name("Меню")
+                           .chest(54)
+                           .shape("#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#########",
+                                  "#######<>")
+
+                           .ingredient('<', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <prev_page> страницу")
+                                                      .description("<page>/<max_page>")
+                                                      .build())
+
+                           .ingredient('>', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <next_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build());
       //</editor-fold>
    }
@@ -80,17 +106,17 @@ public class InventoryShape {
                                   "#########",
                                   "#########",
                                   "#######<>")
-
+                           
                            .ingredient('<', Ingredient.builder()
                                                       .type(Material.ARROW)
-                                                      .name("На <prevPage> страницу")
-                                                      .description("<page>/<maxPage>")
+                                                      .name("На <prev_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build())
-
+                           
                            .ingredient('>', Ingredient.builder()
                                                       .type(Material.ARROW)
-                                                      .name("На <nextPage> страницу")
-                                                      .description("<page>/<maxPage>")
+                                                      .name("На <next_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build());
       //</editor-fold>
    }
@@ -110,17 +136,17 @@ public class InventoryShape {
                                   "#########",
                                   "#########",
                                   "#######{}")
-
-                           .ingredient('{', Ingredient.builder()
-                                                      .type(Material.SPECTRAL_ARROW)
-                                                      .name("На <prevShape> страницу")
-                                                      .description("<shape>/<shapes>")
+                           
+                           .ingredient('<', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <prev_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build())
-
-                           .ingredient('}', Ingredient.builder()
-                                                      .type(Material.SPECTRAL_ARROW)
-                                                      .name("На <nextShape> страницу")
-                                                      .description("<shape>/<shapes>")
+                           
+                           .ingredient('>', Ingredient.builder()
+                                                      .type(Material.ARROW)
+                                                      .name("На <next_page> страницу")
+                                                      .description("<page>/<max_page>")
                                                       .build());
       //</editor-fold>
    }

@@ -62,7 +62,7 @@ public class DynamicViewDrawer extends ViewDrawer {
         Ingredient ingredient = dynamic.get(index);
         
         if (ingredient.shouldRefresh(context)) {
-          ItemStack item = ingredient.getItem(context);
+          ItemStack item = getCachedItem(context, ingredient);
           
           setItem(context, i, item);
         }
@@ -87,7 +87,7 @@ public class DynamicViewDrawer extends ViewDrawer {
       
       if (index < dynamicIngredients.size()) {
         dynamicItemIndex.put(shapeChar, index + 1);
-        return dynamicIngredients.get(index).getItem(context);
+        return getCachedItem(context, dynamicIngredients.get(index));
       }
     }
     
