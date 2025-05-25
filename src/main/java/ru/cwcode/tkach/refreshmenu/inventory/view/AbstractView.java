@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import ru.cwcode.cwutils.event.DragType;
 import ru.cwcode.tkach.refreshmenu.inventory.Menu;
 
 public class AbstractView implements InventoryHolder {

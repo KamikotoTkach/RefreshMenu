@@ -6,7 +6,7 @@
 
     <groupId>ru.cwcode.tkach.refreshmenu</groupId>
     <artifactId>RefreshMenu</artifactId>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
     <packaging>jar</packaging>
 
     <name>RefreshMenu</name>
@@ -259,7 +259,7 @@
         <dependency>
             <groupId>ru.cwcode.cwutils</groupId>
             <artifactId>CWUtils</artifactId>
-            <version>2.2.0</version>
+            <version>2.6.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
