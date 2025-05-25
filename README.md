@@ -1,4 +1,4 @@
-# RefreshMenu 1.5.1
+# RefreshMenu 1.5.2
 #### Библиотека на меню для Paper
 
 
