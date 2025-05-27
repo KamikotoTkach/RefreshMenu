@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient.extra;
 
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -17,7 +18,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ExtraIngredient;
 })
 public interface Extra {
   
-  default void onClick(ExtraIngredient extraIngredient, MenuContext context, ClickType clickType) {
+  default void onClick(ExtraIngredient extraIngredient, MenuContext context, InventoryClickEvent event) {
   
   }
   
@@ -29,7 +30,7 @@ public interface Extra {
     return null;
   }
   
-  default boolean isHandlingOnClick(ExtraIngredient extraIngredient, MenuContext context, ClickType clickType) {
+  default boolean isHandlingOnClick(ExtraIngredient extraIngredient, MenuContext context, InventoryClickEvent event) {
     return false;
   }
   

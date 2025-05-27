@@ -111,7 +111,7 @@ public class View extends AbstractView {
     
     if (clickedIngredient != null) {
       execute((Player) event.getWhoClicked(), () -> {
-        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event);
       });
     }
   }

@@ -128,7 +128,7 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
       execute(((Player) event.getWhoClicked()), () -> {
         MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
         
-        clickedIngredient.onClick(context, event.getClick());
+        clickedIngredient.onClick(context, event);
         event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
       });
     }

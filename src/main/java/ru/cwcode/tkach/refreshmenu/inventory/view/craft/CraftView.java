@@ -70,7 +70,7 @@ public class CraftView extends View implements Refreshable {
     if (ingredient != null) {
       MenuContext context = new MenuContext(this, ((Player) event.getWhoClicked()));
       
-      ingredient.onClick(context, event.getClick());
+      ingredient.onClick(context, event);
       
       ItemStack item = ingredient.getItem(context);
       if (item != null) getInventory().setItem(event.getSlot(), item);

@@ -3,6 +3,7 @@ package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.items.ItemBuilderFactory;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -60,6 +61,9 @@ public interface Ingredient {
   }
   
   default void onClick(MenuContext context, ClickType clickType) {
+  }
   
+  default void onClick(MenuContext context, InventoryClickEvent event) {
+    onClick(context, event.getClick());
   }
 }

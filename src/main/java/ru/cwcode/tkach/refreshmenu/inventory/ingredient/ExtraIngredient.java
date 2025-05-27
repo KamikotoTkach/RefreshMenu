@@ -2,6 +2,7 @@ package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.extra.Extra;
@@ -21,12 +22,12 @@ public class ExtraIngredient extends IngredientImpl {
   }
   
   @Override
-  public void onClick(MenuContext context, ClickType clickType) {
+  public void onClick(MenuContext context, InventoryClickEvent event) {
     extras.stream()
-          .filter(x -> x.isHandlingOnClick(this, context, clickType))
+          .filter(x -> x.isHandlingOnClick(this, context, event))
           .findFirst()
-          .ifPresentOrElse(x -> x.onClick(this, context, clickType),
-                           () -> super.onClick(context, clickType));
+          .ifPresentOrElse(x -> x.onClick(this, context, event),
+                           () -> super.onClick(context, event));
   }
   
   @Override

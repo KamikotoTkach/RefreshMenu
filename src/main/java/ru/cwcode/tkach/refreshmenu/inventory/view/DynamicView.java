@@ -88,7 +88,7 @@ public class DynamicView extends View implements Refreshable {
       execute(((Player) event.getWhoClicked()), () -> {
         MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
         
-        clickedIngredient.onClick(context, event.getClick());
+        clickedIngredient.onClick(context, event);
         event.getView().setItem(event.getSlot(), clickedIngredient.getItem(context));
       });
     }
