@@ -3,11 +3,7 @@ package ru.cwcode.tkach.refreshmenu.protocol;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -23,15 +19,11 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.ExtendedView;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class PacketListener {
-  public static final ItemStack AIR = new ItemStack(Material.AIR);
-  
-  static HashMap<UUID, OpenedWindow> openedWindow = new HashMap<>();
+  private static final ItemStack AIR = new ItemStack(Material.AIR);
   
   public PacketListener() {
     //replacing items in bottom player inventory to relevant items from extended view
@@ -41,7 +33,7 @@ public class PacketListener {
         if (windowID < 1) return;
         
         InventoryHolder holder = event.getPlayer().getOpenInventory().getTopInventory().getHolder();
-        if(!(holder instanceof View openedView)) return;
+        if (!(holder instanceof View openedView)) return;
         
         if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
@@ -63,10 +55,21 @@ public class PacketListener {
     //catching opened window ID instead of getting it using reflection
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.OPEN_WINDOW) {
       public void onPacketSending(PacketEvent event) {
+        Player player = event.getPlayer();
         Integer windowID = event.getPacket().getIntegers().read(0);
         Object type = event.getPacket().getModifier().read(1);
         
-        openedWindow.put(event.getPlayer().getUniqueId(), new OpenedWindow(windowID, type));
+        OpenedWindowService.handleOpen(player, windowID, type);
+      }
+    });
+    
+    //remove opened window on close
+    ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Client.CLOSE_WINDOW) {
+      public void onPacketReceiving(PacketEvent event) {
+        Player player = event.getPlayer();
+        Integer windowID = event.getPacket().getIntegers().read(0);
+        
+        OpenedWindowService.handleClose(player, windowID);
       }
     });
     
@@ -76,7 +79,7 @@ public class PacketListener {
         if (event.getPacket().getIntegers().read(0) < 1) return;
         
         InventoryHolder holder = event.getPlayer().getOpenInventory().getTopInventory().getHolder();
-        if(!(holder instanceof View openedView)) return;
+        if (!(holder instanceof View openedView)) return;
         
         if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
         
@@ -158,17 +161,5 @@ public class PacketListener {
         }
       }
     });
-  }
-
-  
-  public static void setInventoryTitle(Player player, Component title) {
-    PacketContainer packet = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_WINDOW);
-    
-    OpenedWindow window = openedWindow.get(player.getUniqueId());
-    packet.getIntegers().write(0, window.id());
-    packet.getModifier().write(1, window.type());
-    packet.getChatComponents().write(0, WrappedChatComponent.fromJson(GsonComponentSerializer.gson().serialize(title)));
-    
-    ProtocolLibrary.getProtocolManager().sendServerPacket(player, packet);
   }
 }

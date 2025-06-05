@@ -20,7 +20,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
-import ru.cwcode.tkach.refreshmenu.protocol.PacketListener;
+import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
 import java.util.HashMap;
 
@@ -87,7 +87,7 @@ public class View extends AbstractView {
   }
   
   public void updateInventoryTitle(Player player) {
-    PacketListener.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
+    OpenedWindowService.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
   }
   
   public void setState(String state, String value) {
