@@ -11,9 +11,9 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ArtExtendedViewDrawer;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -29,18 +29,26 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   }
   
   public void setArts(ART... arts) {
-    setArts(Arrays.asList(arts));
+    setArts(List.of(arts));
+  }
+  
+  public void bindArt(ArtIngredient art, ClickType clickType, Runnable runnable) {
+    this.getBehavior().bind(art.getChar(), clickType, runnable);
+  }
+  
+  public void bindArt(ArtIngredient art, ClickType clickType, Consumer<InventoryClickEvent> consumer) {
+    this.getBehavior().bind(art.getChar(), clickType, consumer);
   }
   
   public void bindArts(ClickType clickType, Runnable runnable) {
     for (ArtIngredient art : this.arts.values()) {
-      this.getBehavior().bind(art.getChar(), clickType, runnable);
+      bindArt(art, clickType, runnable);
     }
   }
   
   public void bindArts(ClickType clickType, Consumer<InventoryClickEvent> consumer) {
     for (ArtIngredient art : this.arts.values()) {
-      this.getBehavior().bind(art.getChar(), clickType, consumer);
+      bindArt(art, clickType, consumer);
     }
   }
   
