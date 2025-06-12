@@ -25,13 +25,14 @@ import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 import java.util.HashMap;
 
 @JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  property = "type")
+   use = JsonTypeInfo.Id.NAME,
+   property = "type")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = View.class, name = "View"),
+   @JsonSubTypes.Type(value = View.class, name = "View"),
 })
 public class View extends AbstractView {
-  @Getter @Setter
+  @Getter
+  @Setter
   protected InventoryShape shape = InventoryShape.builder()
                                                  .name("Не настроено, vk.com/cwcode")
                                                  .shape("-")
@@ -106,14 +107,15 @@ public class View extends AbstractView {
     drawer = new ViewDrawer();
   }
   
-  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
     Ingredient clickedIngredient = shape.getIngredientMap().get(character);
+    if (clickedIngredient == null) return false;
     
-    if (clickedIngredient != null) {
-      execute((Player) event.getWhoClicked(), () -> {
-        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event);
-      });
-    }
+    execute((Player) event.getWhoClicked(), () -> {
+      clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event);
+    });
+    
+    return true;
   }
   
   protected void execute(Player player, Runnable runnable) {
@@ -127,7 +129,7 @@ public class View extends AbstractView {
   protected void handleException(Exception exception, Player player) {
     if (exception instanceof MessageReturn messageReturn) {
       player.sendMessage(messageReturn.getMessage());
-    } else if(exception instanceof TargetableMessageReturn targetableMessageReturn) {
+    } else if (exception instanceof TargetableMessageReturn targetableMessageReturn) {
       player.sendMessage(targetableMessageReturn.getMessage(player));
     } else {
       player.sendMessage(exception.getLocalizedMessage());
