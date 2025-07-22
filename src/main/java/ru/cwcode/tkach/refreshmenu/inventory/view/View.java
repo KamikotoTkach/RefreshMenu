@@ -23,6 +23,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.PacketListener;
 
 import java.util.HashMap;
+import java.util.Set;
 
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -57,7 +58,8 @@ public class View extends AbstractView {
       handleIngredientClickAction(event, character);
       
       execute(((Player) event.getWhoClicked()), () -> {
-        behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+        boolean success = behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+        if (success) drawer.drawChars(new MenuContext(this, ((Player) event.getWhoClicked())), Set.of(character));
       });
     });
   }
@@ -111,7 +113,9 @@ public class View extends AbstractView {
     
     if (clickedIngredient != null) {
       execute((Player) event.getWhoClicked(), () -> {
-        clickedIngredient.onClick(new MenuContext(this, (Player) event.getWhoClicked()), event.getClick());
+        MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
+        clickedIngredient.onClick(context, event.getClick());
+        event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
       });
     }
   }
@@ -130,7 +134,8 @@ public class View extends AbstractView {
     } else if(exception instanceof TargetableMessageReturn targetableMessageReturn) {
       player.sendMessage(targetableMessageReturn.getMessage(player));
     } else {
-      player.sendMessage(exception.getLocalizedMessage());
+      String message = exception.getLocalizedMessage();
+      player.sendMessage(message == null ? "Unexpected exception, check console" : message);
       exception.printStackTrace();
     }
   }
