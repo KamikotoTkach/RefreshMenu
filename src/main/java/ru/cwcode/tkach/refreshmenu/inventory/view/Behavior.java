@@ -37,10 +37,13 @@ public class Behavior {
     execute(event, new ClickData(character, clickType));
   }
   
-  public void execute(InventoryClickEvent event, ClickData clickData) {
+  public boolean execute(InventoryClickEvent event, ClickData clickData) {
     if (binds.containsKey(clickData)) {
       binds.get(clickData).accept(event);
+      return true;
     }
+    
+    return false;
   }
   
   public static class ClickData {
