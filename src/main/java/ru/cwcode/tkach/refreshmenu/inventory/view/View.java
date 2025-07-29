@@ -31,7 +31,7 @@ import java.util.Set;
 @JsonSubTypes({
   @JsonSubTypes.Type(value = View.class, name = "View"),
 })
-public class View extends AbstractView {
+public abstract class View extends AbstractView {
   @Getter @Setter
   protected InventoryShape shape = InventoryShape.builder()
                                                  .name("Не настроено, vk.com/cwcode")
@@ -59,9 +59,16 @@ public class View extends AbstractView {
       
       execute(((Player) event.getWhoClicked()), () -> {
         boolean success = behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
-        if (success) drawer.drawChars(new MenuContext(this, ((Player) event.getWhoClicked())), Set.of(character));
+        if (success) {
+          prepareForDrawing();
+          drawer.drawChars(new MenuContext(this, ((Player) event.getWhoClicked())), Set.of(character));
+        }
       });
     });
+  }
+  
+  public void prepareForDrawing() {
+    updateStates();
   }
   
   @Override
@@ -85,6 +92,7 @@ public class View extends AbstractView {
   }
   
   public void drawInventory(Player player) {
+    prepareForDrawing();
     drawer.draw(new MenuContext(this, player));
   }
   
@@ -101,8 +109,11 @@ public class View extends AbstractView {
   }
   
   public void updateRequired(Player player) {
+    prepareForDrawing();
     drawer.updateRequired(new MenuContext(this, player));
   }
+  
+  public void updateStates() {}
   
   protected void initializeDrawer() {
     drawer = new ViewDrawer();
@@ -115,6 +126,7 @@ public class View extends AbstractView {
       execute((Player) event.getWhoClicked(), () -> {
         MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
         clickedIngredient.onClick(context, event.getClick());
+        prepareForDrawing();
         event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
       });
     }

@@ -7,8 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.View;
-import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.PagedViewDrawer;
-import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.refresh.Refreshable;
 
 import java.util.ArrayList;

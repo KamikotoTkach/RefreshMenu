@@ -51,7 +51,6 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     this.maxPage = dynamic.size() / pageSize + (dynamic.size() % pageSize != 0 ? 1 : 0);
     
     placeholders.add("max_page", maxPage);
-    placeholders.add("maxPage", maxPage);
     updatePlaceholders();
   }
   
@@ -71,15 +70,17 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     updateRequired(player);
   }
   
+  @Override
+  public void updateStates() {
+    super.updateStates();
+    setState("hasNextPage", hasNextPage() ? "true" : "false");
+    setState("hasPrevPage", hasPrevPage() ? "true" : "false");
+  }
+  
   protected void updatePlaceholders() {
     placeholders.add("page", page + 1);
     placeholders.add("next_page", Math.min(maxPage, page + 2));
     placeholders.add("prev_page", Math.max(1, page));
-    
-    
-    //todo for compatibility:
-    placeholders.add("prevPage", Math.max(1, page));
-    placeholders.add("nextPage", Math.min(maxPage, page + 2));
   }
   
   protected Optional<T> getDynamic(int slot) {
@@ -89,24 +90,32 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     return indexAtDynamic >= dynamic.size() ? Optional.empty() : Optional.ofNullable(dynamic.get(indexAtDynamic));
   }
   
-  protected void nextPage() {
-    if (page + 1 < maxPage) {
+  
+  public boolean hasNextPage() {
+    return page + 1 < maxPage;
+  }
+  
+  public void nextPage() {
+    if (hasNextPage()) {
       page++;
-      updatePlaceholders();
+      updateDynamicContent(player);
+    }
+  }
+  
+  public boolean hasPrevPage() {
+    return page > 0;
+  }
+  
+  public void prevPage() {
+    if (hasPrevPage()) {
+      page--;
       updateDynamicContent(player);
     }
   }
   
   protected void updateDynamicContent(Player player) {
+    prepareForDrawing();
     drawer.drawChars(new MenuContext(this, player), Set.of(getDynamicChar(), '<', '>'));
-  }
-  
-  protected void prevPage() {
-    if (page > 0) {
-      page--;
-      updatePlaceholders();
-      updateDynamicContent(player);
-    }
   }
   
   @Override
@@ -129,6 +138,7 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
         MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
         
         clickedIngredient.onClick(context, event.getClick());
+        prepareForDrawing();
         event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
       });
     }
