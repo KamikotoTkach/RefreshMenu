@@ -20,19 +20,20 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
-import ru.cwcode.tkach.refreshmenu.protocol.PacketListener;
+import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
 import java.util.HashMap;
 import java.util.Set;
 
 @JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  property = "type")
+   use = JsonTypeInfo.Id.NAME,
+   property = "type")
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = View.class, name = "View"),
+   @JsonSubTypes.Type(value = View.class, name = "View"),
 })
 public abstract class View extends AbstractView {
-  @Getter @Setter
+  @Getter
+  @Setter
   protected InventoryShape shape = InventoryShape.builder()
                                                  .name("Не настроено, vk.com/cwcode")
                                                  .shape("-")
@@ -97,7 +98,7 @@ public abstract class View extends AbstractView {
   }
   
   public void updateInventoryTitle(Player player) {
-    PacketListener.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
+    OpenedWindowService.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
   }
   
   public void setState(String state, String value) {
@@ -119,17 +120,18 @@ public abstract class View extends AbstractView {
     drawer = new ViewDrawer();
   }
   
-  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
     Ingredient clickedIngredient = shape.getIngredientMap().get(character);
+    if (clickedIngredient == null) return false;
     
-    if (clickedIngredient != null) {
-      execute((Player) event.getWhoClicked(), () -> {
-        MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
-        clickedIngredient.onClick(context, event.getClick());
-        prepareForDrawing();
-        event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
-      });
-    }
+    execute((Player) event.getWhoClicked(), () -> {
+      MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
+      clickedIngredient.onClick(context, event.getClick());
+      prepareForDrawing();
+      event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
+    });
+    
+    return true;
   }
   
   protected void execute(Player player, Runnable runnable) {
@@ -143,7 +145,7 @@ public abstract class View extends AbstractView {
   protected void handleException(Exception exception, Player player) {
     if (exception instanceof MessageReturn messageReturn) {
       player.sendMessage(messageReturn.getMessage());
-    } else if(exception instanceof TargetableMessageReturn targetableMessageReturn) {
+    } else if (exception instanceof TargetableMessageReturn targetableMessageReturn) {
       player.sendMessage(targetableMessageReturn.getMessage(player));
     } else {
       String message = exception.getLocalizedMessage();

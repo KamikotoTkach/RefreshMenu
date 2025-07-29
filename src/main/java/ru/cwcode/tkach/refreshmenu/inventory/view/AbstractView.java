@@ -9,6 +9,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import ru.cwcode.cwutils.event.DragType;
 import ru.cwcode.tkach.refreshmenu.inventory.Menu;
 
 public class AbstractView implements InventoryHolder {
@@ -16,7 +18,8 @@ public class AbstractView implements InventoryHolder {
   @Setter
   @Getter
   protected Menu menu;
-  @Setter @Getter
+  @Setter
+  @Getter
   protected transient Inventory inventory;
   
   public void onOutsideClick(InventoryClickEvent event) {
@@ -28,6 +31,11 @@ public class AbstractView implements InventoryHolder {
   }
   
   public void onDrag(InventoryDragEvent event) {
+    DragType dragType = DragType.getDragType(event);
+    onDrag(dragType, event);
+  }
+  
+  public void onDrag(DragType dragType, InventoryDragEvent event) {
     event.setCancelled(true);
   }
   
@@ -48,6 +56,11 @@ public class AbstractView implements InventoryHolder {
   }
   
   public void open(Player player) {
+    ItemStack cursor = player.getOpenInventory().getCursor();
+    player.getOpenInventory().setCursor(null);
+    
     player.openInventory(getInventory());
+    
+    player.getOpenInventory().setCursor(cursor);
   }
 }

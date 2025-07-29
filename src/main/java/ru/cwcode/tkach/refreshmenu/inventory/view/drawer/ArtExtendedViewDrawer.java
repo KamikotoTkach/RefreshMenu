@@ -44,10 +44,10 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
     if (item != null && !item.getType().isAir()) return item;
     
     ArtIngredient art = view.getArts().get(shapeChar);
-    if(art == null) return null;
+    if (art == null) return null;
     
     int draws = artDraws.getOrDefault(shapeChar, 0);
-    if (art.getMaxDraws() > -1 && draws > art.getMaxDraws()) return null;
+    if (art.getMaxDraws() > -1 && draws >= art.getMaxDraws()) return null;
     
     artDraws.put(shapeChar, draws + 1);
     return getCachedItem(context, view.getArts().get(shapeChar));

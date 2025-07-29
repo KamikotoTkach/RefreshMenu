@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory.ingredient.extra;
 
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ExtraIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.action.Action;
@@ -20,16 +21,16 @@ public class ExtraBind implements Extra {
   }
   
   @Override
-  public boolean isHandlingOnClick(ExtraIngredient extraIngredient, MenuContext context, ClickType clickType) {
-    return actions.containsKey(clickType);
+  public boolean isHandlingOnClick(ExtraIngredient extraIngredient, MenuContext context, InventoryClickEvent event) {
+    return actions.containsKey(event.getClick());
   }
   
   @Override
-  public void onClick(ExtraIngredient extraIngredient, MenuContext context, ClickType clickType) {
-    Action action = actions.get(clickType);
+  public void onClick(ExtraIngredient extraIngredient, MenuContext context, InventoryClickEvent event) {
+    Action action = actions.get(event.getClick());
     
     if (action != null) {
-      action.accept(context, clickType);
+      action.accept(context, event.getClick());
     }
   }
 }

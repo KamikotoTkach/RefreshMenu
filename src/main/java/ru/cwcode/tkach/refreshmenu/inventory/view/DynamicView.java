@@ -73,7 +73,10 @@ public class DynamicView extends View implements Refreshable {
   }
   
   @Override
-  protected void handleIngredientClickAction(InventoryClickEvent event, char character) {
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
+    boolean isHandled = super.handleIngredientClickAction(event, character);
+    if (isHandled) return true;
+    
     int slot = event.getSlot();
     
     if (event.getView().getInventory(event.getRawSlot()) != getInventory()) {
@@ -83,14 +86,15 @@ public class DynamicView extends View implements Refreshable {
     List<? extends Ingredient> dynamic = dynamicIngredients.get(character);
     
     Ingredient clickedIngredient = dynamic != null ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
+    if (clickedIngredient == null) return false;
     
-    if (clickedIngredient != null) {
-      execute(((Player) event.getWhoClicked()), () -> {
-        MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
-        
-        clickedIngredient.onClick(context, event.getClick());
-        event.getView().setItem(event.getSlot(), clickedIngredient.getItem(context));
-      });
-    }
+    execute(((Player) event.getWhoClicked()), () -> {
+      MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
+      
+      clickedIngredient.onClick(context, event);
+      event.getView().setItem(event.getSlot(), clickedIngredient.getItem(context));
+    });
+    
+    return true;
   }
 }
