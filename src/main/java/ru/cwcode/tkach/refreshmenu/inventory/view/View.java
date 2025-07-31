@@ -126,7 +126,7 @@ public abstract class View extends AbstractView {
     
     execute((Player) event.getWhoClicked(), () -> {
       MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
-      clickedIngredient.onClick(context, event.getClick());
+      clickedIngredient.onClick(context, event);
       prepareForDrawing();
       event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
     });
