@@ -247,13 +247,13 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.19.2-R0.1-20221206.184705-189</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.4-SNAPSHOT</version>
+            <version>1.10.8-20250720.193744-1</version>
         </dependency>
         <dependency>
             <groupId>ru.cwcode.cwutils</groupId>
