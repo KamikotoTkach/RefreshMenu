@@ -17,6 +17,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 @JsonSubTypes({
    @JsonSubTypes.Type(value = IngredientImpl.class, name = "simple"),
    @JsonSubTypes.Type(value = ItemIngredient.class, name = "item"),
+   @JsonSubTypes.Type(value = ItemsAdderIngredient.class, name = "ia"),
    @JsonSubTypes.Type(value = HeadIngredient.class, name = "head"),
    @JsonSubTypes.Type(value = ActionIngredient.class, name = "action"),
    @JsonSubTypes.Type(value = ExtraIngredient.class, name = "extra")
@@ -40,6 +41,10 @@ public interface Ingredient {
   
   static ExtraIngredientBuilder extra() {
     return new ExtraIngredientBuilder();
+  }
+  
+  static ItemsAdderIngredientBuilder ia() {
+    return new ItemsAdderIngredientBuilder();
   }
   
   static ItemIngredient of(ItemStack item) {
