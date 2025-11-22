@@ -13,7 +13,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
-   property = "type")
+   property = "@type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = IngredientImpl.class, name = "simple"),
    @JsonSubTypes.Type(value = ItemIngredient.class, name = "item"),

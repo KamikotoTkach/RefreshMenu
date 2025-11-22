@@ -27,7 +27,7 @@ import java.util.Set;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
-   property = "type")
+   property = "@type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = View.class, name = "View"),
 })

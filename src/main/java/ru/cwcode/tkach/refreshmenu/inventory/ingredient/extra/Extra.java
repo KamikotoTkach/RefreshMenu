@@ -11,7 +11,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ExtraIngredient;
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type")
+  property = "@type")
 @JsonSubTypes({
   @JsonSubTypes.Type(value = ExtraState.class, name = "state"),
   @JsonSubTypes.Type(value = ExtraBind.class, name = "bind"),

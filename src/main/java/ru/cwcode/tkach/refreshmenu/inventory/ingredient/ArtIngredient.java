@@ -5,7 +5,7 @@ import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonType
 
 @JsonTypeInfo(
       use = JsonTypeInfo.Id.NAME,
-      property = "type")
+      property = "@type")
 @JsonSubTypes({
 })
 public interface ArtIngredient extends Ingredient {

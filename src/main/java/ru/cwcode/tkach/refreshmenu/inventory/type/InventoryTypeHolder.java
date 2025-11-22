@@ -9,7 +9,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
-   property = "type")
+   property = "@type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = InventoryTypeHolderImpl.class, name = "type"),
    @JsonSubTypes.Type(value = ChestType.class, name = "chest")

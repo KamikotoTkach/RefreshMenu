@@ -8,7 +8,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 @JsonTypeInfo(
    use = JsonTypeInfo.Id.NAME,
    include = JsonTypeInfo.As.PROPERTY,
-   property = "type")
+   property = "@type")
 @JsonSubTypes({
    @JsonSubTypes.Type(value = ConsoleCommandAction.class, name = "consoleCommand"),
    @JsonSubTypes.Type(value = PlayerCommandAction.class, name = "playerCommand"),
