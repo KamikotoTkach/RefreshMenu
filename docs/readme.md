@@ -1,4 +1,4 @@
-# RefreshMenu 1.5.1
+# RefreshMenu 1.7.0
 #### Библиотека на меню для Paper
 ##### Инструкция для настройки конфигов
 
@@ -71,6 +71,25 @@ ingredientMap:
       texture: "base64 текстура скина"
     'C': !<item> # тип ингредиента - закодированный предмет в SNBT или Base64
       item: "snbt или base64"
+    "N": !<extra>
+      name: Вперёд
+      description:
+      - Страниц больше нет
+      amount: 1
+      type: ARROW
+      customModelData: 3
+      extras:
+      - !<state>
+        states:
+          hasNextPage:true: !<simple>
+            name: Вперёд
+            description: null
+            amount: 1
+            type: SPECTRAL_ARROW
+            customModelData: 4
+      - !<bind>
+        actions:
+          LEFT: !<nextPage> {}
 
 ```
 Все типы предметов можно узнать [тут](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)\
