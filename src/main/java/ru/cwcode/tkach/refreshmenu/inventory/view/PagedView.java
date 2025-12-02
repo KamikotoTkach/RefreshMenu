@@ -118,6 +118,23 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     drawer.drawChars(new MenuContext(this, player), Set.of(getDynamicChar(), '<', '>'));
   }
   
+  public Optional<Integer> getPageForChar(char ingredientChar, int ingredientIndex) {
+    if (ingredientIndex < 0) return Optional.empty();
+    
+    int ingredientCharsCount = getShape().howMany(ingredientChar);
+    if (ingredientCharsCount == 0) return Optional.empty();
+    
+    int pageNumber = (int) Math.floor((double) ingredientIndex / ingredientCharsCount);
+    return Optional.of(pageNumber);
+  }
+  
+  public Optional<Integer> getSlotOnThisPageForChar(char ingredientChar, int ingredientIndex) {
+    int pageForIngredientIndex = getPageForChar(ingredientChar, ingredientIndex).orElse(-1);
+    if (getPage() != pageForIngredientIndex) return Optional.empty();
+    
+    return getSlotForChar(ingredientChar, ingredientIndex);
+  }
+  
   @Override
   protected void initializeDrawer() {
     drawer = new PagedViewDrawer();
