@@ -23,6 +23,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 @JsonTypeInfo(
@@ -134,6 +135,24 @@ public abstract class View extends AbstractView {
     });
     
     return true;
+  }
+  
+  public Optional<Integer> getSlotForChar(char ingredientChar, int ingredientIndex) {
+    if (ingredientIndex < 0) return Optional.empty();
+    
+    int ingredientCharsCount = getShape().howMany(ingredientChar);
+    if (ingredientCharsCount == 0) return Optional.empty();
+    
+    ingredientIndex = ingredientIndex % ingredientCharsCount;
+    String joinedShape = getShape().getJoinedShape();
+    
+    int slot = -1;
+    for (int i = 0; i <= ingredientIndex; i++) {
+      slot = joinedShape.indexOf(ingredientChar, slot + 1);
+      if (slot == -1) return Optional.empty();
+    }
+    
+    return Optional.of(slot);
   }
   
   protected void execute(Player player, Runnable runnable) {
