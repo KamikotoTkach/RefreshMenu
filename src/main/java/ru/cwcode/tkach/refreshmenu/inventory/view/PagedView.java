@@ -77,6 +77,7 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
     setState("hasPrevPage", hasPrevPage() ? "true" : "false");
   }
   
+  @Override
   protected void updatePlaceholders() {
     placeholders.add("page", page + 1);
     placeholders.add("next_page", Math.min(maxPage, page + 2));

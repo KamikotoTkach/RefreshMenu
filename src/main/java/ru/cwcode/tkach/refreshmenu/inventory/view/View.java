@@ -70,6 +70,7 @@ public abstract class View extends AbstractView {
   
   public void prepareForDrawing() {
     updateStates();
+    updatePlaceholders();
   }
   
   @Override
@@ -115,6 +116,7 @@ public abstract class View extends AbstractView {
   }
   
   public void updateStates() {}
+  protected void updatePlaceholders() {}
   
   protected void initializeDrawer() {
     drawer = new ViewDrawer();
