@@ -89,7 +89,7 @@ public class DynamicView extends View implements Refreshable {
     
     List<? extends Ingredient> dynamic = dynamicIngredients.get(character);
     
-    Ingredient clickedIngredient = dynamic != null ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
+    Ingredient clickedIngredient = dynamic != null ? getDynamic(finalSlot).orElse(null) : shape.getIngredientMap().get(character);
     if (clickedIngredient == null) return false;
     
     execute(((Player) event.getWhoClicked()), () -> {

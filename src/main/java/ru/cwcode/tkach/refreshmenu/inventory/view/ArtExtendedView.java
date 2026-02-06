@@ -80,7 +80,7 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
     
     int finalSlot = slot;
     
-    Ingredient clickedIngredient = arts.containsKey(character) ? getArt(slot).orElse(null) : shape.getIngredientMap().get(character);
+    Ingredient clickedIngredient = arts.containsKey(character) ? getArt(finalSlot).orElse(null) : shape.getIngredientMap().get(character);
     if (clickedIngredient == null) return false;
     
     execute(((Player) event.getWhoClicked()), () -> {
