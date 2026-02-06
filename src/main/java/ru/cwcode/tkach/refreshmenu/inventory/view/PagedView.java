@@ -6,9 +6,11 @@ import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.PagedViewDrawer;
+import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.refresh.Refreshable;
 
 import java.util.ArrayList;
@@ -152,6 +154,8 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
       slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
     }
     
+    int finalSlot = slot;
+    
     Ingredient clickedIngredient = character == dynamicChar ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
     if (clickedIngredient == null) return false;
     
@@ -160,7 +164,9 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
       
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
-      event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
+      
+      ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
+      event.getView().setItem(event.getRawSlot(), updatedItem);
     });
     
     return true;
