@@ -10,6 +10,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ArtExtendedViewDrawer;
+import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,6 +78,8 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
       slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
     }
     
+    int finalSlot = slot;
+    
     Ingredient clickedIngredient = arts.containsKey(character) ? getArt(slot).orElse(null) : shape.getIngredientMap().get(character);
     if (clickedIngredient == null) return false;
     
@@ -88,7 +91,9 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
       ItemStack itemStack = event.getView().getItem(event.getRawSlot());
       if (itemStack == null || itemStack.getType() == Material.AIR) return;
       
-      event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
+      ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
+      
+      event.getView().setItem(event.getRawSlot(), updatedItem);
     });
     
     return true;

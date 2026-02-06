@@ -3,9 +3,11 @@ package ru.cwcode.tkach.refreshmenu.inventory.view;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.DynamicViewDrawer;
+import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.refresh.Refreshable;
 
 import java.util.*;
@@ -83,6 +85,8 @@ public class DynamicView extends View implements Refreshable {
       slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
     }
     
+    int finalSlot = slot;
+    
     List<? extends Ingredient> dynamic = dynamicIngredients.get(character);
     
     Ingredient clickedIngredient = dynamic != null ? getDynamic(slot).orElse(null) : shape.getIngredientMap().get(character);
@@ -92,7 +96,9 @@ public class DynamicView extends View implements Refreshable {
       MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
       
       clickedIngredient.onClick(context, event);
-      event.getView().setItem(event.getSlot(), clickedIngredient.getItem(context));
+      
+      ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
+      event.getView().setItem(event.getSlot(), updatedItem);
     });
     
     return true;
