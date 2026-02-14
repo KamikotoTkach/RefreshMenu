@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
@@ -169,6 +170,7 @@ public abstract class View extends AbstractView {
     } else if (exception instanceof TargetableMessageReturn targetableMessageReturn) {
       player.sendMessage(targetableMessageReturn.getMessage(player));
     } else {
+      player.closeInventory(InventoryCloseEvent.Reason.PLUGIN);
       String message = exception.getLocalizedMessage();
       player.sendMessage(message == null ? "Unexpected exception, check console" : message);
       exception.printStackTrace();
