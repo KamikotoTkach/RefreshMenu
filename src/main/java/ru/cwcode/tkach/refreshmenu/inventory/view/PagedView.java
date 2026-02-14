@@ -165,6 +165,10 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
       
+      if (event.getView().getInventory(event.getRawSlot()) != getInventory()) { //do not touch player inventory items
+        return;
+      }
+      
       ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
       event.getView().setItem(event.getRawSlot(), updatedItem);
     });

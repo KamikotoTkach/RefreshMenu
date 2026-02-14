@@ -92,8 +92,7 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
       if (itemStack == null || itemStack.getType() == Material.AIR) return;
       
       ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
-      
-      event.getView().setItem(event.getRawSlot(), updatedItem);
+      getDrawer().setItem(context, event.getRawSlot(), updatedItem);
     });
     
     return true;

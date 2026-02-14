@@ -1,5 +1,6 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view.drawer;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 public class ExtendedViewDrawer extends PagedViewDrawer {
   volatile int inventorySize;
+  @Getter
   volatile ItemStack[] playerInventoryBuffer = new ItemStack[36];
   
   @Override
@@ -43,7 +45,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  public void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
     if (slot < inventorySize) {
       super.setItem(context, slot, item);
     } else {
@@ -58,10 +60,6 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
     for (int i = 0; i < playerInventoryBuffer.length; i++) {
       sendSlotPacket(context.player(), i);
     }
-  }
-  
-  public ItemStack[] getPlayerInventoryBuffer() {
-    return playerInventoryBuffer;
   }
   
   public int getTopInventorySize() {
