@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -139,7 +140,7 @@ public class PacketListener {
               Packet.setSlot(player, slot, playerInventoryBuffer[slot - topInventorySize], windowId);
             }
           }
-          
+          //todo: restore similar items when player use double-click
           Packet.setSlot(player, -1, AIR, -1);
           Packet.setSlot(player, clickedSlot, playerInventoryBuffer[clickedSlot - topInventorySize], windowId);
           
@@ -154,7 +155,9 @@ public class PacketListener {
           
           InventoryView openInventory = player.getOpenInventory();
           if (openInventory.getTopInventory().getHolder() instanceof ExtendedView<?> extendedView) {
-            extendedView.onOwnInventoryClick(new InventoryClickEvent(openInventory, InventoryType.SlotType.CONTAINER, clickedSlot, click, InventoryAction.PICKUP_ALL));
+            Bukkit.getScheduler().runTask(plugin, () -> {
+              extendedView.onOwnInventoryClick(new InventoryClickEvent(openInventory, InventoryType.SlotType.CONTAINER, clickedSlot, click, InventoryAction.PICKUP_ALL));
+            });
           }
           
           event.setCancelled(true);
