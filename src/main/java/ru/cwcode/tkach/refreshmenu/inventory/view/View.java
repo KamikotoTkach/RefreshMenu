@@ -24,6 +24,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -132,6 +133,11 @@ public abstract class View extends AbstractView {
       MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
+      
+      if (event.getView().getInventory(event.getRawSlot()) != getInventory()) { //do not touch player inventory items (todo: replace with abstract Drawer::setItem)
+        return;
+      }
+      
       event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
     });
     
