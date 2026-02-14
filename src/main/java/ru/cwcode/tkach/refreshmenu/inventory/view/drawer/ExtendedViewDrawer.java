@@ -35,7 +35,10 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   
   public void sendSlotPacket(Player player, int slot) {
     ItemStack item = playerInventoryBuffer[slot];
-    Packet.setSlot(player, slot > 27 ? slot - 27 : slot + 9, item == null ? AIR : item, -2);
+    try {
+      Packet.setSlot(player, slot > 27 ? slot - 27 : slot + 9, item == null ? AIR : item, -2);
+    } catch (Exception e) {
+    }
   }
   
   @Override
