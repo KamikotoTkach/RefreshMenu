@@ -48,11 +48,21 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  public void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
     if (slot < inventorySize) {
       super.setItem(context, slot, item);
     } else {
-      playerInventoryBuffer[slot-inventorySize] = item;
+      playerInventoryBuffer[slot - inventorySize] = item;
+    }
+  }
+  
+  @Override
+  public void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
+    if (slot < inventorySize) {
+      super.drawItem(context, slot, item);
+    } else {
+      playerInventoryBuffer[slot - inventorySize] = item;
+      sendSlotPacket(context.player(), slot - inventorySize);
     }
   }
   

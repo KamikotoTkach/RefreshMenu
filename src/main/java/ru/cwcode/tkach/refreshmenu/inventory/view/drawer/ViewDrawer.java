@@ -35,9 +35,9 @@ public class ViewDrawer extends AbstractDrawer {
         
         setItem(context, i, item);
       }
-    
-    drawBuffer(context);
-    
+      
+      drawBuffer(context);
+      
     } finally {
       buffer = null;
     }
@@ -100,6 +100,10 @@ public class ViewDrawer extends AbstractDrawer {
   
   protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
     buffer[slot] = item == null ? AIR : item;
+  }
+  
+  public void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
+    context.view().getInventory().setItem(slot, item);
   }
   
   protected ItemStack findItem(MenuContext context, int slot, char currShapeChar) {

@@ -1,22 +1,18 @@
 package ru.cwcode.tkach.refreshmenu.inventory.view;
 
 import lombok.Getter;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ArtExtendedViewDrawer;
-import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Getter
 public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> extends ExtendedView<T> {
@@ -68,34 +64,10 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   }
   
   @Override
-  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
-    boolean isHandled = super.handleIngredientClickAction(event, character);
-    if (isHandled) return true;
+  public Optional<Ingredient> getIngredient(char character, int slot) {
+    Supplier<Optional<Ingredient>> def = () -> super.getIngredient(character, slot);
+    boolean isArt = arts.containsKey(character);
     
-    int slot = event.getSlot();
-    
-    if (event.getView().getInventory(event.getRawSlot()) != getInventory()) {
-      slot = getInventory().getSize() + (slot < 9 ? (slot + 27) : (slot - 9));
-    }
-    
-    int finalSlot = slot;
-    
-    Ingredient clickedIngredient = arts.containsKey(character) ? getArt(finalSlot).orElse(null) : shape.getIngredientMap().get(character);
-    if (clickedIngredient == null) return false;
-    
-    execute(((Player) event.getWhoClicked()), () -> {
-      MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
-      
-      clickedIngredient.onClick(context, event);
-      
-      ItemStack itemStack = event.getView().getItem(event.getRawSlot());
-      if (itemStack == null || itemStack.getType() == Material.AIR) return;
-      if (event.getView().getInventory(event.getRawSlot()) != getInventory()) return;
-      
-      ItemStack updatedItem = getDynamic(finalSlot).map(x -> x.getItem(context)).orElse(ViewDrawer.AIR);
-      event.getView().setItem(event.getRawSlot(), updatedItem);
-    });
-    
-    return true;
+    return isArt ? def.get().or(() -> getArt(slot)) : def.get();
   }
 }

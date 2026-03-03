@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.cwcode.cwutils.messages.MessageReturn;
@@ -24,7 +25,6 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -118,30 +118,29 @@ public abstract class View extends AbstractView {
     drawer.updateRequired(new MenuContext(this, player));
   }
   
-  public void updateStates() {}
-  protected void updatePlaceholders() {}
+  public void updateStates() {
+  }
+  
+  protected void updatePlaceholders() {
+  }
   
   protected void initializeDrawer() {
     drawer = new ViewDrawer();
   }
   
-  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
-    Ingredient clickedIngredient = shape.getIngredientMap().get(character);
-    if (clickedIngredient == null) return false;
+  public int getNormalizedSlot(InventoryClickEvent event) {
+    int slot = event.getSlot();
     
-    execute((Player) event.getWhoClicked(), () -> {
-      MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
-      clickedIngredient.onClick(context, event);
-      prepareForDrawing();
-      
-      if (event.getView().getInventory(event.getRawSlot()) != getInventory()) { //do not touch player inventory items (todo: replace with abstract Drawer::setItem)
-        return;
-      }
-      
-      event.getView().setItem(event.getRawSlot(), clickedIngredient.getItem(context));
-    });
+    if (event.getView().getInventory(event.getRawSlot()) != getInventory()) {
+      int additionalIndex = slot < 9 ? (slot + 27) : (slot - 9);
+      slot = getInventory().getSize() + additionalIndex;
+    }
     
-    return true;
+    return slot;
+  }
+  
+  public Optional<Ingredient> getIngredient(char character, int slot) {
+    return Optional.ofNullable(shape.getIngredientMap().get(character));
   }
   
   public Optional<Integer> getSlotForChar(char ingredientChar, int ingredientIndex) {
@@ -160,6 +159,25 @@ public abstract class View extends AbstractView {
     }
     
     return Optional.of(slot);
+  }
+  
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
+    int slot = getNormalizedSlot(event);
+    
+    Ingredient clickedIngredient = getIngredient(character, slot).orElse(null);
+    if (clickedIngredient == null) return false;
+    
+    execute(((Player) event.getWhoClicked()), () -> {
+      MenuContext context = new MenuContext(this, (Player) event.getWhoClicked());
+      
+      clickedIngredient.onClick(context, event);
+      prepareForDrawing();
+      
+      ItemStack updatedItem = clickedIngredient.getItem(context);
+      getDrawer().drawItem(context, event.getRawSlot(), updatedItem);
+    });
+    
+    return true;
   }
   
   protected void execute(Player player, Runnable runnable) {
