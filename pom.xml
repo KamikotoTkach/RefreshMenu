@@ -234,8 +234,8 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+            <id>mvn-wesjd-net</id>
+            <url>https://mvn.wesjd.net/</url>
         </repository>
         <repository>
             <id>jitpack</id>
@@ -253,7 +253,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.10-SNAPSHOT</version>
+            <version>1.10.11-20260125.051017-1</version>
         </dependency>
         <dependency>
             <groupId>com.github.LoneDev6</groupId>
