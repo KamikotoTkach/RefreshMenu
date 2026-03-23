@@ -37,6 +37,7 @@ public class MenuRefreshManager {
     return Optional.empty();
   }
   
+  //TODO: проверка, активно ли view
   private void tick() {
     views.forEach((view, refresh) -> {
       try {
