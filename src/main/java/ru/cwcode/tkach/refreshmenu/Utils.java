@@ -3,8 +3,8 @@ package ru.cwcode.tkach.refreshmenu;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import ru.cwcode.tkach.locale.Placeholders;
-import ru.cwcode.tkach.locale.platform.MessagePreprocessor;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
+import ru.cwcode.tkach.locale.preprocessor.MessagePreprocessor;
 import ru.cwcode.tkach.locale.wrapper.adventure.MiniMessageWrapper;
 
 import java.util.List;
