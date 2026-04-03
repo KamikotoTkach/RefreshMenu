@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -9,7 +10,7 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 public class MenuListener implements Listener {
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   void onInventoryClick(InventoryClickEvent event) {
     if (event.getInventory().getHolder() instanceof View view) {
       if (event.getClickedInventory() == null) {
@@ -22,7 +23,7 @@ public class MenuListener implements Listener {
     }
   }
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   void onInventoryClose(InventoryCloseEvent event) {
     if (event.getInventory().getHolder() instanceof View view) {
       boolean isClosed = view.onInventoryClose(event);
@@ -34,7 +35,7 @@ public class MenuListener implements Listener {
   }
   
   
-  @EventHandler
+  @EventHandler(priority = EventPriority.LOW)
   void onInventoryDrag(InventoryDragEvent event) {
     if (event.getInventory().getHolder() instanceof View view) {
       view.onDrag(event);
