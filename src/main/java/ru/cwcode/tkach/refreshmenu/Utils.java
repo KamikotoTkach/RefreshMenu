@@ -4,14 +4,14 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.locale.platform.MiniLocale;
-import ru.cwcode.tkach.locale.preprocessor.MessagePreprocessor;
+import ru.cwcode.tkach.locale.preprocessor.MessagePreprocessors;
 import ru.cwcode.tkach.locale.wrapper.adventure.MiniMessageWrapper;
 
 import java.util.List;
 
 public class Utils {
   
-  public static final MessagePreprocessor MESSAGE_PREPROCESSOR = MiniLocale.getInstance().messagePreprocessor();
+  public static final MessagePreprocessors MESSAGE_PREPROCESSOR = MiniLocale.getInstance().messagePreprocessors();
   public static final MiniMessageWrapper MINI_MESSAGE_WRAPPER = MiniLocale.getInstance().miniMessageWrapper();
   
   public static Component deserialize(String string, Placeholders placeholders, Audience viewer, boolean disableItalic) {
