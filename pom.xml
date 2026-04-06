@@ -253,7 +253,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.10.11-20260125.051017-1</version>
+            <version>1.10.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.github.LoneDev6</groupId>
