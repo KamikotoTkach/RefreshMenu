@@ -6,7 +6,7 @@
 
     <groupId>ru.cwcode.tkach.refreshmenu</groupId>
     <artifactId>RefreshMenu</artifactId>
-    <version>1.7.3</version>
+    <version>1.7.4</version>
     <packaging>jar</packaging>
 
     <name>RefreshMenu</name>
@@ -21,7 +21,7 @@
     </licenses>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -170,7 +170,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
                             <relocations>
                                 <relocation>
                                     <pattern>net.wesjd.anvilgui</pattern>
