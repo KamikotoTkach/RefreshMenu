@@ -21,6 +21,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
       throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
     
     view = artExtendedView;
+    artDraws.clear();
     
     super.draw(context);
   }
@@ -33,6 +34,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
       throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
     
     view = artExtendedView;
+    artDraws.clear();
     
     super.drawChars(context, characters);
   }
