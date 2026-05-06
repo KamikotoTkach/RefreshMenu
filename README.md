@@ -1,4 +1,4 @@
-# RefreshMenu 1.7.4
+# RefreshMenu 1.7.5
 #### Библиотека на меню для Paper
 
 
@@ -7,7 +7,7 @@
 <dependency>
   <groupId>ru.cwcode.tkach.refreshmenu</groupId>
   <artifactId>RefreshMenu</artifactId>
-  <version>1.7.4</version>
+  <version>1.7.5</version>
   <scope>provided</scope>
 </dependency>
 ```
