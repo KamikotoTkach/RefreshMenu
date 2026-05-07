@@ -15,6 +15,8 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   @Override
   public void onOwnInventoryClick(InventoryClickEvent event) {
     shape.findCharAtIndex(event.getRawSlot()).ifPresent(character -> {
+      super.onOwnInventoryClick(event);
+      
       execute(((Player) event.getWhoClicked()), () -> {
         boolean success = behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
         if (success) {
@@ -22,8 +24,6 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
           drawer.drawChars(new MenuContext(this, (Player) event.getWhoClicked()), Set.of(character));
         }
       });
-      
-      super.onOwnInventoryClick(event);
     });
   }
   
