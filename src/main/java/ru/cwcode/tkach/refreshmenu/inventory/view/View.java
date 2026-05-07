@@ -173,11 +173,15 @@ public abstract class View extends AbstractView {
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
       
-      ItemStack updatedItem = clickedIngredient.getItem(context);
-      getDrawer().drawItem(context, event.getRawSlot(), updatedItem);
+      redrawClickedIngredient(context, event, character, clickedIngredient);
     });
     
     return true;
+  }
+  
+  protected void redrawClickedIngredient(MenuContext context, InventoryClickEvent event, char character, Ingredient clickedIngredient) {
+    ItemStack updatedItem = clickedIngredient.getItem(context);
+    getDrawer().drawItem(context, event.getRawSlot(), updatedItem);
   }
   
   protected void execute(Player player, Runnable runnable) {

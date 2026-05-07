@@ -3,14 +3,12 @@ package ru.cwcode.tkach.refreshmenu.inventory.view;
 import lombok.Getter;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.ArtIngredient;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ArtExtendedViewDrawer;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -61,6 +59,19 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   @Override
   public ArtExtendedViewDrawer getDrawer() {
     return (ArtExtendedViewDrawer) drawer;
+  }
+  
+  @Override
+  protected void redrawClickedIngredient(MenuContext context, InventoryClickEvent event, char character, Ingredient clickedIngredient) {
+    if (arts.get(character) == clickedIngredient) {
+      Behavior.ClickData clickData = new Behavior.ClickData(character, event.getClick());
+      if (behavior.hasBind(clickData)) return;
+      
+      drawer.drawChars(context, Set.of(character));
+      return;
+    }
+    
+    super.redrawClickedIngredient(context, event, character, clickedIngredient);
   }
   
   @Override

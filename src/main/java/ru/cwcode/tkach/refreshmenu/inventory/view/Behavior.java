@@ -46,6 +46,10 @@ public class Behavior {
     return false;
   }
   
+  public boolean hasBind(ClickData clickData) {
+    return binds.containsKey(clickData);
+  }
+  
   public static class ClickData {
     char character;
     ClickType clickType;
