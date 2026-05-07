@@ -14,7 +14,9 @@ public abstract class AbstractDrawer {
   Map<Ingredient, ItemStack> ingredientCache = Collections.synchronizedMap(new WeakHashMap<>());
   
   public abstract void draw(MenuContext context);
+  
   public abstract void drawChars(MenuContext context, Collection<Character> characters);
+  
   public abstract void updateRequired(MenuContext context);
   
   public ItemStack getCachedItem(MenuContext menuContext, Ingredient ingredient) {

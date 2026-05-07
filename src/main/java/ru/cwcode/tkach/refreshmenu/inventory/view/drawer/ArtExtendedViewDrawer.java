@@ -12,18 +12,6 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   volatile ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;
   
   @Override
-  public void draw(MenuContext context) {
-    if (buffer != null) return;
-    
-    if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
-      throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
-    
-    view = artExtendedView;
-    
-    super.draw(context);
-  }
-  
-  @Override
   public void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
