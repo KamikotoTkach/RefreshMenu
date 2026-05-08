@@ -59,15 +59,8 @@ public abstract class View extends AbstractView {
     super.onInventoryClick(event);
     
     shape.findCharAtIndex(event.getSlot()).ifPresent(character -> {
-      handleIngredientClickAction(event, character);
-      
-      execute(((Player) event.getWhoClicked()), () -> {
-        boolean success = behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
-        if (success) {
-          prepareForDrawing();
-          drawer.drawChars(new MenuContext(this, ((Player) event.getWhoClicked())), Set.of(character));
-        }
-      });
+      handleIngredientClickAction(event, character, true);
+      handleBehaviorClickAction(event, character);
     });
   }
   
@@ -83,7 +76,7 @@ public abstract class View extends AbstractView {
     int playerInvSlot = event.getSlot();
     
     shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
-      handleIngredientClickAction(event, character);
+      handleIngredientClickAction(event, character, false);
     });
   }
   
@@ -161,7 +154,7 @@ public abstract class View extends AbstractView {
     return Optional.of(slot);
   }
   
-  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character, boolean deferRedrawToBehavior) {
     int slot = getNormalizedSlot(event);
     
     Ingredient clickedIngredient = getIngredient(character, slot).orElse(null);
@@ -173,10 +166,27 @@ public abstract class View extends AbstractView {
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
       
-      redrawClickedIngredient(context, event, character, clickedIngredient);
+      boolean shouldRedrawClickedIngredient = !deferRedrawToBehavior || !hasClickBehavior(event, character);
+      if (shouldRedrawClickedIngredient) redrawClickedIngredient(context, event, character, clickedIngredient);
     });
     
     return true;
+  }
+  
+  protected void handleBehaviorClickAction(InventoryClickEvent event, char character) {
+    Player player = (Player) event.getWhoClicked();
+    
+    execute(player, () -> {
+      boolean success = behavior.execute(event, new Behavior.ClickData(character, event.getClick()));
+      if (success) {
+        prepareForDrawing();
+        drawer.drawChars(new MenuContext(this, player), Set.of(character));
+      }
+    });
+  }
+  
+  protected boolean hasClickBehavior(InventoryClickEvent event, char character) {
+    return behavior.hasBind(new Behavior.ClickData(character, event.getClick()));
   }
   
   protected void redrawClickedIngredient(MenuContext context, InventoryClickEvent event, char character, Ingredient clickedIngredient) {
