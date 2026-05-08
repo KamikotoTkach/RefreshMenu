@@ -12,15 +12,6 @@ public class PagedViewDrawer extends ViewDrawer {
   volatile int dynamicItemIndex;
   volatile PagedView<? extends Ingredient> view;
   
-  @Override
-  public void draw(MenuContext context) {
-    if (buffer != null) return;
-    
-    setupPagedDrawer(context);
-    
-    super.draw(context);
-  }
-  
   private void setupPagedDrawer(MenuContext context) {
     if (!(context.view() instanceof PagedView<? extends Ingredient> pagedView))
       throw new IllegalArgumentException("PagedViewDrawer can only be used with <? extends PagedView>");

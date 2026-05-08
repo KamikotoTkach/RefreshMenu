@@ -9,10 +9,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ViewDrawer extends AbstractDrawer {
   public static ItemStack AIR = new ItemStack(Material.AIR);
@@ -20,33 +17,12 @@ public class ViewDrawer extends AbstractDrawer {
   
   @Override
   public void draw(MenuContext context) {
-    if (buffer != null) return;
-    
-    try {
-      buffer = context.view().getInventory().getContents().clone();
-      
-      InventoryShape shape = context.view().getShape();
-      String joinedShape = shape.getJoinedShape();
-      
-      for (int i = 0; i < Math.min(joinedShape.length(), getDrawingSize(context)); i++) {
-        char currShapeChar = joinedShape.charAt(i);
-        
-        ItemStack item = findItem(context, i, currShapeChar);
-        
-        setItem(context, i, item);
-      }
-      
-      drawBuffer(context);
-      
-    } finally {
-      buffer = null;
-    }
+    drawChars(context, Collections.emptySet());
   }
   
   @Override
   public void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
-    if (characters.isEmpty()) return;
     
     try {
       buffer = context.view().getInventory().getContents().clone();
@@ -56,11 +32,9 @@ public class ViewDrawer extends AbstractDrawer {
       
       for (int i = 0; i < getDrawingSize(context); i++) {
         char currShapeChar = joinedShape.charAt(i);
-        
-        if (!characters.contains(currShapeChar)) continue;
+        if (!characters.isEmpty() && !characters.contains(currShapeChar)) continue;
         
         ItemStack item = findItem(context, i, currShapeChar);
-        
         setItem(context, i, item);
       }
       

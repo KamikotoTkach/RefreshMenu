@@ -7,23 +7,9 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.ArtExtendedView;
 
 import java.util.Collection;
-import java.util.HashMap;
 
 public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   volatile ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;
-  volatile HashMap<Character, Integer> artDraws = new HashMap<>();
-  
-  @Override
-  public void draw(MenuContext context) {
-    if (buffer != null) return;
-    
-    if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))
-      throw new IllegalArgumentException("ArtExtendedViewDrawer can only be used with <? extends ArtExtendedView>");
-    
-    view = artExtendedView;
-    
-    super.draw(context);
-  }
   
   @Override
   public void drawChars(MenuContext context, Collection<Character> characters) {
@@ -46,10 +32,9 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
     ArtIngredient art = view.getArts().get(shapeChar);
     if (art == null) return null;
     
-    int draws = artDraws.getOrDefault(shapeChar, 0);
-    if (art.getMaxDraws() > -1 && draws >= art.getMaxDraws()) return null;
+    int draws = (int) context.view().getShape().getJoinedShape().substring(0, slot).chars().filter(ch -> ch == shapeChar).count();
+    if (art.getMaxDraws() > -1 && draws >= art.getMaxDraws()) return art.getEmptyItem(context);
     
-    artDraws.put(shapeChar, draws + 1);
     return getCachedItem(context, view.getArts().get(shapeChar));
   }
 }

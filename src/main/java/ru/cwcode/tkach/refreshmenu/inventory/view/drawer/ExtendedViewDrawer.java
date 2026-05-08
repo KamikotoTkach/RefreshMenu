@@ -16,15 +16,6 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   volatile ItemStack[] playerInventoryBuffer = new ItemStack[36];
   
   @Override
-  public void draw(MenuContext context) {
-    if (buffer != null) return;
-    
-    inventorySize = context.view().getInventory().getSize();
-    
-    super.draw(context);
-  }
-  
-  @Override
   public void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
