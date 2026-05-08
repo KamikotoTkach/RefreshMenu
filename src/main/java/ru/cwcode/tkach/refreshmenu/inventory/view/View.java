@@ -213,4 +213,8 @@ public abstract class View extends AbstractView {
     
     return inventory;
   }
+  
+  public boolean isInventoryInitialized() {
+    return inventory != null;
+  }
 }
