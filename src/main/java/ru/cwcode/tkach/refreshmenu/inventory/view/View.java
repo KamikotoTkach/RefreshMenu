@@ -218,9 +218,14 @@ public abstract class View extends AbstractView {
   @Override
   public @NotNull Inventory getInventory() {
     if (inventory == null) {
+      updatePlaceholders();
       inventory = shape.createInventory(this);
     }
     
     return inventory;
+  }
+  
+  public boolean isInventoryInitialized() {
+    return inventory != null;
   }
 }

@@ -226,16 +226,16 @@
 
     <repositories>
         <repository>
+            <id>cwcode</id>
+            <url>https://nexus.cwcode.ru:4444/repository/cwcode-public/</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>mvn-wesjd-net</id>
-            <url>https://mvn.wesjd.net/</url>
         </repository>
         <repository>
             <id>jitpack</id>

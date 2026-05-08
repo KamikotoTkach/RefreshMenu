@@ -48,8 +48,10 @@ public class Menu {
   
   public boolean hasViewers() {
     for (View value : views.values()) {
+      if (!value.isInventoryInitialized()) continue;
       if (!value.getInventory().getViewers().isEmpty()) return true;
     }
+    
     return false;
   }
   
