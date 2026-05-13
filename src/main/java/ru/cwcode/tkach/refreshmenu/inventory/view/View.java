@@ -59,7 +59,7 @@ public abstract class View extends AbstractView {
     super.onInventoryClick(event);
     
     shape.findCharAtIndex(event.getSlot()).ifPresent(character -> {
-      handleIngredientClickAction(event, character, true);
+      handleIngredientClickActionDeferred(event, character);
       handleBehaviorClickAction(event, character);
     });
   }
@@ -76,7 +76,7 @@ public abstract class View extends AbstractView {
     int playerInvSlot = event.getSlot();
     
     shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
-      handleIngredientClickAction(event, character, false);
+      handleIngredientClickActionImmediate(event, character);
     });
   }
   
@@ -154,7 +154,7 @@ public abstract class View extends AbstractView {
     return Optional.of(slot);
   }
   
-  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character, boolean deferRedrawToBehavior) {
+  private boolean handleIngredientClickAction(InventoryClickEvent event, char character, boolean deferRedrawToBehaviorIfExist) {
     int slot = getNormalizedSlot(event);
     
     Ingredient clickedIngredient = getIngredient(character, slot).orElse(null);
@@ -166,11 +166,23 @@ public abstract class View extends AbstractView {
       clickedIngredient.onClick(context, event);
       prepareForDrawing();
       
-      boolean shouldRedrawClickedIngredient = !deferRedrawToBehavior || !hasClickBehavior(event, character);
+      boolean shouldRedrawClickedIngredient = !deferRedrawToBehaviorIfExist || !hasClickBehavior(event, character);
       if (shouldRedrawClickedIngredient) redrawClickedIngredient(context, event, character, clickedIngredient);
     });
     
     return true;
+  }
+  
+  protected boolean handleIngredientClickActionImmediate(InventoryClickEvent event, char character) {
+    return handleIngredientClickAction(event, character, false);
+  }
+  
+  protected boolean handleIngredientClickActionDeferred(InventoryClickEvent event, char character) {
+    return handleIngredientClickAction(event, character, true);
+  }
+  
+  protected boolean handleIngredientClickAction(InventoryClickEvent event, char character) {
+    return handleIngredientClickActionImmediate(event, character);
   }
   
   protected void handleBehaviorClickAction(InventoryClickEvent event, char character) {

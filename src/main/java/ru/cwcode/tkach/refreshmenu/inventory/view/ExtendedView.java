@@ -13,8 +13,8 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   public void onOwnInventoryClick(InventoryClickEvent event) {
     shape.findCharAtIndex(event.getRawSlot()).ifPresent(character -> {
       event.setCancelled(true);
-
-      handleIngredientClickAction(event, character, true);
+      
+      handleIngredientClickActionDeferred(event, character);
       handleBehaviorClickAction(event, character);
     });
   }
