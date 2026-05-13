@@ -64,9 +64,6 @@ public class ArtExtendedView<T extends Ingredient, ART extends ArtIngredient> ex
   @Override
   protected void redrawClickedIngredient(MenuContext context, InventoryClickEvent event, char character, Ingredient clickedIngredient) {
     if (arts.get(character) == clickedIngredient) {
-      Behavior.ClickData clickData = new Behavior.ClickData(character, event.getClick());
-      if (behavior.hasBind(clickData)) return;
-      
       drawer.drawChars(context, Set.of(character));
       return;
     }
