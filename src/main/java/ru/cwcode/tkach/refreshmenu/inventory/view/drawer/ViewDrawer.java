@@ -63,7 +63,10 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   protected void drawBuffer(MenuContext context) {
-    context.view().getInventory().setContents(buffer);
+    var tmp = buffer;
+    if (tmp == null) return;
+    
+    context.view().getInventory().setContents(tmp);
     buffer = null;
   }
   
