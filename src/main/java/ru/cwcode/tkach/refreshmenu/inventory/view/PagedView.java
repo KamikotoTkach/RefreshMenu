@@ -73,8 +73,8 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
   @Override
   public void updateStates() {
     super.updateStates();
-    setState("hasNextPage", hasNextPage() ? "true" : "false");
-    setState("hasPrevPage", hasPrevPage() ? "true" : "false");
+    setState("hasNextPage", Boolean.toString(hasNextPage()));
+    setState("hasPrevPage", Boolean.toString(hasPrevPage()));
   }
   
   @Override
