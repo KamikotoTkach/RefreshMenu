@@ -22,9 +22,11 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class PacketListener {
   private static final ItemStack AIR = new ItemStack(Material.AIR);
+  private static final Set<String> MODE_TO_RESTORE = Set.of("QUICK_MOVE", "PICKUP_ALL");
   
   public PacketListener() {
     //replacing items in bottom player inventory to relevant items from extended view
@@ -131,15 +133,37 @@ public class PacketListener {
         ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
         
         if (clickedSlot > topInventorySize - 1) {
+          InventoryView openInventory = player.getOpenInventory();
+          
           if (PaperServerUtils.isVersionGreater("1.16.5")) {
             Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
             
             for (Integer slot : handle.keySet()) {
-              if (slot <= topInventorySize - 1) continue;
+              if (slot < 0) continue;
               
-              Packet.setSlot(player, slot, playerInventoryBuffer[slot - topInventorySize], windowId);
+              if (slot < topInventorySize) {
+                ItemStack topItem = openInventory.getItem(slot);
+                Packet.setSlot(player, slot, topItem == null ? AIR : topItem, windowId);
+                continue;
+              }
+              
+              int playerInvSlot = slot - topInventorySize;
+              if (playerInvSlot < playerInventoryBuffer.length) {
+                Packet.setSlot(player, slot, playerInventoryBuffer[playerInvSlot], windowId);
+              }
+            }
+          } else {
+            Enum<?> clickMode = event.getPacket().getSpecificModifier(Enum.class).readSafely(0);
+            boolean shouldRestore = clickMode != null && MODE_TO_RESTORE.contains(clickMode.name());
+            if (shouldRestore) {
+              // 1.16.5 and lower do not send changedSlots for shift-click or collect-all.
+              for (int slot = 0; slot < topInventorySize; slot++) {
+                ItemStack topItem = openInventory.getItem(slot);
+                Packet.setSlot(player, slot, topItem == null ? AIR : topItem, windowId);
+              }
             }
           }
+          
           //todo: restore similar items when player use double-click
           Packet.setSlot(player, -1, AIR, -1);
           Packet.setSlot(player, clickedSlot, playerInventoryBuffer[clickedSlot - topInventorySize], windowId);
@@ -153,7 +177,6 @@ public class PacketListener {
           
           ClickType click = button == 0 ? ClickType.LEFT : ClickType.RIGHT;
           
-          InventoryView openInventory = player.getOpenInventory();
           if (openInventory.getTopInventory().getHolder() instanceof ExtendedView<?> extendedView) {
             Bukkit.getScheduler().runTask(plugin, () -> {
               extendedView.onOwnInventoryClick(new InventoryClickEvent(openInventory, InventoryType.SlotType.CONTAINER, clickedSlot, click, InventoryAction.PICKUP_ALL));
