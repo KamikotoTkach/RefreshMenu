@@ -119,9 +119,6 @@ public class PacketListener {
         }
         
         if (!(holder instanceof View openedView)) return;
-        if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
-        
-        int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
         Integer clickedSlot;
         if (PaperServerUtils.isVersionGreater("1.18.1")) {
@@ -130,20 +127,33 @@ public class PacketListener {
           clickedSlot = event.getPacket().getIntegers().read(1);
         }
         
-        ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
         Enum<?> clickMode = event.getPacket().getSpecificModifier(Enum.class).readSafely(0);
         String clickModeName = clickMode == null ? null : clickMode.name();
         
-        Integer button;
+        int button;
         if (PaperServerUtils.isVersionGreater("1.17")) {
           button = event.getPacket().getIntegers().read(3);
         } else {
           button = event.getPacket().getIntegers().read(2);
         }
         
-        if (clickedSlot > topInventorySize - 1) {
-          InventoryView openInventory = player.getOpenInventory();
+        InventoryView openInventory = player.getOpenInventory();
+        if (clickedSlot >= 0 && "SWAP".equals(clickModeName) && button == 40) {
+          if (!(openedView.getDrawer() instanceof ExtendedViewDrawer) || clickedSlot < openInventory.getTopInventory().getSize()) {
+            ItemStack clickedItem = openInventory.getItem(clickedSlot);
+            Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
+          }
           
+          ItemStack offhandItem = player.getInventory().getItemInOffHand();
+          Packet.setSlot(player, 40, offhandItem == null ? AIR : offhandItem, -2);
+        }
+        
+        if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+        
+        int topInventorySize = extendedViewDrawer.getTopInventorySize();
+        ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
+        
+        if (clickedSlot > topInventorySize - 1) {
           if (PaperServerUtils.isVersionGreater("1.16.5")) {
             Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
             
@@ -162,7 +172,7 @@ public class PacketListener {
               }
             }
           } else {
-            boolean shouldRestore = MODE_TO_RESTORE.contains(clickModeName);
+            boolean shouldRestore = clickModeName != null && MODE_TO_RESTORE.contains(clickModeName);
             if (shouldRestore) {
               // 1.16.5 and lower do not send changedSlots for shift-click or collect-all.
               for (int slot = 0; slot < topInventorySize; slot++) {
@@ -171,7 +181,11 @@ public class PacketListener {
               }
             }
           }
-          if ("SWAP".equals(clickModeName)) restoreSwapTarget(player, extendedViewDrawer, button, windowId);
+          if ("SWAP".equals(clickModeName) && button >= 0 && button < 9) {
+            int bufferSlot = 27 + button;
+            ItemStack item = playerInventoryBuffer[bufferSlot];
+            Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
+          }
           
           //todo: restore similar items when player use double-click
           Packet.setSlot(player, -1, AIR, -1);
@@ -186,24 +200,15 @@ public class PacketListener {
           }
           
           event.setCancelled(true);
-        } else if (clickedSlot >= 0 && "SWAP".equals(clickModeName)) {
-          InventoryView openInventory = player.getOpenInventory();
+        } else if (clickedSlot >= 0 && "SWAP".equals(clickModeName) && button >= 0 && button < 9) {
           ItemStack topItem = openInventory.getItem(clickedSlot);
           Packet.setSlot(player, clickedSlot, topItem == null ? AIR : topItem, windowId);
-          restoreSwapTarget(player, extendedViewDrawer, button, windowId);
+          
+          int bufferSlot = 27 + button;
+          ItemStack item = playerInventoryBuffer[bufferSlot];
+          Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
         }
       }
     });
-  }
-  
-  private void restoreSwapTarget(Player player, ExtendedViewDrawer drawer, int button, int windowId) {
-    if (button >= 0 && button < 9) {
-      int bufferSlot = 27 + button;
-      ItemStack item = drawer.getPlayerInventoryBuffer()[bufferSlot];
-      Packet.setSlot(player, drawer.getTopInventorySize() + bufferSlot, item == null ? AIR : item, windowId);
-    } else if (button == 40) {
-      ItemStack item = player.getInventory().getItemInOffHand();
-      Packet.setSlot(player, 40, item == null ? AIR : item, -2);
-    }
   }
 }
