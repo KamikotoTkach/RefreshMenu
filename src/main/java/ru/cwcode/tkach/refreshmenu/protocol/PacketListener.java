@@ -131,6 +131,15 @@ public class PacketListener {
         }
         
         ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
+        Enum<?> clickMode = event.getPacket().getSpecificModifier(Enum.class).readSafely(0);
+        String clickModeName = clickMode == null ? null : clickMode.name();
+        
+        Integer button;
+        if (PaperServerUtils.isVersionGreater("1.17")) {
+          button = event.getPacket().getIntegers().read(3);
+        } else {
+          button = event.getPacket().getIntegers().read(2);
+        }
         
         if (clickedSlot > topInventorySize - 1) {
           InventoryView openInventory = player.getOpenInventory();
@@ -153,8 +162,7 @@ public class PacketListener {
               }
             }
           } else {
-            Enum<?> clickMode = event.getPacket().getSpecificModifier(Enum.class).readSafely(0);
-            boolean shouldRestore = clickMode != null && MODE_TO_RESTORE.contains(clickMode.name());
+            boolean shouldRestore = MODE_TO_RESTORE.contains(clickModeName);
             if (shouldRestore) {
               // 1.16.5 and lower do not send changedSlots for shift-click or collect-all.
               for (int slot = 0; slot < topInventorySize; slot++) {
@@ -163,17 +171,11 @@ public class PacketListener {
               }
             }
           }
+          if ("SWAP".equals(clickModeName)) restoreSwapTarget(player, extendedViewDrawer, button, windowId);
           
           //todo: restore similar items when player use double-click
           Packet.setSlot(player, -1, AIR, -1);
           Packet.setSlot(player, clickedSlot, playerInventoryBuffer[clickedSlot - topInventorySize], windowId);
-          
-          Integer button;
-          if (PaperServerUtils.isVersionGreater("1.17")) {
-            button = event.getPacket().getIntegers().read(3);
-          } else {
-            button = event.getPacket().getIntegers().read(2);
-          }
           
           ClickType click = button == 0 ? ClickType.LEFT : ClickType.RIGHT;
           
@@ -184,8 +186,24 @@ public class PacketListener {
           }
           
           event.setCancelled(true);
+        } else if (clickedSlot >= 0 && "SWAP".equals(clickModeName)) {
+          InventoryView openInventory = player.getOpenInventory();
+          ItemStack topItem = openInventory.getItem(clickedSlot);
+          Packet.setSlot(player, clickedSlot, topItem == null ? AIR : topItem, windowId);
+          restoreSwapTarget(player, extendedViewDrawer, button, windowId);
         }
       }
     });
+  }
+  
+  private void restoreSwapTarget(Player player, ExtendedViewDrawer drawer, int button, int windowId) {
+    if (button >= 0 && button < 9) {
+      int bufferSlot = 27 + button;
+      ItemStack item = drawer.getPlayerInventoryBuffer()[bufferSlot];
+      Packet.setSlot(player, drawer.getTopInventorySize() + bufferSlot, item == null ? AIR : item, windowId);
+    } else if (button == 40) {
+      ItemStack item = player.getInventory().getItemInOffHand();
+      Packet.setSlot(player, 40, item == null ? AIR : item, -2);
+    }
   }
 }
