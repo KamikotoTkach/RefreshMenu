@@ -28,6 +28,8 @@ public class PacketListener {
   private static final ItemStack AIR = new ItemStack(Material.AIR);
   private static final Set<String> MODE_TO_RESTORE = Set.of("QUICK_MOVE", "PICKUP_ALL");
   
+  private final WindowClickPacketReader windowClickPacketReader = WindowClickPacketReader.create();
+  
   public PacketListener() {
     //replacing items in bottom player inventory to relevant items from extended view
     ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(ProtocolLibrary.getPlugin(), PacketType.Play.Server.WINDOW_ITEMS) {
@@ -120,22 +122,12 @@ public class PacketListener {
         
         if (!(holder instanceof View openedView)) return;
         
-        Integer clickedSlot;
-        if (PaperServerUtils.isVersionGreater("1.18.1")) {
-          clickedSlot = event.getPacket().getIntegers().read(2);
-        } else {
-          clickedSlot = event.getPacket().getIntegers().read(1);
-        }
+        int clickedSlot = windowClickPacketReader.readSlot(event.getPacket());
         
         Enum<?> clickMode = event.getPacket().getSpecificModifier(Enum.class).readSafely(0);
         String clickModeName = clickMode == null ? null : clickMode.name();
         
-        int button;
-        if (PaperServerUtils.isVersionGreater("1.17")) {
-          button = event.getPacket().getIntegers().read(3);
-        } else {
-          button = event.getPacket().getIntegers().read(2);
-        }
+        int button = windowClickPacketReader.readButton(event.getPacket());
         
         InventoryView openInventory = player.getOpenInventory();
         if (clickedSlot >= 0 && "SWAP".equals(clickModeName) && button == 40) {
@@ -154,8 +146,8 @@ public class PacketListener {
         ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
         
         if (clickedSlot > topInventorySize - 1) {
-          if (PaperServerUtils.isVersionGreater("1.16.5")) {
-            Map<Integer, Object> handle = (Map<Integer, Object>) (event.getPacket().getStructures().read(2).getHandle());
+          if (windowClickPacketReader.hasChangedSlots()) {
+            Map<Integer, Object> handle = windowClickPacketReader.readChangedSlots(event.getPacket());
             
             for (Integer slot : handle.keySet()) {
               if (slot < 0) continue;
