@@ -11,7 +11,8 @@ public class MenuRefreshManager {
   ConcurrentHashMap<Refreshable, Refresh> views = new ConcurrentHashMap<>();
   
   public MenuRefreshManager(JavaPlugin plugin) {
-    Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::tick, 1, 1);
+    Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::tickAsync, 1, 1);
+    Bukkit.getScheduler().runTaskTimer(plugin, this::tickSync, 1, 1);
   }
   
   public void tryRegister(View view) {
@@ -37,13 +38,24 @@ public class MenuRefreshManager {
     return Optional.empty();
   }
   
-  //TODO: проверка, активно ли view
-  private void tick() {
+  private void tickAsync() {
+    tick(true);
+  }
+  
+  private void tickSync() {
+    tick(false);
+  }
+  
+  private void tick(boolean async) {
+    int currentTick = Bukkit.getCurrentTick();
+    
     views.forEach((view, refresh) -> {
+      if (refresh.async() != async) return;
+      if (currentTick % refresh.delay() != 0) return;
+      if (view instanceof View v && (!v.isInventoryInitialized() || v.getInventory().getViewers().isEmpty())) return;
+      
       try {
-        if (Bukkit.getCurrentTick() % refresh.delay() == 0) {
-          view.refresh();
-        }
+        view.refresh();
       } catch (Exception e) {
         e.printStackTrace();
       }

@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Refresh {
   long delay() default 1L;
+  boolean async() default true;
 }

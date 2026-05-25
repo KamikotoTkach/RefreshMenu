@@ -68,7 +68,6 @@ public class DynamicView extends View implements Refreshable {
   
   @Override
   public void refresh() {
-    if (getInventory().getViewers().isEmpty()) return;
     updateRequired(viewer);
   }
   

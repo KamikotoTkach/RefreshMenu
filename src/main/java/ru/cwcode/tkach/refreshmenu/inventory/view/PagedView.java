@@ -66,7 +66,6 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
   
   @Override
   public void refresh() {
-    if (getInventory().getViewers().isEmpty()) return;
     updateRequired(player);
   }
   
