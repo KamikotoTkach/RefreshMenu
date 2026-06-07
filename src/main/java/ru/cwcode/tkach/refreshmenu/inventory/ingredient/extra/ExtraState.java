@@ -8,9 +8,11 @@ import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ExtraState implements Extra {
-  HashMap<String, Ingredient> states = new HashMap<>();
+  Map<String, Ingredient> states = new LinkedHashMap<>();
   transient String lastState = null;
   
   public static ExtraStateBuilder builder() {
