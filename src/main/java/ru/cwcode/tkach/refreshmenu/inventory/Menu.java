@@ -1,6 +1,7 @@
 package ru.cwcode.tkach.refreshmenu.inventory;
 
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import ru.cwcode.tkach.refreshmenu.MenuManager;
@@ -10,10 +11,14 @@ import ru.cwcode.tkach.refreshmenu.inventory.view.View;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class Menu {
-  
+
   private final HashMap<String, View> views = new HashMap<>();
+  private final Set<UUID> participants = new HashSet<>();
   public transient boolean shouldUnload = true;
   @Setter
   transient private MenuManager menuManager = null;
@@ -30,8 +35,25 @@ public class Menu {
       return;
     }
     
+    participants.add(player.getUniqueId());
+
     view.setMenu(this);
     view.open(player);
+  }
+
+  public boolean hasOnlineParticipantExcept(UUID except) {
+    for (UUID id : participants) {
+      if (id.equals(except)) continue;
+
+      Player player = Bukkit.getPlayer(id);
+      if (player != null && player.isOnline()) return true;
+    }
+
+    return false;
+  }
+
+  public boolean isParticipant(UUID id) {
+    return participants.contains(id);
   }
   
   public void bind(char character, ClickType type, Runnable runnable) {
