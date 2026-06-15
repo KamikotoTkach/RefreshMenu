@@ -5,11 +5,14 @@ import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.cwcode.cwutils.event.DragType;
+import ru.cwcode.cwutils.protocol.Packet;
 import ru.cwcode.cwutils.messages.MessageReturn;
 import ru.cwcode.cwutils.messages.TargetableMessageReturn;
 import ru.cwcode.tkach.config.relocate.com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -21,6 +24,7 @@ import ru.cwcode.tkach.refreshmenu.Utils;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.Ingredient;
 import ru.cwcode.tkach.refreshmenu.inventory.shape.InventoryShape;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.AbstractDrawer;
+import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ExtendedViewDrawer;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 import ru.cwcode.tkach.refreshmenu.protocol.OpenedWindowService;
 
@@ -77,6 +81,37 @@ public abstract class View extends AbstractView {
     
     shape.findCharAtIndex(inventory.getSize() + (playerInvSlot < 9 ? playerInvSlot + 27 : (playerInvSlot - 9))).ifPresent(character -> {
       handleIngredientClickActionImmediate(event, character);
+    });
+  }
+  
+  @Override
+  public void onDrag(DragType dragType, InventoryDragEvent event) {
+    super.onDrag(dragType, event);
+    
+    Player player = (Player) event.getWhoClicked();
+    OpenedWindowService.getWindow(player).ifPresent(window -> {
+      ExtendedViewDrawer extendedViewDrawer = drawer instanceof ExtendedViewDrawer extendedDrawer ? extendedDrawer : null;
+      int topInventorySize = extendedViewDrawer == null ? event.getView().getTopInventory().getSize() : extendedViewDrawer.getTopInventorySize();
+      ItemStack[] playerInventoryBuffer = extendedViewDrawer == null ? null : extendedViewDrawer.getPlayerInventoryBuffer();
+      
+      for (Integer slot : event.getRawSlots()) {
+        if (slot < 0 || slot >= event.getView().countSlots()) continue;
+        
+        if (extendedViewDrawer != null && slot >= topInventorySize) {
+          int playerInvSlot = slot - topInventorySize;
+          if (playerInvSlot < playerInventoryBuffer.length) {
+            ItemStack item = playerInventoryBuffer[playerInvSlot];
+            Packet.setSlot(player, slot, item == null ? ViewDrawer.AIR : item, window.id());
+          }
+          continue;
+        }
+        
+        ItemStack item = event.getView().getItem(slot);
+        Packet.setSlot(player, slot, item == null ? ViewDrawer.AIR : item, window.id());
+      }
+      
+      ItemStack cursorItem = event.getOldCursor();
+      Packet.setSlot(player, -1, cursorItem == null ? ViewDrawer.AIR : cursorItem, -1);
     });
   }
   
