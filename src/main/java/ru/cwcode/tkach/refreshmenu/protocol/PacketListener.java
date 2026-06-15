@@ -99,8 +99,11 @@ public class PacketListener {
         
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
-          ItemStack element = extendedViewDrawer.getPlayerInventoryBuffer()[playerInvSlot];
-          event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
+          ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
+          if (playerInvSlot >= 0 && playerInvSlot < playerInventoryBuffer.length) {
+            ItemStack element = playerInventoryBuffer[playerInvSlot];
+            event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
+          }
         }
       }
     });
@@ -152,6 +155,21 @@ public class PacketListener {
             
             ItemStack item = openInventory.getItem(slot);
             Packet.setSlot(player, slot, item == null ? AIR : item, windowId);
+          }
+          
+          ItemStack cursorItem = player.getItemOnCursor();
+          Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
+        }
+        
+        if (!windowClickPacketReader.hasChangedSlots() && clickedSlot >= 0 && ("PICKUP".equals(clickModeName) || "QUICK_CRAFT".equals(clickModeName))) {
+          if (extendedViewDrawer != null && clickedSlot >= topInventorySize) {
+            int playerInvSlot = clickedSlot - topInventorySize;
+            if (playerInvSlot < playerInventoryBuffer.length) {
+              Packet.setSlot(player, clickedSlot, playerInventoryBuffer[playerInvSlot], windowId);
+            }
+          } else if (clickedSlot < openInventory.countSlots()) {
+            ItemStack clickedItem = openInventory.getItem(clickedSlot);
+            Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
           }
           
           ItemStack cursorItem = player.getItemOnCursor();
