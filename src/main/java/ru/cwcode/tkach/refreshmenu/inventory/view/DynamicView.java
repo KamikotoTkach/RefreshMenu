@@ -22,6 +22,11 @@ public class DynamicView extends View implements Refreshable {
     super.open(player);
   }
   
+  @Override
+  public void onUnload() {
+    viewer = null;
+  }
+  
   public List<? extends Ingredient> getDynamicIngredients(char character) {
     return dynamicIngredients.get(character);
   }

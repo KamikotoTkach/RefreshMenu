@@ -30,7 +30,7 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
   
   @Getter()
   @Setter(AccessLevel.PROTECTED)
-  protected Player player;
+  protected Player player; //todo: weak-reference
   
   {
     behavior.bind('<', ClickType.LEFT, this::prevPage);
@@ -67,6 +67,11 @@ public class PagedView<T extends Ingredient> extends View implements Refreshable
   @Override
   public void refresh() {
     updateRequired(player);
+  }
+  
+  @Override
+  public void onUnload() {
+    player = null;
   }
   
   @Override

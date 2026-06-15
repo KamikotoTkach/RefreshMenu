@@ -50,6 +50,7 @@ public class MenuRefreshManager {
     int currentTick = Bukkit.getCurrentTick();
     
     views.forEach((view, refresh) -> {
+      if (!async && view instanceof View v && tryCleanupClosedMenu(v)) return;
       if (refresh.async() != async) return;
       if (currentTick % refresh.delay() != 0) return;
       if (view instanceof View v && (!v.isInventoryInitialized() || v.getInventory().getViewers().isEmpty())) return;
@@ -60,5 +61,14 @@ public class MenuRefreshManager {
         e.printStackTrace();
       }
     });
+  }
+  
+  private boolean tryCleanupClosedMenu(View view) {
+    var menu = view.getMenu();
+    
+    if (menu == null || menu.getManager() == null || !menu.shouldUnload || menu.hasViewers()) return false;
+    
+    menu.getManager().removeActiveMenu(menu);
+    return true;
   }
 }

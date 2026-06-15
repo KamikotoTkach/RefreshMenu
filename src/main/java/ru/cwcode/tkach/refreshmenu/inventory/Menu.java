@@ -59,6 +59,8 @@ public class Menu {
     View prevView = views.put(name, view);
     
     RefreshMenu.getMenuRefreshManager().tryUnregister(prevView);
+
+    view.setMenu(this);
     RefreshMenu.getMenuRefreshManager().tryRegister(view);
   }
   

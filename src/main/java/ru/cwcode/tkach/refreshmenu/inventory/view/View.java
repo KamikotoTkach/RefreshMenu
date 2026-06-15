@@ -241,4 +241,7 @@ public abstract class View extends AbstractView {
   public boolean isInventoryInitialized() {
     return inventory != null;
   }
+  
+  public void onUnload() {
+  }
 }

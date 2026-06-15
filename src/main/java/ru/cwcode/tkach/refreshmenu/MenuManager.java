@@ -30,6 +30,7 @@ public class MenuManager {
     
     for (View view : menu.getViews()) {
       RefreshMenu.getMenuRefreshManager().tryUnregister(view);
+      view.onUnload();
     }
   }
 
