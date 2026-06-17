@@ -17,6 +17,7 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
    @JsonSubTypes.Type(value = CloseInventoryAction.class, name = "closeInventory"),
    @JsonSubTypes.Type(value = NextPageIngredientAction.class, name = "nextPage"),
    @JsonSubTypes.Type(value = PrevPageIngredientAction.class, name = "prevPage"),
+   @JsonSubTypes.Type(value = SoundAction.class, name = "sound"),
 })
 public interface Action {
   void accept(MenuContext context, ClickType clickType);

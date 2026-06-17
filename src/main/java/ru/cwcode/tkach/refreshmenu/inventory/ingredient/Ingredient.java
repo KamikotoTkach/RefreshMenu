@@ -20,7 +20,8 @@ import ru.cwcode.tkach.refreshmenu.MenuContext;
    @JsonSubTypes.Type(value = ItemsAdderIngredient.class, name = "ia"),
    @JsonSubTypes.Type(value = HeadIngredient.class, name = "head"),
    @JsonSubTypes.Type(value = ActionIngredient.class, name = "action"),
-   @JsonSubTypes.Type(value = ExtraIngredient.class, name = "extra")
+   @JsonSubTypes.Type(value = ExtraIngredient.class, name = "extra"),
+   @JsonSubTypes.Type(value = AutoIngredient.class, name = "auto")
 })
 public interface Ingredient {
   static <I extends IngredientImpl, B extends IngredientBuilder<I, B>> B builder() {
