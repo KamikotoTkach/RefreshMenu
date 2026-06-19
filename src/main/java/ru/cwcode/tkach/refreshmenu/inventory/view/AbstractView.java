@@ -63,4 +63,9 @@ public class AbstractView implements InventoryHolder {
     
     player.getOpenInventory().setCursor(cursor);
   }
+  
+  public void close(Player player, InventoryCloseEvent.Reason reason) {
+    player.getOpenInventory().setCursor(null);
+    player.closeInventory(reason);
+  }
 }

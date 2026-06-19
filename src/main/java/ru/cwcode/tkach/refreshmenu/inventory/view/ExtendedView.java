@@ -23,7 +23,7 @@ public class ExtendedView<T extends Ingredient> extends PagedView<T> {
   public boolean onInventoryClose(InventoryCloseEvent event) {
     boolean isClosed = super.onInventoryClose(event);
     
-    if (isClosed) { //update players phantom inventory to real
+    if (isClosed && RefreshMenu.plugin.isEnabled()) { //update players phantom inventory to real
       Bukkit.getScheduler().runTaskLater(RefreshMenu.plugin, () -> {
         ((Player) event.getPlayer()).updateInventory();
       }, 1);
