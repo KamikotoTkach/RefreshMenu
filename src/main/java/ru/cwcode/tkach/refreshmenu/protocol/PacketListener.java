@@ -47,9 +47,11 @@ public class PacketListener {
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
-        int c = 0;
         for (int slot = topInventorySize; slot < itemStacks.size(); slot++) {
-          ItemStack element = playerInventoryBuffer[c++];
+          int playerInvSlot = slot - topInventorySize;
+          if (!extendedViewDrawer.isPlayerInventorySlotControlled(playerInvSlot)) continue;
+          
+          ItemStack element = playerInventoryBuffer[playerInvSlot];
           itemStacks.set(slot, element == null ? AIR : element);
         }
         
@@ -100,7 +102,7 @@ public class PacketListener {
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
           ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
-          if (playerInvSlot >= 0 && playerInvSlot < playerInventoryBuffer.length) {
+          if (extendedViewDrawer.isPlayerInventorySlotControlled(playerInvSlot)) {
             ItemStack element = playerInventoryBuffer[playerInvSlot];
             event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
           }
@@ -145,10 +147,10 @@ public class PacketListener {
             
             if (extendedViewDrawer != null && slot >= topInventorySize) {
               int playerInvSlot = slot - topInventorySize;
-              if (playerInvSlot < playerInventoryBuffer.length) {
+              if (extendedViewDrawer.isPlayerInventorySlotControlled(playerInvSlot)) {
                 Packet.setSlot(player, slot, playerInventoryBuffer[playerInvSlot], windowId);
+                continue;
               }
-              continue;
             }
             
             if (slot >= openInventory.countSlots()) continue;
@@ -162,11 +164,9 @@ public class PacketListener {
         }
         
         if (!windowClickPacketReader.hasChangedSlots() && clickedSlot >= 0 && ("PICKUP".equals(clickModeName) || "QUICK_CRAFT".equals(clickModeName))) {
-          if (extendedViewDrawer != null && clickedSlot >= topInventorySize) {
+          if (extendedViewDrawer != null && extendedViewDrawer.isRawSlotControlled(clickedSlot)) {
             int playerInvSlot = clickedSlot - topInventorySize;
-            if (playerInvSlot < playerInventoryBuffer.length) {
-              Packet.setSlot(player, clickedSlot, playerInventoryBuffer[playerInvSlot], windowId);
-            }
+            Packet.setSlot(player, clickedSlot, playerInventoryBuffer[playerInvSlot], windowId);
           } else if (clickedSlot < openInventory.countSlots()) {
             ItemStack clickedItem = openInventory.getItem(clickedSlot);
             Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
@@ -177,7 +177,7 @@ public class PacketListener {
         }
         
         if (clickedSlot >= 0 && "SWAP".equals(clickModeName) && button == 40) {
-          if (extendedViewDrawer == null || clickedSlot < topInventorySize) {
+          if (extendedViewDrawer == null || !extendedViewDrawer.isRawSlotControlled(clickedSlot)) {
             ItemStack clickedItem = openInventory.getItem(clickedSlot);
             Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
           }
@@ -193,6 +193,8 @@ public class PacketListener {
         if (extendedViewDrawer == null) return;
         
         if (clickedSlot > topInventorySize - 1) {
+          if (!extendedViewDrawer.isRawSlotControlled(clickedSlot)) return;
+          
           if (!windowClickPacketReader.hasChangedSlots()) {
             boolean shouldRestore = clickModeName != null && MODE_TO_RESTORE.contains(clickModeName);
             if (shouldRestore) {
@@ -205,7 +207,7 @@ public class PacketListener {
           }
           if ("SWAP".equals(clickModeName) && button >= 0 && button < 9) {
             int bufferSlot = 27 + button;
-            ItemStack item = playerInventoryBuffer[bufferSlot];
+            ItemStack item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, bufferSlot);
             Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
           }
           
@@ -227,7 +229,7 @@ public class PacketListener {
           Packet.setSlot(player, clickedSlot, topItem == null ? AIR : topItem, windowId);
           
           int bufferSlot = 27 + button;
-          ItemStack item = playerInventoryBuffer[bufferSlot];
+          ItemStack item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, bufferSlot);
           Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
         }
       }
