@@ -109,6 +109,10 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
     return rawSlot >= inventorySize && isPlayerInventorySlotControlled(rawSlot - inventorySize);
   }
   
+  public boolean isRawPlayerInventorySlot(int rawSlot) {
+    return rawSlot >= inventorySize && isValidPlayerInventorySlot(rawSlot - inventorySize);
+  }
+  
   public ItemStack getDisplayedPlayerInventoryItem(Player player, int slot) {
     if (!isValidPlayerInventorySlot(slot)) return AIR;
     return isPlayerInventorySlotControlled(slot) ? playerInventoryBuffer[slot] : getRealPlayerInventoryItem(player, slot);
@@ -121,5 +125,4 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   private boolean isValidPlayerInventorySlot(int slot) {
     return slot >= 0 && slot < playerInventoryBuffer.length;
   }
-  
 }
