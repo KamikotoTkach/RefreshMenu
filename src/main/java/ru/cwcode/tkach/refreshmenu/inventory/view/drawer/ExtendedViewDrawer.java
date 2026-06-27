@@ -20,7 +20,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   private volatile boolean[] previouslyControlledPlayerInventorySlots = new boolean[36];
   
   @Override
-  public void drawChars(MenuContext context, Collection<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
     inventorySize = context.view().getInventory().getSize();
@@ -56,7 +56,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  protected synchronized void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
     if (slot < inventorySize) {
       super.setItem(context, slot, item);
     } else {
@@ -69,7 +69,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  public void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  public synchronized void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
     if (slot < inventorySize) {
       super.drawItem(context, slot, item);
     } else {
@@ -83,7 +83,7 @@ public class ExtendedViewDrawer extends PagedViewDrawer {
   }
   
   @Override
-  protected void drawBuffer(MenuContext context) {
+  protected synchronized void drawBuffer(MenuContext context) {
     super.drawBuffer(context);
     
     for (int i = 0; i < playerInventoryBuffer.length; i++) {

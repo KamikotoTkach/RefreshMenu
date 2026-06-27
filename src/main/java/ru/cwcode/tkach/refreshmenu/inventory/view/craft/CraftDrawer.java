@@ -11,7 +11,7 @@ public class CraftDrawer extends ViewDrawer {
   volatile CraftView view;
   
   @Override
-  public void draw(MenuContext context) {
+  public synchronized void draw(MenuContext context) {
     if (buffer != null) return;
     view = (CraftView) context.view();
     
@@ -19,14 +19,14 @@ public class CraftDrawer extends ViewDrawer {
   }
   
   @Override
-  public void drawChars(MenuContext context, Collection<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     view = (CraftView) context.view();
     
     super.drawChars(context, characters);
   }
   
-  public void updateRequired(MenuContext context) { //todo refactor
+  public synchronized void updateRequired(MenuContext context) { //todo refactor
     if (buffer != null) return;
     
     try {

@@ -12,7 +12,7 @@ public class ArtExtendedViewDrawer extends ExtendedViewDrawer {
   volatile ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> view;
   
   @Override
-  public void drawChars(MenuContext context, Collection<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
     if (!(context.view() instanceof ArtExtendedView<? extends Ingredient, ? extends ArtIngredient> artExtendedView))

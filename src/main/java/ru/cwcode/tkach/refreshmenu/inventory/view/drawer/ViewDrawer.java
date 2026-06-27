@@ -16,12 +16,12 @@ public class ViewDrawer extends AbstractDrawer {
   public volatile ItemStack[] buffer = null;
   
   @Override
-  public void draw(MenuContext context) {
+  public synchronized void draw(MenuContext context) {
     drawChars(context, Collections.emptySet());
   }
   
   @Override
-  public void drawChars(MenuContext context, Collection<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
     try {
@@ -45,7 +45,7 @@ public class ViewDrawer extends AbstractDrawer {
   }
   
   @Override
-  public void updateRequired(MenuContext context) {
+  public synchronized void updateRequired(MenuContext context) {
     if (buffer != null) return;
     
     drawChars(context, getRequiredUpdateCharacters(context));
@@ -62,7 +62,7 @@ public class ViewDrawer extends AbstractDrawer {
                 .toList();
   }
   
-  protected void drawBuffer(MenuContext context) {
+  protected synchronized void drawBuffer(MenuContext context) {
     var tmp = buffer;
     if (tmp == null) return;
     
@@ -75,11 +75,11 @@ public class ViewDrawer extends AbstractDrawer {
                                    context.view().getInventory().getSize());
   }
   
-  protected void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  protected synchronized void setItem(MenuContext context, int slot, @Nullable ItemStack item) {
     buffer[slot] = item == null ? AIR : item;
   }
   
-  public void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
+  public synchronized void drawItem(MenuContext context, int slot, @Nullable ItemStack item) {
     context.view().getInventory().setItem(slot, item);
   }
   
