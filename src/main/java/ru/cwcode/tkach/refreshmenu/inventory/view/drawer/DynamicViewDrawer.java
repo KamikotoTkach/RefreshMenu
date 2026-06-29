@@ -17,7 +17,7 @@ public class DynamicViewDrawer extends ViewDrawer {
   volatile DynamicView view;
   
   @Override
-  public void drawChars(MenuContext context, Collection<Character> characters) {
+  public synchronized void drawChars(MenuContext context, Collection<Character> characters) {
     if (buffer != null) return;
     
     setupDynamicDrawer(context);
@@ -25,7 +25,7 @@ public class DynamicViewDrawer extends ViewDrawer {
     super.drawChars(context, characters);
   }
   
-  public void updateRequired(MenuContext context) { //todo refactor
+  public synchronized void updateRequired(MenuContext context) { //todo refactor
     if (buffer != null) return;
     
     try {

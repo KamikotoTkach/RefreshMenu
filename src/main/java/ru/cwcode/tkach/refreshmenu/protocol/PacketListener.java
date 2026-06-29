@@ -47,9 +47,11 @@ public class PacketListener {
         
         int topInventorySize = extendedViewDrawer.getTopInventorySize();
         
-        int c = 0;
         for (int slot = topInventorySize; slot < itemStacks.size(); slot++) {
-          ItemStack element = playerInventoryBuffer[c++];
+          int playerInvSlot = slot - topInventorySize;
+          if (!extendedViewDrawer.isPlayerInventorySlotControlled(playerInvSlot)) continue;
+          
+          ItemStack element = playerInventoryBuffer[playerInvSlot];
           itemStacks.set(slot, element == null ? AIR : element);
         }
         
@@ -100,7 +102,7 @@ public class PacketListener {
         if (slot > topInventorySize - 1) {
           int playerInvSlot = slot - topInventorySize;
           ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
-          if (playerInvSlot >= 0 && playerInvSlot < playerInventoryBuffer.length) {
+          if (extendedViewDrawer.isPlayerInventorySlotControlled(playerInvSlot)) {
             ItemStack element = playerInventoryBuffer[playerInvSlot];
             event.getPacket().getItemModifier().write(0, element == null ? AIR : element);
           }
@@ -137,16 +139,38 @@ public class PacketListener {
         int topInventorySize = extendedViewDrawer == null ? openInventory.getTopInventory().getSize() : extendedViewDrawer.getTopInventorySize();
         ItemStack[] playerInventoryBuffer = extendedViewDrawer == null ? null : extendedViewDrawer.getPlayerInventoryBuffer();
         
+        boolean uncontrolledPlayerInventoryClick = extendedViewDrawer != null
+                                                   && extendedViewDrawer.isRawPlayerInventorySlot(clickedSlot)
+                                                   && !extendedViewDrawer.isRawSlotControlled(clickedSlot);
+        
+        if (uncontrolledPlayerInventoryClick && "QUICK_MOVE".equals(clickModeName)) {
+          if (windowClickPacketReader.hasChangedSlots()) {
+            Map<Integer, Object> handle = windowClickPacketReader.readChangedSlots(event.getPacket());
+            for (Integer slot : handle.keySet()) {
+              restoreWindowSlot(player, openInventory, extendedViewDrawer, topInventorySize, slot, windowId);
+            }
+          } else {
+            restoreTopInventory(player, openInventory, extendedViewDrawer, topInventorySize, windowId);
+            restoreWindowSlot(player, openInventory, extendedViewDrawer, topInventorySize, clickedSlot, windowId);
+          }
+          
+          restoreCursor(player);
+          event.setCancelled(true);
+          return;
+        }
+        
         if (windowClickPacketReader.hasChangedSlots()) {
           Map<Integer, Object> handle = windowClickPacketReader.readChangedSlots(event.getPacket());
+          boolean restoredSlot = false;
           
           for (Integer slot : handle.keySet()) {
             if (slot < 0) continue;
             
-            if (extendedViewDrawer != null && slot >= topInventorySize) {
-              int playerInvSlot = slot - topInventorySize;
-              if (playerInvSlot < playerInventoryBuffer.length) {
+            if (extendedViewDrawer != null && extendedViewDrawer.isRawPlayerInventorySlot(slot)) {
+              if (extendedViewDrawer.isRawSlotControlled(slot)) {
+                int playerInvSlot = slot - topInventorySize;
                 Packet.setSlot(player, slot, playerInventoryBuffer[playerInvSlot], windowId);
+                restoredSlot = true;
               }
               continue;
             }
@@ -155,44 +179,61 @@ public class PacketListener {
             
             ItemStack item = openInventory.getItem(slot);
             Packet.setSlot(player, slot, item == null ? AIR : item, windowId);
+            restoredSlot = true;
           }
           
-          ItemStack cursorItem = player.getItemOnCursor();
-          Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
+          if (restoredSlot) {
+            ItemStack cursorItem = player.getItemOnCursor();
+            Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
+          }
         }
         
         if (!windowClickPacketReader.hasChangedSlots() && clickedSlot >= 0 && ("PICKUP".equals(clickModeName) || "QUICK_CRAFT".equals(clickModeName))) {
-          if (extendedViewDrawer != null && clickedSlot >= topInventorySize) {
-            int playerInvSlot = clickedSlot - topInventorySize;
-            if (playerInvSlot < playerInventoryBuffer.length) {
+          boolean restoredSlot = false;
+          
+          if (extendedViewDrawer != null && extendedViewDrawer.isRawPlayerInventorySlot(clickedSlot)) {
+            if (extendedViewDrawer.isRawSlotControlled(clickedSlot)) {
+              int playerInvSlot = clickedSlot - topInventorySize;
               Packet.setSlot(player, clickedSlot, playerInventoryBuffer[playerInvSlot], windowId);
+              restoredSlot = true;
             }
           } else if (clickedSlot < openInventory.countSlots()) {
             ItemStack clickedItem = openInventory.getItem(clickedSlot);
             Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
+            restoredSlot = true;
           }
           
-          ItemStack cursorItem = player.getItemOnCursor();
-          Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
+          if (restoredSlot) {
+            ItemStack cursorItem = player.getItemOnCursor();
+            Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
+          }
         }
         
         if (clickedSlot >= 0 && "SWAP".equals(clickModeName) && button == 40) {
-          if (extendedViewDrawer == null || clickedSlot < topInventorySize) {
-            ItemStack clickedItem = openInventory.getItem(clickedSlot);
-            Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
-          }
+          boolean uncontrolledPlayerSlot = extendedViewDrawer != null
+                                           && extendedViewDrawer.isRawPlayerInventorySlot(clickedSlot)
+                                           && !extendedViewDrawer.isRawSlotControlled(clickedSlot);
           
-          ItemStack offhandItem = player.getInventory().getItemInOffHand();
-          Packet.setSlot(player, 40, offhandItem == null ? AIR : offhandItem, -2);
-          int offhandRawSlot = topInventorySize + 40;
-          if (offhandRawSlot < openInventory.countSlots()) {
-            Packet.setSlot(player, offhandRawSlot, offhandItem == null ? AIR : offhandItem, windowId);
+          if (!uncontrolledPlayerSlot) {
+            if (extendedViewDrawer == null || !extendedViewDrawer.isRawSlotControlled(clickedSlot)) {
+              ItemStack clickedItem = openInventory.getItem(clickedSlot);
+              Packet.setSlot(player, clickedSlot, clickedItem == null ? AIR : clickedItem, windowId);
+            }
+            
+            ItemStack offhandItem = player.getInventory().getItemInOffHand();
+            Packet.setSlot(player, 40, offhandItem == null ? AIR : offhandItem, -2);
+            int offhandRawSlot = topInventorySize + 40;
+            if (offhandRawSlot < openInventory.countSlots()) {
+              Packet.setSlot(player, offhandRawSlot, offhandItem == null ? AIR : offhandItem, windowId);
+            }
           }
         }
         
         if (extendedViewDrawer == null) return;
         
         if (clickedSlot > topInventorySize - 1) {
+          if (!extendedViewDrawer.isRawSlotControlled(clickedSlot)) return;
+          
           if (!windowClickPacketReader.hasChangedSlots()) {
             boolean shouldRestore = clickModeName != null && MODE_TO_RESTORE.contains(clickModeName);
             if (shouldRestore) {
@@ -205,7 +246,7 @@ public class PacketListener {
           }
           if ("SWAP".equals(clickModeName) && button >= 0 && button < 9) {
             int bufferSlot = 27 + button;
-            ItemStack item = playerInventoryBuffer[bufferSlot];
+            ItemStack item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, bufferSlot);
             Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
           }
           
@@ -227,10 +268,34 @@ public class PacketListener {
           Packet.setSlot(player, clickedSlot, topItem == null ? AIR : topItem, windowId);
           
           int bufferSlot = 27 + button;
-          ItemStack item = playerInventoryBuffer[bufferSlot];
+          ItemStack item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, bufferSlot);
           Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
         }
       }
     });
+  }
+  
+  private void restoreTopInventory(Player player, InventoryView openInventory, ExtendedViewDrawer extendedViewDrawer, int topInventorySize, int windowId) {
+    for (int slot = 0; slot < topInventorySize; slot++) {
+      restoreWindowSlot(player, openInventory, extendedViewDrawer, topInventorySize, slot, windowId);
+    }
+  }
+  
+  private void restoreWindowSlot(Player player, InventoryView openInventory, ExtendedViewDrawer extendedViewDrawer, int topInventorySize, int slot, int windowId) {
+    if (slot < 0 || slot >= openInventory.countSlots()) return;
+    
+    ItemStack item;
+    if (extendedViewDrawer != null && extendedViewDrawer.isRawPlayerInventorySlot(slot)) {
+      item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, slot - topInventorySize);
+    } else {
+      item = openInventory.getItem(slot);
+    }
+    
+    Packet.setSlot(player, slot, item == null ? AIR : item, windowId);
+  }
+  
+  private void restoreCursor(Player player) {
+    ItemStack cursorItem = player.getItemOnCursor();
+    Packet.setSlot(player, -1, cursorItem == null ? AIR : cursorItem, -1);
   }
 }
