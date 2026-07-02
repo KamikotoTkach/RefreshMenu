@@ -1,5 +1,6 @@
 package ru.cwcode.tkach.refreshmenu;
 
+import com.github.retrooper.packetevents.PacketEvents;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,8 +30,9 @@ public final class RefreshMenu extends JavaPlugin {
     menuRefreshManager = new MenuRefreshManager(this);
     
     Bukkit.getPluginManager().registerEvents(new MenuListener(), this);
-    
-    new PacketListener();
+
+    //packetevents runs as a standalone plugin, so the API is already loaded/initialized — we only register the listener
+    PacketEvents.getAPI().getEventManager().registerListener(new PacketListener());
   }
   
   @Override
