@@ -97,6 +97,7 @@ public abstract class View extends AbstractView {
   public void updateInventoryTitle(Player player) {
     prepareForDrawing();
     OpenedWindowService.setInventoryTitle(player, Utils.deserialize(shape.getName(), getPlaceholders(), player, false));
+    player.updateInventory();
   }
   
   public void setState(String state, String value) {
