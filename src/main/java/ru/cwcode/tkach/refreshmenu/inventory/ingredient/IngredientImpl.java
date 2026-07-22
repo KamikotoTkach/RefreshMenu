@@ -3,6 +3,7 @@ package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.items.ItemBuilder;
 import ru.cwcode.cwutils.items.ItemBuilderFactory;
@@ -20,7 +21,8 @@ public class IngredientImpl implements Ingredient {
   int amount;
   Material type;
   int customModelData;
-  
+  List<ItemFlag> itemFlags;
+
   public IngredientImpl(String name, List<String> description, int amount, Material type, int customModelData) {
     this.name = name;
     this.description = description;
@@ -28,31 +30,27 @@ public class IngredientImpl implements Ingredient {
     this.type = type;
     this.customModelData = customModelData;
   }
-  
+
   public IngredientImpl() {
   }
-  
+
   @Override
   public ItemStack getItem(MenuContext context) {
     ItemBuilder item = ItemBuilderFactory.of(type);
-    
-    if (name != null) item.name(Utils.deserialize(name, context.view().getPlaceholders(), context.player(), true));
-    if (description != null) item.description(Utils.deserialize(description, context.view().getPlaceholders(), context.player(), true));
-    if (amount != 0) item.amount(amount);
+
+    Utils.applyCommon(item, name, description, amount, itemFlags, context);
     if (customModelData != 0) item.customModelData(customModelData);
-    
+
     return item.build();
   }
-  
+
   @Override
   public ItemStack getItem(Placeholders placeholders) {
     ItemBuilder item = ItemBuilderFactory.of(type);
-    
-    if (name != null) item.name(Utils.deserialize(name, placeholders, null, true));
-    if (description != null) item.description(Utils.deserialize(description, placeholders, null, true));
-    if (amount != 0) item.amount(amount);
+
+    Utils.applyCommon(item, name, description, amount, itemFlags, placeholders, null);
     if (customModelData != 0) item.customModelData(customModelData);
-    
+
     return item.build();
   }
 }

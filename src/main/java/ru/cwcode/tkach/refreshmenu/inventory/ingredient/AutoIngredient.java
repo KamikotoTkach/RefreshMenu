@@ -24,6 +24,7 @@ public class AutoIngredient implements Ingredient {
   String type;                    // "STONE" | "ns:key" (IA) | "head:<tex>" | "head-name:<ник>"
   Integer customModelData;        // только int в v1
   Boolean glow;
+  List<ItemFlag> itemFlags;
 
   String show;                    // Condition: ингредиент виден, только если истинно
   String hide;                    // Condition: ингредиент скрыт, если истинно
@@ -76,11 +77,17 @@ public class AutoIngredient implements Ingredient {
   }
 
   private ItemStack applyMeta(ItemStack item) {
-    if (Boolean.TRUE.equals(glow) && item != null) {
+    if (item == null) return null;
+
+    boolean hasFlags = itemFlags != null && !itemFlags.isEmpty();
+    if (Boolean.TRUE.equals(glow) || hasFlags) {
       ItemMeta meta = item.getItemMeta();
       if (meta != null) {
-        meta.addEnchant(Enchantment.LURE, 1, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        if (Boolean.TRUE.equals(glow)) {
+          meta.addEnchant(Enchantment.LURE, 1, true);
+          meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+        if (hasFlags) meta.addItemFlags(itemFlags.toArray(new ItemFlag[0]));
         item.setItemMeta(meta);
       }
     }
@@ -106,6 +113,7 @@ public class AutoIngredient implements Ingredient {
     r.type = patch.type != null ? patch.type : this.type;
     r.customModelData = patch.customModelData != null ? patch.customModelData : this.customModelData;
     r.glow = patch.glow != null ? patch.glow : this.glow;
+    r.itemFlags = patch.itemFlags != null ? patch.itemFlags : this.itemFlags;
     r.show = patch.show != null ? patch.show : this.show;
     r.hide = patch.hide != null ? patch.hide : this.hide;
     r.click = patch.click != null ? patch.click : this.click;
