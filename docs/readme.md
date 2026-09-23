@@ -92,5 +92,24 @@ ingredientMap:
           LEFT: !<nextPage> {}
 
 ```
+**Плейсхолдеры в действиях**
+
+В командах `playerCommand`/`consoleCommand` и в сообщении `sendMessage` (в том числе в строках `click:` у `!<auto>`)
+подставляются плейсхолдеры меню — те же, что работают в названии и описании предметов (`<page>`, а в меню плагина —
+его собственные, например `<member>`), и `<player>` — ник нажавшего. Тег без такого плейсхолдера остаётся как есть.
+
+В команде заменяются только такие теги, остальной текст команды не меняется. Значение подставляется без разметки, число —
+без форматирования (`1500`, а не `1 500`), игрок — ником.
+
+```yaml
+LEFT: !<playerCommand>
+  command: "island kick <member>"
+```
+
+Скрытый условием `show`/`hide` ингредиент `!<auto>` на клики не реагирует.
+
+Из кода `!<auto>` для значений конфига по умолчанию собирается `Ingredient.auto()`:
+`Ingredient.auto().type(Material.PAPER).name("<green>Статистика").click("[LMB] setview stats").build()`.
+
 Все типы предметов можно узнать [тут](https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html)\
 Все типы кликов можно узнать [тут](https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/event/inventory/ClickType.html)

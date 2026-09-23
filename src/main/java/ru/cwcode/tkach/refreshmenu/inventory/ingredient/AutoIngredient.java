@@ -3,19 +3,15 @@ package ru.cwcode.tkach.refreshmenu.inventory.ingredient;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import ru.cwcode.tkach.locale.Placeholders;
 import ru.cwcode.tkach.refreshmenu.MenuContext;
 import ru.cwcode.tkach.refreshmenu.inventory.ingredient.condition.Condition;
 import ru.cwcode.tkach.refreshmenu.inventory.view.drawer.ViewDrawer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AutoIngredient implements Ingredient {
   String name;
@@ -120,6 +116,8 @@ public class AutoIngredient implements Ingredient {
 
   @Override
   public void onClick(MenuContext context, InventoryClickEvent event) {
+    if (isHidden(context)) return;
+
     AutoIngredient effective = resolveState(context);
 
     boolean handled = false;

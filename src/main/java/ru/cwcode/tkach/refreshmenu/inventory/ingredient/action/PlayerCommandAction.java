@@ -15,6 +15,6 @@ public class PlayerCommandAction implements Action {
   
   @Override
   public void accept(MenuContext context, ClickType clickType) {
-    context.player().performCommand(command);
+    context.player().performCommand(ActionPlaceholders.apply(command, context));
   }
 }

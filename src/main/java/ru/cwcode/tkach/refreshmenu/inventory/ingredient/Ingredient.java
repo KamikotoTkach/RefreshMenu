@@ -44,6 +44,10 @@ public interface Ingredient {
     return new ExtraIngredientBuilder();
   }
   
+  static AutoIngredientBuilder auto() {
+    return new AutoIngredientBuilder();
+  }
+  
   static ItemsAdderIngredientBuilder ia() {
     return new ItemsAdderIngredientBuilder();
   }

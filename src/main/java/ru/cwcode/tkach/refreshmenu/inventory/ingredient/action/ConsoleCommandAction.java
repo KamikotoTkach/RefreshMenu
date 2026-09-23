@@ -16,6 +16,6 @@ public class ConsoleCommandAction implements Action {
   
   @Override
   public void accept(MenuContext context, ClickType clickType) {
-    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("<player>", context.player().getName()));
+    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ActionPlaceholders.apply(command, context));
   }
 }
