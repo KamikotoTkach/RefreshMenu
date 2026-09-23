@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.protocol.Packet;
@@ -33,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 public class PacketListener extends PacketListenerAbstract {
   private static final ItemStack AIR = new ItemStack(Material.AIR);
@@ -76,11 +76,8 @@ public class PacketListener extends PacketListenerAbstract {
     WrapperPlayServerWindowItems packet = new WrapperPlayServerWindowItems(event);
     if (packet.getWindowId() < 1) return;
 
-    Player player = event.getPlayer();
-    InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-    if (!(holder instanceof View openedView)) return;
-
-    if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+    ExtendedViewDrawer extendedViewDrawer = getExtendedDrawer(event.getUser().getUUID(), packet.getWindowId());
+    if (extendedViewDrawer == null) return;
 
     List<com.github.retrooper.packetevents.protocol.item.ItemStack> itemStacks = packet.getItems();
     ItemStack[] playerInventoryBuffer = extendedViewDrawer.getPlayerInventoryBuffer();
@@ -104,6 +101,7 @@ public class PacketListener extends PacketListenerAbstract {
     Player player = event.getPlayer();
 
     OpenedWindowService.handleOpen(player, packet.getContainerId(), packet.getType());
+    OpenedViewService.bindWindow(player.getUniqueId(), packet.getContainerId());
   }
 
   //replacing item in bottom player inventory to relevant items from extended view
@@ -111,11 +109,8 @@ public class PacketListener extends PacketListenerAbstract {
     WrapperPlayServerSetSlot packet = new WrapperPlayServerSetSlot(event);
     if (packet.getWindowId() < 1) return;
 
-    Player player = event.getPlayer();
-    InventoryHolder holder = player.getOpenInventory().getTopInventory().getHolder();
-    if (!(holder instanceof View openedView)) return;
-
-    if (!(openedView.getDrawer() instanceof ExtendedViewDrawer extendedViewDrawer)) return;
+    ExtendedViewDrawer extendedViewDrawer = getExtendedDrawer(event.getUser().getUUID(), packet.getWindowId());
+    if (extendedViewDrawer == null) return;
 
     int topInventorySize = extendedViewDrawer.getTopInventorySize();
     int slot = packet.getSlot();
@@ -144,16 +139,11 @@ public class PacketListener extends PacketListenerAbstract {
     int windowId = packet.getWindowId();
     if (windowId < 1) return;
 
+    OpenedView opened = OpenedViewService.get(event.getUser().getUUID());
+    if (opened == null || !opened.matches(windowId)) return;
+
     Player player = event.getPlayer();
-
-    InventoryHolder holder;
-    try {
-      holder = player.getOpenInventory().getTopInventory().getHolder();
-    } catch (RuntimeException e) { //for catching "Tile is null, asynchronous access?"
-      return;
-    }
-
-    if (!(holder instanceof View openedView)) return;
+    View openedView = opened.getView();
 
     int clickedSlot = packet.getSlot();
     String clickModeName = packet.getWindowClickType().name();
@@ -279,7 +269,7 @@ public class PacketListener extends PacketListenerAbstract {
 
       ClickType click = button == 0 ? ClickType.LEFT : ClickType.RIGHT;
 
-      if (openInventory.getTopInventory().getHolder() instanceof ExtendedView<?> extendedView) {
+      if (openedView instanceof ExtendedView<?> extendedView) {
         Bukkit.getScheduler().runTask(RefreshMenu.plugin, () -> {
           extendedView.onOwnInventoryClick(new InventoryClickEvent(openInventory, InventoryType.SlotType.CONTAINER, clickedSlot, click, InventoryAction.PICKUP_ALL));
         });
@@ -294,6 +284,13 @@ public class PacketListener extends PacketListenerAbstract {
       ItemStack item = extendedViewDrawer.getDisplayedPlayerInventoryItem(player, bufferSlot);
       Packet.setSlot(player, topInventorySize + bufferSlot, item == null ? AIR : item, windowId);
     }
+  }
+
+  private ExtendedViewDrawer getExtendedDrawer(UUID uuid, int windowId) {
+    OpenedView opened = OpenedViewService.get(uuid);
+    if (opened == null || !opened.matches(windowId)) return null;
+
+    return opened.getView().getDrawer() instanceof ExtendedViewDrawer drawer ? drawer : null;
   }
 
   private Set<Integer> readChangedSlots(WrapperPlayClientClickWindow packet) {

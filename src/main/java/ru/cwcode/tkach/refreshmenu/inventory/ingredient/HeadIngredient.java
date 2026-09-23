@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import ru.cwcode.cwutils.items.ItemBuilder;
 import ru.cwcode.cwutils.items.ItemBuilderFactory;
@@ -23,48 +24,43 @@ public class HeadIngredient implements Ingredient {
   List<String> description;
   int amount;
   String texture;
-  
+  List<ItemFlag> itemFlags;
+
   public HeadIngredient() {
   }
-  
+
   public HeadIngredient(String name, List<String> description, int amount, String texture) {
     this.name = name;
     this.description = description;
     this.amount = amount;
     this.texture = texture;
   }
-  
+
   @Override
   public ItemStack getItem(MenuContext context) {
     ItemBuilder item = ItemBuilderFactory.of(Material.PLAYER_HEAD);
-    
-    if (name != null) item.name(Utils.deserialize(name, context.view().getPlaceholders(), context.player(), true));
-    if (description != null) item.description(Utils.deserialize(description, context.view().getPlaceholders(), context.player(), true));
-    if (amount != 0) item.amount(amount);
-    
-    if (texture != null) {
-      PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
-      profile.setProperty(new ProfileProperty("textures", texture));
-      item.playerProfile(profile);
-    }
-    
+
+    Utils.applyCommon(item, name, description, amount, itemFlags, context);
+    applyTexture(item);
+
     return item.build();
   }
-  
+
   @Override
   public ItemStack getItem(Placeholders placeholders) {
     ItemBuilder item = ItemBuilderFactory.of(Material.PLAYER_HEAD);
-    
-    if (name != null) item.name(Utils.deserialize(name, placeholders, null, true));
-    if (description != null) item.description(Utils.deserialize(description, placeholders, null, true));
-    if (amount != 0) item.amount(amount);
-    
-    if (texture != null) {
-      PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
-      profile.setProperty(new ProfileProperty("textures", texture));
-      item.playerProfile(profile);
-    }
-    
+
+    Utils.applyCommon(item, name, description, amount, itemFlags, placeholders, null);
+    applyTexture(item);
+
     return item.build();
+  }
+
+  private void applyTexture(ItemBuilder item) {
+    if (texture == null) return;
+
+    PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID(), "");
+    profile.setProperty(new ProfileProperty("textures", texture));
+    item.playerProfile(profile);
   }
 }
